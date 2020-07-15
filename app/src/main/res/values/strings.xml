@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Оппозит МК - Касса</string>
+
+    <string name="auth_login">Логин</string>
+    <string name="auth_password">Пароль</string>
+    <string name="auth_enter">Войти</string>
+
+    <string name="deposit_person">Пользователь</string>
+    <string name="deposit_contribution">Депозит</string>
+    <string name="deposit_cashbox">В кассе</string>
+    <string name="deposit_last_update_date">Дата последнего изменения</string>
+
+    <string name="event_name">Название</string>
+    <string name="event_contribution">Взнос</string>
+    <string name="event_total">Всего</string>
+    <string name="event_deadline">Сдать до</string>
+    <string name="event_creation_date">Дата создания</string>
+    <string name="event_author">Автор</string>
+
+    <string name="event_page_creation_date">Дата создания: </string>
+    <string name="event_page_deadline">Сдать до: </string>
+
+    <string name="transaction_name">Название</string>
+    <string name="transaction_type">Тип</string>
+    <string name="transaction_cash">Сумма</string>
+    <string name="transaction_event">Событие</string>
+    <string name="transaction_person">Пользователь</string>
+
+    <string name="transaction_page_creation_date">Дата создания: </string>
+    <string name="transaction_page_person">Пользователь: </string>
+
+    <string name="treasure_scroller_next_page">Следующая страница</string>
+</resources>
