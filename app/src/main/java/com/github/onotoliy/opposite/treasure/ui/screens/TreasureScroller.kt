@@ -18,7 +18,7 @@ import com.github.onotoliy.opposite.treasure.R
 
 @Composable
 fun <D> TreasureScroller(
-    data: List<D>,
+    data: List<D>?,
     total: Int,
     navigateToNextPageScreen: () -> Unit = {},
     scrollerPosition: ScrollerPosition = ScrollerPosition(),
@@ -28,7 +28,7 @@ fun <D> TreasureScroller(
         scrollerPosition = scrollerPosition,
         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 100.dp)
     ) {
-        data.forEachIndexed { index, item ->
+        data?.forEachIndexed { index, item ->
             itemView(item)
 
             if (index == data.size - 1 && total > data.size) {

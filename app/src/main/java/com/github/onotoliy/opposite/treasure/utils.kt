@@ -1,3 +1,3 @@
 package com.github.onotoliy.opposite.treasure
 
-fun String.formatDate() = substring(0, 10)
+fun String?.formatDate() = this?.substring(0, 10) ?: ""

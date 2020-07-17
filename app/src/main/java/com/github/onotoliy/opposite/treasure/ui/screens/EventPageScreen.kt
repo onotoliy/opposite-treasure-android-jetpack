@@ -1,6 +1,5 @@
 package com.github.onotoliy.opposite.treasure.ui.screens
 
-import android.accounts.AccountManager
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Icon
@@ -9,7 +8,6 @@ import androidx.ui.foundation.Text
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.*
 import androidx.ui.material.Divider
-import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.LocationOn
 import androidx.ui.res.stringResource
@@ -20,8 +18,8 @@ import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.auth.getEventPage
 import com.github.onotoliy.opposite.treasure.formatDate
+import com.github.onotoliy.opposite.treasure.models.EventScreenPageModel
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Preview
@@ -50,26 +48,19 @@ fun EventPageScreenPreview() {
 
 @Composable
 fun EventPageScreen(
-    manager: AccountManager,
-    navigateTo: (Screen) -> Unit,
-    offset: Int = 0,
-    numberOfRows: Int = 20,
-    default: List<Event> = listOf()
+    model: EventScreenPageModel,
+    navigateTo: (Screen) -> Unit
 ) {
-    val page = manager.getEventPage(offset, numberOfRows)
-    val list = mutableListOf<Event>()
-
-    list.addAll(default)
-    list.addAll(page.context)
-
-    EventPageScreen(
-        events = list,
-        offset = list.size,
-        total = page.meta.total,
-        numberOfRows = numberOfRows,
-        navigateTo = navigateTo,
-        scrollerPosition = if (default.size < 10) ScrollerPosition() else ScrollerPosition((100 * default.size).toFloat())
-    )
+    model.events?.let {
+        EventPageScreen(
+            events = it,
+            offset = model.events?.size ?: 0,
+            total = model.meta?.total ?: 0,
+            numberOfRows = model.numberOfRows,
+            navigateTo = navigateTo,
+            scrollerPosition = model.scrollerPosition
+        )
+    }
 }
 
 @Composable

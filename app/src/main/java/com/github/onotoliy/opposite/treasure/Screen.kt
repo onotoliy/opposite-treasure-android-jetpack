@@ -10,12 +10,12 @@ sealed class Screen {
     data class EventPageScreen(
         val offset: Int = 0,
         val numberOfRows: Int = 5,
-        val default: List<Event> = listOf()
+        val default: List<Event>? = listOf()
     ) : Screen()
     data class TransactionPageScreen(
         val offset: Int = 0,
         val numberOfRows: Int = 5,
-        val default: List<Transaction> = listOf()
+        val default: List<Transaction>? = listOf()
     ) : Screen()
     data class EventScreen(val event: String) : Screen()
     data class DepositScreen(val deposit: String) : Screen()

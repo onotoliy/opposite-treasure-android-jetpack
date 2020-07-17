@@ -1,6 +1,5 @@
 package com.github.onotoliy.opposite.treasure.ui.screens
 
-import android.accounts.AccountManager
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
 import androidx.ui.foundation.Icon
@@ -9,24 +8,21 @@ import androidx.ui.foundation.Text
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.*
 import androidx.ui.material.Divider
-import androidx.ui.material.MaterialTheme
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.KeyboardArrowDown
 import androidx.ui.material.icons.filled.KeyboardArrowRight
 import androidx.ui.material.icons.filled.KeyboardArrowUp
-import androidx.ui.material.icons.filled.LocationOn
 import androidx.ui.res.stringResource
 import androidx.ui.text.style.TextAlign
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.TransactionType.*
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.auth.getTransactionPage
 import com.github.onotoliy.opposite.treasure.formatDate
+import com.github.onotoliy.opposite.treasure.models.TransactionScreenPageModel
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Preview
@@ -56,26 +52,19 @@ fun TransactionPageScreenPreview() {
 
 @Composable
 fun TransactionPageScreen(
-    manager: AccountManager,
-    navigateTo: (Screen) -> Unit,
-    offset: Int = 0,
-    numberOfRows: Int = 20,
-    default: List<Transaction> = listOf()
+    model: TransactionScreenPageModel,
+    navigateTo: (Screen) -> Unit
 ) {
-    val page = manager.getTransactionPage(offset, numberOfRows)
-    val list = mutableListOf<Transaction>()
-
-    list.addAll(default)
-    list.addAll(page.context)
-
-    TransactionPageScreen(
-        transactions = list,
-        offset = list.size,
-        total = page.meta.total,
-        numberOfRows = numberOfRows,
-        navigateTo = navigateTo,
-        scrollerPosition = if (default.size < 10) ScrollerPosition() else ScrollerPosition((100 * default.size).toFloat())
-    )
+    model.transactions?.let {
+        TransactionPageScreen(
+            transactions = it,
+            offset = it.size,
+            total = model.meta?.total ?: 0,
+            numberOfRows = model.numberOfRows,
+            navigateTo = navigateTo,
+            scrollerPosition = model.scrollerPosition
+        )
+    }
 }
 
 @Composable
