@@ -14,7 +14,24 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Refresh
 import androidx.ui.res.stringResource
 import androidx.ui.unit.dp
+import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.R
+
+@Composable
+fun <D> TreasureScroller(
+    page: Page<D>,
+    navigateToNextPageScreen: () -> Unit = {},
+    scrollerPosition: ScrollerPosition = ScrollerPosition(),
+    itemView: @Composable() (D) -> Unit
+) {
+    TreasureScroller(
+        data = page.context,
+        total = page.meta.total,
+        navigateToNextPageScreen = navigateToNextPageScreen,
+        scrollerPosition = scrollerPosition,
+        itemView = itemView
+    )
+}
 
 @Composable
 fun <D> TreasureScroller(

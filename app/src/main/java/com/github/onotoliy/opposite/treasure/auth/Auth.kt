@@ -32,7 +32,7 @@ fun authToken(username: String, password: String): String {
     connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
     connection.setRequestProperty("charset", "utf-8")
     connection.setRequestProperty("Content-Length", parameters.size.toString())
-    connection.useCaches = false;
+    connection.useCaches = false
     connection.outputStream.use {
         it.write(parameters)
     }

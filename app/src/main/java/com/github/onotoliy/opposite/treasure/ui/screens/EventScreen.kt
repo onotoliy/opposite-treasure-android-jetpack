@@ -12,7 +12,6 @@ import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.formatDate
-import com.github.onotoliy.opposite.treasure.models.EventScreenModel
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Preview
@@ -35,29 +34,31 @@ fun EventScreenPreview() {
 }
 
 @Composable
-fun EventScreen(model: EventScreenModel, navigateTo: (Screen) -> Unit) {
-    EventScreen(data = model.event, navigateTo = navigateTo)
+fun EventScreen(model: Screen.EventScreen, navigateTo: (Screen) -> Unit) {
+    model.event?.let {
+        EventScreen(data = it, navigateTo = navigateTo)
+    }
 }
 
 @Composable
-private fun EventScreen(data: Event?, navigateTo: (Screen) -> Unit) {
+private fun EventScreen(data: Event, navigateTo: (Screen) -> Unit) {
     Column {
         Text(text = stringResource(id = R.string.event_name), style = typography.h6)
-        Text(text = data?.name ?: "", style = typography.body1)
+        Text(text = data.name, style = typography.body1)
         Text(text = stringResource(id = R.string.event_contribution), style = typography.h6)
-        Text(text = data?.contribution ?: "", style = typography.body1)
+        Text(text = data.contribution, style = typography.body1)
         Text(text = stringResource(id = R.string.event_total), style = typography.h6)
-        Text(text = data?.total ?: "", style = typography.body1)
+        Text(text = data.total, style = typography.body1)
         Text(text = stringResource(id = R.string.event_deadline), style = typography.h6)
-        Text(text = data?.deadline.formatDate(), style = typography.body1)
+        Text(text = data.deadline.formatDate(), style = typography.body1)
         Text(text = stringResource(id = R.string.event_creation_date), style = typography.h6)
-        Text(text = data?.creationDate.formatDate(), style = typography.body1)
+        Text(text = data.creationDate.formatDate(), style = typography.body1)
         Text(text = stringResource(id = R.string.event_author), style = typography.h6)
         Text(
             modifier = Modifier.clickable(onClick = {
-                navigateTo(Screen.DepositScreen(data?.author?.uuid ?: ""))
+                navigateTo(Screen.DepositScreen(data.author.uuid))
             }),
-            text = data?.author?.name ?: "",
+            text = data.author.name,
             style = typography.body1
         )
     }

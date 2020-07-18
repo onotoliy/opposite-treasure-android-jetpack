@@ -16,10 +16,11 @@ import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
+import com.github.onotoliy.opposite.data.page.Meta
+import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.formatDate
-import com.github.onotoliy.opposite.treasure.models.EventScreenPageModel
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Preview
@@ -38,49 +39,42 @@ fun EventPageScreenPreview() {
     )
 
     EventPageScreen(
-        events = list,
-        offset = list.size,
-        total = 2,
-        numberOfRows = 10,
+        page = Page(Meta(), list),
+        scrollerPosition = ScrollerPosition(),
         navigateTo = { }
     )
 }
 
 @Composable
 fun EventPageScreen(
-    model: EventScreenPageModel,
+    model: Screen.EventPageScreen,
     navigateTo: (Screen) -> Unit
 ) {
-    model.events?.let {
+    model.page?.let {
         EventPageScreen(
-            events = it,
-            offset = model.events?.size ?: 0,
-            total = model.meta?.total ?: 0,
-            numberOfRows = model.numberOfRows,
-            navigateTo = navigateTo,
-            scrollerPosition = model.scrollerPosition
+            page = it,
+            scrollerPosition = model.scrollerPosition,
+            navigateTo = navigateTo
         )
     }
 }
 
 @Composable
 private fun EventPageScreen(
-    events: List<Event>,
-    total: Int,
-    offset: Int = 0,
-    numberOfRows: Int = 20,
-    navigateTo: (Screen) -> Unit,
-    scrollerPosition: ScrollerPosition = ScrollerPosition()
+    page: Page<Event>,
+    scrollerPosition: ScrollerPosition,
+    navigateTo: (Screen) -> Unit
 ) {
     TreasureScroller(
-        data = events,
-        total = total,
+        page = page,
         scrollerPosition = scrollerPosition,
         navigateToNextPageScreen = {
-            Screen.EventPageScreen(
-                offset = offset,
-                numberOfRows = numberOfRows,
-                default = events
+            navigateTo(
+                Screen.EventPageScreen(
+                    offset = page.context.size,
+                    numberOfRows = page.meta.paging.size,
+                    default = page
+                )
             )
         }
     ) {

@@ -9,7 +9,7 @@ import com.github.onotoliy.opposite.data.Cashbox
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.models.DepositScreenModel
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Preview
@@ -22,20 +22,33 @@ fun DepositScreenPreview() {
 }
 
 @Composable
-fun DepositScreen(model: DepositScreenModel) {
-    DepositScreen(deposit = model.deposit, cashbox = model.cashbox)
+fun HomeScreen(model: Screen.HomeScreen) {
+    model.deposit?.let { deposit ->
+        model.cashbox?.let { cashbox ->
+            DepositScreen(deposit = deposit, cashbox = cashbox)
+        }
+    }
 }
 
 @Composable
-private fun DepositScreen(deposit: Deposit?, cashbox: Cashbox?) {
+fun DepositScreen(model: Screen.DepositScreen) {
+    model.deposit?.let { deposit ->
+        model.cashbox?.let { cashbox ->
+            DepositScreen(deposit = deposit, cashbox = cashbox)
+        }
+    }
+}
+
+@Composable
+private fun DepositScreen(deposit: Deposit, cashbox: Cashbox) {
     Column {
         Text(text = stringResource(id = R.string.deposit_person), style = typography.h6)
-        Text(text = deposit?.person?.name ?: "", style = typography.body1)
+        Text(text = deposit.person.name, style = typography.body1)
         Text(text = stringResource(id = R.string.deposit_contribution), style = typography.h6)
-        Text(text = deposit?.deposit ?: "", style = typography.body1)
+        Text(text = deposit.deposit, style = typography.body1)
         Text(text = stringResource(id = R.string.deposit_cashbox), style = typography.h6)
-        Text(text = cashbox?.deposit ?: "", style = typography.body1)
+        Text(text = cashbox.deposit, style = typography.body1)
         Text(text = stringResource(id = R.string.deposit_last_update_date), style = typography.h6)
-        Text(text = cashbox?.lastUpdateDate ?: "", style = typography.body1)
+        Text(text = cashbox.lastUpdateDate, style = typography.body1)
     }
 }

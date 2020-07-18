@@ -42,7 +42,7 @@ fun Menu(
                         icon = { Icon(asset = Icons.Filled.Home) }
                     )
                     IconButton(
-                        onClick = { navigateTo(Screen.DepositPageScreen) },
+                        onClick = { navigateTo(Screen.DepositPageScreen()) },
                         icon = { Icon(asset = Icons.Filled.Person) }
                     )
                     IconButton(

@@ -19,10 +19,11 @@ import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType.*
+import com.github.onotoliy.opposite.data.page.Meta
+import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.formatDate
-import com.github.onotoliy.opposite.treasure.models.TransactionScreenPageModel
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Preview
@@ -42,49 +43,40 @@ fun TransactionPageScreenPreview() {
     )
 
     TransactionPageScreen(
-        transactions = list,
-        offset = list.size,
-        total = 2,
-        numberOfRows = 10,
+        page = Page(Meta(), list),
+        scrollerPosition = ScrollerPosition(),
         navigateTo = { }
     )
 }
 
 @Composable
 fun TransactionPageScreen(
-    model: TransactionScreenPageModel,
+    model: Screen.TransactionPageScreen,
     navigateTo: (Screen) -> Unit
 ) {
-    model.transactions?.let {
+    model.page?.let {
         TransactionPageScreen(
-            transactions = it,
-            offset = it.size,
-            total = model.meta?.total ?: 0,
-            numberOfRows = model.numberOfRows,
-            navigateTo = navigateTo,
-            scrollerPosition = model.scrollerPosition
+            page = it,
+            scrollerPosition = model.scrollerPosition,
+            navigateTo = navigateTo
         )
     }
 }
 
 @Composable
 private fun TransactionPageScreen(
-    transactions: List<Transaction>,
-    total: Int,
-    offset: Int = 0,
-    numberOfRows: Int = 20,
-    navigateTo: (Screen) -> Unit,
-    scrollerPosition: ScrollerPosition = ScrollerPosition()
+    page: Page<Transaction>,
+    scrollerPosition: ScrollerPosition,
+    navigateTo: (Screen) -> Unit
 ) {
     TreasureScroller(
-        data = transactions,
-        total = total,
+        page = page,
         scrollerPosition = scrollerPosition,
         navigateToNextPageScreen = {
             Screen.TransactionPageScreen(
-                offset = offset,
-                numberOfRows = numberOfRows,
-                default = transactions
+                offset = page.context.size,
+                numberOfRows = page.meta.paging.size,
+                default = page
             )
         }
     ) {

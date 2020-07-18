@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.tasks
+package com.github.onotoliy.opposite.treasure.resources
 
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
