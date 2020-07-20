@@ -6,15 +6,15 @@ import androidx.compose.state
 import androidx.ui.animation.Crossfade
 import androidx.ui.material.Surface
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.auth.addAccount
+import com.github.onotoliy.opposite.treasure.auth.*
 import com.github.onotoliy.opposite.treasure.ui.Menu
 
 @Composable
 fun TreasureScreen(firstScreen: Screen, manager: AccountManager) {
     val state = state { firstScreen }
-
     val navigateTo: (Screen) -> Unit = {
         state.value = it
+        state.value.loading(manager)
     }
 
     Crossfade(state.value) { screen ->
@@ -26,37 +26,37 @@ fun TreasureScreen(firstScreen: Screen, manager: AccountManager) {
                 }
                 is Screen.HomeScreen ->
                     Menu(
-                        bodyContent = { DepositScreen(manager) },
+                        bodyContent = { HomeScreen(screen) },
                         navigateTo = navigateTo
                     )
                 is Screen.DepositScreen ->
                     Menu(
-                        bodyContent = { DepositScreen(manager, uuid = screen.deposit) },
+                        bodyContent = { DepositScreen(screen) },
                         navigateTo = navigateTo
                     )
                 is Screen.EventScreen ->
                     Menu(
-                        bodyContent = { EventScreen(manager, uuid = screen.event, navigateTo = navigateTo) },
+                        bodyContent = { EventScreen(screen, navigateTo) },
                         navigateTo = navigateTo
                     )
                 is Screen.TransactionScreen ->
                     Menu(
-                        bodyContent = { TransactionScreen(manager, uuid = screen.transaction, navigateTo = navigateTo) },
+                        bodyContent = { TransactionScreen(screen, navigateTo) },
                         navigateTo = navigateTo
                     )
                 is Screen.DepositPageScreen ->
                     Menu(
-                        bodyContent = { DepositPageScreen(manager, navigateTo) },
+                        bodyContent = { DepositPageScreen(screen, navigateTo) },
                         navigateTo = navigateTo
                     )
                 is Screen.EventPageScreen ->
                     Menu(
-                        bodyContent = { EventPageScreen(manager, navigateTo, screen.offset, screen.numberOfRows, screen.default) },
+                        bodyContent = { EventPageScreen(screen, navigateTo) },
                         navigateTo = navigateTo
                     )
                 is Screen.TransactionPageScreen ->
                     Menu(
-                        bodyContent = { TransactionPageScreen(manager, navigateTo, screen.offset, screen.numberOfRows, screen.default) },
+                        bodyContent = { TransactionPageScreen(screen, navigateTo) },
                         navigateTo = navigateTo
                     )
             }
