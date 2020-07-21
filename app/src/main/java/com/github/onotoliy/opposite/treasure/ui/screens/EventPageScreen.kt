@@ -51,11 +51,15 @@ fun EventPageScreen(
     navigateTo: (Screen) -> Unit
 ) {
     model.page?.let {
-        EventPageScreen(
-            page = it,
-            scrollerPosition = model.scrollerPosition,
-            navigateTo = navigateTo
-        )
+        if (it.context.isNullOrEmpty()) {
+            ProgressScreen()
+        } else {
+            EventPageScreen(
+                page = it,
+                scrollerPosition = model.scrollerPosition,
+                navigateTo = navigateTo
+            )
+        }
     }
 }
 

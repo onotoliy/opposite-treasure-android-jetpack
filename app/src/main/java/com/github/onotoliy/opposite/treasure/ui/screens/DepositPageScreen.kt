@@ -25,13 +25,15 @@ import java.util.*
 @Composable
 fun DepositPageScreenPreview() {
     DepositPageScreen(
-        page = Page(Meta(), listOf(
-            Deposit(Option(UUID.randomUUID().toString(), "Иванов Иван Иванович"), "10000"),
-            Deposit(Option(UUID.randomUUID().toString(), "Петров Иван Иванович"), "10000"),
-            Deposit(Option(UUID.randomUUID().toString(), "Сидоров Иван Иванович"), "10000"),
-            Deposit(Option(UUID.randomUUID().toString(), "Курочкин Иван Иванович"), "10000"),
-            Deposit(Option(UUID.randomUUID().toString(), "Петухов Иван Иванович"), "10000")
-        )),
+        page = Page(
+            Meta(), listOf(
+                Deposit(Option(UUID.randomUUID().toString(), "Иванов Иван Иванович"), "10000"),
+                Deposit(Option(UUID.randomUUID().toString(), "Петров Иван Иванович"), "10000"),
+                Deposit(Option(UUID.randomUUID().toString(), "Сидоров Иван Иванович"), "10000"),
+                Deposit(Option(UUID.randomUUID().toString(), "Курочкин Иван Иванович"), "10000"),
+                Deposit(Option(UUID.randomUUID().toString(), "Петухов Иван Иванович"), "10000")
+            )
+        ),
         scrollerPosition = ScrollerPosition()
     ) {
 
@@ -41,11 +43,15 @@ fun DepositPageScreenPreview() {
 @Composable
 fun DepositPageScreen(model: Screen.DepositPageScreen, navigateTo: (Screen) -> Unit) {
     model.page?.let {
-        DepositPageScreen(
-            page = it,
-            scrollerPosition = model.scrollerPosition,
-            navigateTo = navigateTo
-        )
+        if (it.context.isNullOrEmpty()) {
+            ProgressScreen()
+        } else {
+            DepositPageScreen(
+                page = it,
+                scrollerPosition = model.scrollerPosition,
+                navigateTo = navigateTo
+            )
+        }
     }
 }
 
@@ -59,10 +65,12 @@ fun DepositPageScreen(
         page = page,
         scrollerPosition = scrollerPosition,
         navigateToNextPageScreen = {
-            Screen.DepositPageScreen(
-                offset = page.context.size,
-                numberOfRows = page.meta.paging.size,
-                default = page
+            navigateTo(
+                Screen.DepositPageScreen(
+                    offset = page.context.size,
+                    numberOfRows = page.meta.paging.size,
+                    default = page
+                )
             )
         }
     ) {

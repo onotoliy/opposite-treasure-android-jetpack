@@ -55,11 +55,15 @@ fun TransactionPageScreen(
     navigateTo: (Screen) -> Unit
 ) {
     model.page?.let {
-        TransactionPageScreen(
-            page = it,
-            scrollerPosition = model.scrollerPosition,
-            navigateTo = navigateTo
-        )
+        if (it.context.isNullOrEmpty()) {
+            ProgressScreen()
+        } else {
+            TransactionPageScreen(
+                page = it,
+                scrollerPosition = model.scrollerPosition,
+                navigateTo = navigateTo
+            )
+        }
     }
 }
 
@@ -73,10 +77,12 @@ private fun TransactionPageScreen(
         page = page,
         scrollerPosition = scrollerPosition,
         navigateToNextPageScreen = {
-            Screen.TransactionPageScreen(
-                offset = page.context.size,
-                numberOfRows = page.meta.paging.size,
-                default = page
+            navigateTo(
+                Screen.TransactionPageScreen(
+                    offset = page.context.size,
+                    numberOfRows = page.meta.paging.size,
+                    default = page
+                )
             )
         }
     ) {
@@ -91,7 +97,7 @@ private fun TransactionPageScreen(
             ) {
                 Row(modifier = Modifier.weight(4f)) {
                     Icon(
-                        asset = when(it.type) {
+                        asset = when (it.type) {
                             NONE, WRITE_OFF -> Icons.Filled.KeyboardArrowRight
                             COST, PAID -> Icons.Filled.KeyboardArrowDown
                             CONTRIBUTION, EARNED -> Icons.Filled.KeyboardArrowUp

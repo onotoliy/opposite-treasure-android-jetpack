@@ -26,8 +26,8 @@ fun HomeScreen(model: Screen.HomeScreen) {
     model.deposit?.let { deposit ->
         model.cashbox?.let { cashbox ->
             DepositScreen(deposit = deposit, cashbox = cashbox)
-        }
-    }
+        } ?: ProgressScreen()
+    }?: ProgressScreen()
 }
 
 @Composable
@@ -35,8 +35,8 @@ fun DepositScreen(model: Screen.DepositScreen) {
     model.deposit?.let { deposit ->
         model.cashbox?.let { cashbox ->
             DepositScreen(deposit = deposit, cashbox = cashbox)
-        }
-    }
+        }?: ProgressScreen()
+    }?: ProgressScreen()
 }
 
 @Composable

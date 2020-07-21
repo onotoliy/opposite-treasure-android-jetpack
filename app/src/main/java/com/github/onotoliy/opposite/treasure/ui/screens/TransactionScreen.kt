@@ -19,17 +19,16 @@ import com.github.onotoliy.opposite.treasure.ui.typography
 @Composable
 fun TransactionScreenPreview() {
     TransactionScreen(
-        data =
-            Transaction(
-                uuid = "",
-                name = "Открытие мотосезона город Улан-Удэ 2020 год",
-                cash = "1 000",
-                type = TransactionType.CONTRIBUTION,
-                person = Option("", "Анатолий Похресный"),
-                event = Option("", "Открытие мотосезона город Улан-Удэ 2020 год"),
-                creationDate = "20.12.2020",
-                author = Option("", "Анатолий Похресный")
-            )
+        data = Transaction(
+            uuid = "",
+            name = "Открытие мотосезона город Улан-Удэ 2020 год",
+            cash = "1 000",
+            type = TransactionType.CONTRIBUTION,
+            person = Option("", "Анатолий Похресный"),
+            event = Option("", "Открытие мотосезона город Улан-Удэ 2020 год"),
+            creationDate = "20.12.2020",
+            author = Option("", "Анатолий Похресный")
+        )
     ) {
 
     }
@@ -39,7 +38,7 @@ fun TransactionScreenPreview() {
 fun TransactionScreen(model: Screen.TransactionScreen, navigateTo: (Screen) -> Unit) {
     model.transaction?.let {
         TransactionScreen(data = it, navigateTo = navigateTo)
-    }
+    } ?: ProgressScreen()
 }
 
 @Composable
