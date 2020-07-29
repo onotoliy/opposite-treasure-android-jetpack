@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Оппозит МК - Касса</string>
+    <string name="app_name">Оппозит МК</string>
 
     <string name="auth_login">Логин</string>
     <string name="auth_password">Пароль</string>

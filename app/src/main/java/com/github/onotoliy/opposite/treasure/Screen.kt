@@ -36,21 +36,17 @@ sealed class Screen {
         override fun loading(manager: AccountManager) {
             manager.cashbox.get().enqueue(object : Callback<Cashbox> {
                 override fun onFailure(call: Call<Cashbox>, t: Throwable) {
-                    println("Home cashbox $t")
                 }
 
                 override fun onResponse(call: Call<Cashbox>, response: Response<Cashbox>) {
                     _cashbox.postValue(response.body())
-                    println("Home cashbox")
                 }
             })
             manager.deposits.get(manager.getUUID()).enqueue(object : Callback<Deposit> {
                 override fun onFailure(call: Call<Deposit>, t: Throwable) {
-                    println("Home deposits $t")
                 }
                 override fun onResponse(call: Call<Deposit>, response: Response<Deposit>) {
                     _deposit.postValue(response.body())
-                    println("Home deposits")
                 }
             })
         }
