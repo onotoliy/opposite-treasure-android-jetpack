@@ -18,16 +18,15 @@ import com.github.onotoliy.opposite.treasure.ui.typography
 @Composable
 fun EventScreenPreview() {
     EventScreen(
-        data =
-            Event(
-                uuid = "",
-                name = "Открытие мотосезона город Улан-Удэ 2020 год",
-                contribution = "1 000",
-                total = "10 000",
-                deadline = "20.12.2020",
-                creationDate = "20.12.2020",
-                author = Option("", "Анатолий Похресный")
-            )
+        data = Event(
+            uuid = "",
+            name = "Открытие мотосезона город Улан-Удэ 2020 год",
+            contribution = "1 000",
+            total = "10 000",
+            deadline = "20.12.2020",
+            creationDate = "20.12.2020",
+            author = Option("", "Анатолий Похресный")
+        )
     ) {
 
     }
@@ -37,7 +36,7 @@ fun EventScreenPreview() {
 fun EventScreen(model: Screen.EventScreen, navigateTo: (Screen) -> Unit) {
     model.event?.let {
         EventScreen(data = it, navigateTo = navigateTo)
-    }
+    } ?: ProgressScreen()
 }
 
 @Composable

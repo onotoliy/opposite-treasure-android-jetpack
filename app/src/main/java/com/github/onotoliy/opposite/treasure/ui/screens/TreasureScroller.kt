@@ -2,17 +2,18 @@ package com.github.onotoliy.opposite.treasure.ui.screens
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
+import androidx.ui.foundation.*
+import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
+import androidx.ui.material.CircularProgressIndicator
 import androidx.ui.material.IconButton
+import androidx.ui.material.LinearProgressIndicator
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Refresh
 import androidx.ui.res.stringResource
+import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.R

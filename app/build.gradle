@@ -72,6 +72,12 @@ dependencies {
     implementation "androidx.ui:ui-material:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
     implementation "androidx.ui:ui-livedata:$compose_version"
+
+    implementation "androidx.ui:ui-core:$compose_version"
+    implementation "androidx.ui:ui-foundation:$compose_version"
+    implementation "androidx.ui:ui-text:$compose_version"
+    implementation "androidx.ui:ui-tooling:$compose_version"
+
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

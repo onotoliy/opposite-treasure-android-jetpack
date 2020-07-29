@@ -11,7 +11,10 @@ import com.github.onotoliy.opposite.treasure.ui.Menu
 
 @Composable
 fun TreasureScreen(firstScreen: Screen, manager: AccountManager) {
-    val state = state { firstScreen }
+    val state = state {
+        firstScreen.loading(manager)
+        firstScreen
+    }
     val navigateTo: (Screen) -> Unit = {
         state.value = it
         state.value.loading(manager)
