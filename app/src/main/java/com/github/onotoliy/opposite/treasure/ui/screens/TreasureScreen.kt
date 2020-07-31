@@ -6,7 +6,7 @@ import androidx.compose.state
 import androidx.ui.animation.Crossfade
 import androidx.ui.material.Surface
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.auth.*
+import com.github.onotoliy.opposite.treasure.auth.addAccount
 import com.github.onotoliy.opposite.treasure.ui.Menu
 
 @Composable
@@ -25,16 +25,11 @@ fun TreasureScreen(firstScreen: Screen, manager: AccountManager) {
             when (screen) {
                 is Screen.LoginScreen -> LoginScreen { account, password, token ->
                     manager.addAccount(account, password, token)
-                    navigateTo(Screen.HomeScreen)
+                    navigateTo(Screen.DepositScreen())
                 }
-                is Screen.HomeScreen ->
-                    Menu(
-                        bodyContent = { HomeScreen(screen) },
-                        navigateTo = navigateTo
-                    )
                 is Screen.DepositScreen ->
                     Menu(
-                        bodyContent = { DepositScreen(screen) },
+                        bodyContent = { DepositScreen(screen, navigateTo) },
                         navigateTo = navigateTo
                     )
                 is Screen.EventScreen ->

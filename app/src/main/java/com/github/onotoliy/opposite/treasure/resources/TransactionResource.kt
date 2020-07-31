@@ -13,6 +13,10 @@ interface TransactionResource {
 
     @GET("/api/treasure/v1/transaction")
     fun getAll(
+        @Query("name") name: String = "",
+        @Query("user") user: String = "",
+        @Query("type") type: String = "",
+        @Query("event") event: String = "",
         @Query("offset") offset: Int = 0,
         @Query("numberOfRows") numberOfRows: Int = 20
     ): Call<Page<Transaction>>

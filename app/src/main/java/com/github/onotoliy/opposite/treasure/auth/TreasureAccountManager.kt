@@ -7,10 +7,7 @@ import android.util.Base64
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.onotoliy.opposite.treasure.resources.CashboxResource
-import com.github.onotoliy.opposite.treasure.resources.DepositResource
-import com.github.onotoliy.opposite.treasure.resources.EventResource
-import com.github.onotoliy.opposite.treasure.resources.TransactionResource
+import com.github.onotoliy.opposite.treasure.resources.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -28,7 +25,6 @@ fun AccountManager.getAccount(): Account =
 fun AccountManager.getUUID(): String =
     getUserData(getAccount(), "uuid")
 
-
 val AccountManager.retrofit: Retrofit
     get() = Retrofit
         .Builder()
@@ -45,6 +41,9 @@ val AccountManager.transactions: TransactionResource
 
 val AccountManager.deposits: DepositResource
     get() = retrofit.create(DepositResource::class.java)
+
+val AccountManager.debts: DebtResource
+    get() = retrofit.create(DebtResource::class.java)
 
 val AccountManager.cashbox: CashboxResource
     get() = retrofit.create(CashboxResource::class.java)

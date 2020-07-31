@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         val firstScreen = if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
             Screen.LoginScreen
         } else {
-            Screen.HomeScreen
+            Screen.DepositScreen()
         }
 
         setContent {

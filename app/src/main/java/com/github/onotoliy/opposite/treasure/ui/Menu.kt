@@ -38,7 +38,7 @@ fun Menu(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(
-                        onClick = { navigateTo(Screen.HomeScreen) },
+                        onClick = { navigateTo(Screen.DepositScreen()) },
                         icon = { Icon(asset = Icons.Filled.Home) }
                     )
                     IconButton(

@@ -1,226 +1,187 @@
 package com.github.onotoliy.opposite.treasure
 
 import android.accounts.AccountManager
-import androidx.compose.Composable
 import androidx.lifecycle.MutableLiveData
-import androidx.ui.foundation.ScrollerPosition
 import com.github.onotoliy.opposite.data.Cashbox
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.auth.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.github.onotoliy.opposite.treasure.resources.*
+import com.github.onotoliy.opposite.treasure.ui.screens.DepositTab
+import com.github.onotoliy.opposite.treasure.ui.screens.EventTab
 
 sealed class Screen {
     abstract fun loading(manager: AccountManager)
 
+    val pending: MutableLiveData<Boolean> = MutableLiveData(true)
+
     object LoginScreen : Screen() {
-        override fun loading(manager: AccountManager) { }
-    }
-
-    object HomeScreen : Screen() {
-        private val _cashbox: MutableLiveData<Cashbox> = MutableLiveData()
-        private val _deposit: MutableLiveData<Deposit> = MutableLiveData()
-
-        @Composable
-        val deposit: Deposit?
-            get() = observe(data = _deposit)
-
-        @Composable
-        val cashbox: Cashbox?
-            get() = observe(data = _cashbox)
-
-        override fun loading(manager: AccountManager) {
-            manager.cashbox.get().enqueue(object : Callback<Cashbox> {
-                override fun onFailure(call: Call<Cashbox>, t: Throwable) {
-                }
-
-                override fun onResponse(call: Call<Cashbox>, response: Response<Cashbox>) {
-                    _cashbox.postValue(response.body())
-                }
-            })
-            manager.deposits.get(manager.getUUID()).enqueue(object : Callback<Deposit> {
-                override fun onFailure(call: Call<Deposit>, t: Throwable) {
-                }
-                override fun onResponse(call: Call<Deposit>, response: Response<Deposit>) {
-                    _deposit.postValue(response.body())
-                }
-            })
-        }
+        override fun loading(manager: AccountManager) {}
     }
 
     data class DepositPageScreen(
-        private val offset: Int = 0,
-        private val numberOfRows: Int = 5,
-        private val default: Page<Deposit>? = null
+        private val default: PageView<Deposit> = PageView()
     ) : Screen() {
-        private val _page: MutableLiveData<Page<Deposit>> =
-            MutableLiveData(default ?: Page())
 
-        @Composable
-        val page: Page<Deposit>?
-            get() = observe(data = _page)
-
-        @Composable
-        val scrollerPosition: ScrollerPosition
-            get() = default.scrollerPosition
+        val page: MutableLiveData<PageView<Deposit>> = MutableLiveData(default)
 
         override fun loading(manager: AccountManager) {
-            manager.deposits.getAll(offset, numberOfRows).enqueue(object : Callback<Page<Deposit>> {
-                override fun onFailure(call: Call<Page<Deposit>>, t: Throwable) {
-                }
-
-                override fun onResponse(
-                    call: Call<Page<Deposit>>,
-                    response: Response<Page<Deposit>>
-                ) {
-                    response.body()?.let {
-                        val list = mutableListOf<Deposit>()
-                        list.addAll(default?.context ?: listOf())
-                        list.addAll(it.context)
-
-                        _page.postValue(Page(it.meta, list))
-                    }
-                }
-            })
+            manager
+                .deposits
+                .getAll(default.offset, default.numberOfRows)
+                .enqueue(DepositPageCallback(default.default) {
+                    page.postValue(default.copy(context = it))
+                    pending.postValue(false)
+                })
         }
     }
 
     data class EventPageScreen(
-        private val offset: Int = 0,
-        private val numberOfRows: Int = 5,
-        private val default: Page<Event>? = null
+        private val default: PageView<Event> = PageView()
     ) : Screen() {
-        private val _page: MutableLiveData<Page<Event>> =
-            MutableLiveData(default ?: Page())
 
-        @Composable
-        val page: Page<Event>?
-            get() = observe(data = _page)
-
-        @Composable
-        val scrollerPosition: ScrollerPosition
-            get() = default.scrollerPosition
+        val page: MutableLiveData<PageView<Event>> = MutableLiveData(default)
 
         override fun loading(manager: AccountManager) {
-            manager.events.getAll(offset, numberOfRows).enqueue(object : Callback<Page<Event>> {
-                override fun onFailure(call: Call<Page<Event>>, t: Throwable) {
-                }
-
-                override fun onResponse(
-                    call: Call<Page<Event>>,
-                    response: Response<Page<Event>>
-                ) {
-                    response.body()?.let {
-                        val list = mutableListOf<Event>()
-                        list.addAll(default?.context ?: listOf())
-                        list.addAll(it.context)
-
-                        _page.postValue(Page(it.meta, list))
+            manager
+                .events
+                .getAll(offset = default.offset, numberOfRows = default.numberOfRows)
+                .enqueue(
+                    EventPageCallback(default.default) {
+                        page.postValue(default.copy(context = it))
+                        pending.postValue(false)
                     }
-                }
-            })
+                )
         }
     }
 
     data class TransactionPageScreen(
-        private val offset: Int = 0,
-        private val numberOfRows: Int = 5,
-        private val default: Page<Transaction>? = null
+        private val default: PageView<Transaction> = PageView()
     ) : Screen() {
-        private val _page: MutableLiveData<Page<Transaction>> =
-            MutableLiveData(default ?: Page())
 
-        @Composable
-        val page: Page<Transaction>?
-            get() = observe(data = _page)
-
-        @Composable
-        val scrollerPosition: ScrollerPosition
-            get() = default.scrollerPosition
+        val page: MutableLiveData<PageView<Transaction>> = MutableLiveData(default)
 
         override fun loading(manager: AccountManager) {
-            manager.transactions.getAll(offset, numberOfRows).enqueue(object : Callback<Page<Transaction>> {
-                override fun onFailure(call: Call<Page<Transaction>>, t: Throwable) {
-                }
-
-                override fun onResponse(
-                    call: Call<Page<Transaction>>,
-                    response: Response<Page<Transaction>>
-                ) {
-                    response.body()?.let {
-                        val list = mutableListOf<Transaction>()
-                        list.addAll(default?.context ?: listOf())
-                        list.addAll(it.context)
-
-                        _page.postValue(Page(it.meta, list))
-                    }
-                }
-            })
+            manager
+                .transactions
+                .getAll(offset = default.offset, numberOfRows = default.numberOfRows)
+                .enqueue(TransactionPageCallback(default.default) {
+                    page.postValue(default.copy(context = it))
+                    pending.postValue(false)
+                })
         }
     }
 
-    data class EventScreen(private val pk: String) : Screen() {
-        private val _event: MutableLiveData<Event> = MutableLiveData()
+    data class EventScreen(
+        private val pk: String,
+        private val dp: PageView<Deposit> = PageView(),
+        private val tp: PageView<Transaction> = PageView(),
+        val tab: EventTab = EventTab.GENERAL
+    ) : Screen() {
 
-        @Composable
-        val event: Event?
-            get() = observe(data = _event)
-
-        override fun loading(manager: AccountManager) {
-            manager.events.get(pk).enqueue(object : Callback<Event> {
-                override fun onFailure(call: Call<Event>, t: Throwable) { }
-
-                override fun onResponse(call: Call<Event>, response: Response<Event>) =
-                    _event.postValue(response.body())
-            })
-        }
-    }
-
-    data class DepositScreen(private val pk: String) : Screen() {
-        private val _cashbox: MutableLiveData<Cashbox> = MutableLiveData()
-        private val _deposit: MutableLiveData<Deposit> = MutableLiveData()
-
-        @Composable
-        val deposit: Deposit?
-            get() = observe(data = _deposit)
-
-        @Composable
-        val cashbox: Cashbox?
-            get() = observe(data = _cashbox)
+        val event: MutableLiveData<Event> = MutableLiveData()
+        val debtors: MutableLiveData<PageView<Deposit>> = MutableLiveData(dp)
+        val transactions: MutableLiveData<PageView<Transaction>> = MutableLiveData(tp)
 
         override fun loading(manager: AccountManager) {
-            manager.cashbox.get().enqueue(object : Callback<Cashbox> {
-                override fun onFailure(call: Call<Cashbox>, t: Throwable) { }
+            val loading = mutableMapOf(
+                "event" to true,
+                "debtors" to true,
+                "transactions" to true
+            )
 
-                override fun onResponse(call: Call<Cashbox>, response: Response<Cashbox>) =
-                    _cashbox.postValue(response.body())
+            manager.events.get(pk).enqueue(EventCallback {
+                event.postValue(it)
+                loading["event"] = false
+                pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
             })
-            manager.deposits.get(pk).enqueue(object : Callback<Deposit> {
-                override fun onFailure(call: Call<Deposit>, t: Throwable) { }
-                override fun onResponse(call: Call<Deposit>, response: Response<Deposit>) =
-                    _deposit.postValue(response.body())
-            })
+            manager.transactions
+                .getAll(event = pk, offset = tp.offset, numberOfRows = tp.numberOfRows)
+                .enqueue(TransactionPageCallback(tp.default) {
+                    transactions.postValue(
+                        PageView(
+                            offset = tp.offset,
+                            numberOfRows = tp.numberOfRows,
+                            context = it,
+                            default = tp.default
+                        )
+                    )
+                    loading["debtors"] = false
+                    loading["transactions"] = false
+                    pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
+                })
         }
     }
 
     data class TransactionScreen(private val pk: String) : Screen() {
-        private val _transaction: MutableLiveData<Transaction> = MutableLiveData()
 
-        @Composable
-        val transaction: Transaction?
-            get() = observe(data = _transaction)
+        val transaction: MutableLiveData<Transaction> = MutableLiveData()
 
         override fun loading(manager: AccountManager) {
-            manager.transactions.get(pk).enqueue(object : Callback<Transaction> {
-                override fun onFailure(call: Call<Transaction>, t: Throwable) { }
-
-                override fun onResponse(call: Call<Transaction>, response: Response<Transaction>) =
-                    _transaction.postValue(response.body())
+            manager.transactions.get(pk).enqueue(TransactionCallback {
+                transaction.postValue(it)
+                pending.postValue(false)
             })
+        }
+    }
+
+    data class DepositScreen(
+        private val pk: String? = null,
+        private val ep: PageView<Event> = PageView(),
+        private val tp: PageView<Transaction> = PageView(),
+        var tab: DepositTab = DepositTab.GENERAL
+    ) : Screen() {
+        val cashbox: MutableLiveData<Cashbox> = MutableLiveData()
+        val deposit: MutableLiveData<Deposit> = MutableLiveData()
+        val events: MutableLiveData<PageView<Event>> = MutableLiveData(ep)
+        val transactions: MutableLiveData<PageView<Transaction>> = MutableLiveData(tp)
+
+        override fun loading(manager: AccountManager) {
+            val loading = mutableMapOf(
+                "cashbox" to true,
+                "deposit" to true,
+                "events" to true,
+                "transactions" to true
+            )
+
+            manager.cashbox.get().enqueue(CashboxCallback {
+                cashbox.postValue(it)
+                loading["cashbox"] = false
+                pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
+            })
+            manager.deposits.get(pk ?: manager.getUUID()).enqueue(DepositCallback {
+                deposit.postValue(it)
+                loading["deposit"] = false
+                pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
+            })
+            manager.debts.getAll(pk ?: manager.getUUID()).enqueue(EventPageCallback(ep.default) {
+                events.postValue(
+                    PageView(
+                        offset = ep.offset,
+                        numberOfRows = ep.numberOfRows,
+                        context = it,
+                        default = ep.default
+                    )
+                )
+                loading["events"] = false
+                pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
+            })
+            manager
+                .transactions
+                .getAll(user = pk ?: manager.getUUID(), offset = tp.offset, numberOfRows = tp.numberOfRows)
+                .enqueue(TransactionPageCallback(tp.default) {
+                    transactions.postValue(
+                        PageView(
+                            offset = tp.offset,
+                            numberOfRows = tp.numberOfRows,
+                            context = it,
+                            default = tp.default
+                        )
+                    )
+                    loading["transactions"] = false
+                    pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
+                })
         }
     }
 }

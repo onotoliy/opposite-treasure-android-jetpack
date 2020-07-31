@@ -12,27 +12,19 @@ import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
 import androidx.ui.input.KeyboardType
 import androidx.ui.input.PasswordVisualTransformation
-import androidx.ui.layout.*
+import androidx.ui.layout.Column
+import androidx.ui.layout.fillMaxWidth
+import androidx.ui.layout.padding
 import androidx.ui.material.Button
-import androidx.ui.material.MaterialTheme
 import androidx.ui.res.stringResource
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontStyle
 import androidx.ui.text.style.TextAlign
-import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.TextUnit
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.auth.asyncAuthToken
 import com.github.onotoliy.opposite.treasure.ui.typography
-
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen(addAccount = { username, password, token ->
-
-    })
-}
 
 @Composable
 fun LoginScreen(
