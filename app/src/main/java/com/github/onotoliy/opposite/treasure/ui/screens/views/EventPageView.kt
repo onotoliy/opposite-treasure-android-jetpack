@@ -2,13 +2,10 @@ package com.github.onotoliy.opposite.treasure.ui.screens.views
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.*
 import androidx.ui.material.Divider
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.LocationOn
 import androidx.ui.res.stringResource
 import androidx.ui.text.style.TextAlign
 import androidx.ui.unit.dp
@@ -41,10 +38,7 @@ fun EventPageView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(modifier = Modifier.weight(4f)) {
-                    Icon(
-                        asset = Icons.Filled.LocationOn,
-                        modifier = Modifier.padding(0.dp, 0.dp, 6.dp, 0.dp)
-                    )
+                    IconEvents()
                     Text(
                         text = it.name,
                         softWrap = false,

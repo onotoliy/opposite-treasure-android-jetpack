@@ -2,14 +2,12 @@ package com.github.onotoliy.opposite.treasure
 
 import android.accounts.AccountManager
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Cashbox
-import com.github.onotoliy.opposite.data.Deposit
-import com.github.onotoliy.opposite.data.Event
-import com.github.onotoliy.opposite.data.Transaction
+import com.github.onotoliy.opposite.data.*
 import com.github.onotoliy.opposite.treasure.auth.*
 import com.github.onotoliy.opposite.treasure.resources.*
 import com.github.onotoliy.opposite.treasure.ui.screens.DepositTab
 import com.github.onotoliy.opposite.treasure.ui.screens.EventTab
+import java.util.*
 
 sealed class Screen {
     abstract fun loading(manager: AccountManager)
@@ -74,7 +72,7 @@ sealed class Screen {
     }
 
     data class EventScreen(
-        private val pk: String,
+        val pk: String,
         private val dp: PageView<Deposit> = PageView(),
         private val tp: PageView<Transaction> = PageView(),
         val tab: EventTab = EventTab.GENERAL
@@ -114,7 +112,7 @@ sealed class Screen {
         }
     }
 
-    data class TransactionScreen(private val pk: String) : Screen() {
+    data class TransactionScreen(val pk: String) : Screen() {
 
         val transaction: MutableLiveData<Transaction> = MutableLiveData()
 
@@ -182,6 +180,59 @@ sealed class Screen {
                     loading["transactions"] = false
                     pending.postValue(loading.any(Map.Entry<String, Boolean>::value))
                 })
+        }
+    }
+
+    data class EventEditScreen(private val pk: String? = null): Screen() {
+
+        val edit: MutableLiveData<Boolean> = MutableLiveData(false)
+        val event: MutableLiveData<Event> = MutableLiveData()
+
+        override fun loading(manager: AccountManager) {
+            if (pk == null) {
+                event.postValue(
+                    Event(
+                        uuid = UUID.randomUUID().toString(),
+                        name = "",
+                        contribution = "0.0",
+                        total = "0.0",
+                        deadline = "2020-07-31T00:00:00.000Z",
+                        creationDate = "2020-07-31T00:00:00.000Z",
+                        author = Option(
+                            uuid = manager.getUUID(),
+                            name = manager.getPreferredName()
+                        )
+                    )
+                )
+                edit.postValue(false)
+                pending.postValue(false)
+            } else {
+                manager.events.get(pk).enqueue(EventCallback {
+                    event.postValue(it)
+                    edit.postValue(true)
+                    pending.postValue(false)
+                })
+            }
+        }
+    }
+
+    data class TransactionEditScreen(private val pk: String? = null): Screen() {
+
+        val edit: MutableLiveData<Boolean> = MutableLiveData(false)
+        val transaction: MutableLiveData<Transaction> = MutableLiveData()
+
+        override fun loading(manager: AccountManager) {
+            if (pk == null) {
+                transaction.postValue(Transaction())
+                edit.postValue(false)
+                pending.postValue(false)
+            } else {
+                manager.transactions.get(pk).enqueue(TransactionCallback {
+                    transaction.postValue(it)
+                    edit.postValue(true)
+                    pending.postValue(false)
+                })
+            }
         }
     }
 }

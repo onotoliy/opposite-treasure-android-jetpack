@@ -25,6 +25,9 @@ fun AccountManager.getAccount(): Account =
 fun AccountManager.getUUID(): String =
     getUserData(getAccount(), "uuid")
 
+fun AccountManager.getPreferredName(): String =
+    getUserData(getAccount(), "preferredName")
+
 val AccountManager.retrofit: Retrofit
     get() = Retrofit
         .Builder()

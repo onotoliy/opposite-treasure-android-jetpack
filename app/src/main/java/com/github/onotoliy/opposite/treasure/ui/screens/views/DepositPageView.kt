@@ -2,7 +2,6 @@ package com.github.onotoliy.opposite.treasure.ui.screens.views
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.foundation.clickable
 import androidx.ui.layout.Arrangement
@@ -10,16 +9,11 @@ import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.layout.padding
 import androidx.ui.material.Divider
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.AccountCircle
 import androidx.ui.text.style.TextAlign
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.PageView
-import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.numberOfRows
-import com.github.onotoliy.opposite.treasure.offset
+import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.ui.Scroller
 import com.github.onotoliy.opposite.treasure.ui.typography
 
@@ -42,10 +36,7 @@ fun DepositPageView(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row {
-                Icon(
-                    asset = Icons.Filled.AccountCircle,
-                    modifier = Modifier.padding(0.dp, 0.dp, 6.dp, 0.dp)
-                )
+                IconAccountCircle()
                 Text(text = it.person.name, style = typography.subtitle1)
             }
             Text(text = it.deposit, style = typography.subtitle1, textAlign = TextAlign.Right)

@@ -2,25 +2,20 @@ package com.github.onotoliy.opposite.treasure.ui
 
 import androidx.compose.Composable
 import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
 import androidx.ui.layout.Arrangement
 import androidx.ui.layout.Row
 import androidx.ui.layout.fillMaxWidth
 import androidx.ui.material.*
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Home
-import androidx.ui.material.icons.filled.List
-import androidx.ui.material.icons.filled.LocationOn
-import androidx.ui.material.icons.filled.Person
 import androidx.ui.res.stringResource
+import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.Screen
 
 @Composable
 fun Menu(
     bodyContent: @Composable() (Modifier) -> Unit,
     navigateTo: (Screen) -> Unit = {},
+    floatingActionButton: @Composable (() -> Unit)? = null,
     scaffoldState: ScaffoldState = ScaffoldState()
 ) {
     Scaffold(
@@ -30,6 +25,7 @@ fun Menu(
                 title = { Text(text = stringResource(id = R.string.app_name)) }
             )
         },
+        floatingActionButton = floatingActionButton,
         bodyContent = bodyContent,
         bottomAppBar = {
             BottomAppBar {
@@ -39,19 +35,19 @@ fun Menu(
                 ) {
                     IconButton(
                         onClick = { navigateTo(Screen.DepositScreen()) },
-                        icon = { Icon(asset = Icons.Filled.Home) }
+                        icon = { IconHome() }
                     )
                     IconButton(
                         onClick = { navigateTo(Screen.DepositPageScreen()) },
-                        icon = { Icon(asset = Icons.Filled.Person) }
+                        icon = { IconDeposits() }
                     )
                     IconButton(
                         onClick = { navigateTo(Screen.TransactionPageScreen()) },
-                        icon = { Icon(asset = Icons.Filled.List) }
+                        icon = { IconTransactions() }
                     )
                     IconButton(
                         onClick = { navigateTo(Screen.EventPageScreen()) },
-                        icon = { Icon(asset = Icons.Filled.LocationOn) }
+                        icon = { IconEvents() }
                     )
                 }
             }
