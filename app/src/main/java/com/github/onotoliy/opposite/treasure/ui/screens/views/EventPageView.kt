@@ -13,8 +13,7 @@ import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.ui.Scroller
-import com.github.onotoliy.opposite.treasure.ui.typography
+import com.github.onotoliy.opposite.treasure.ui.*
 
 @Composable
 fun EventPageView(
@@ -39,44 +38,30 @@ fun EventPageView(
             ) {
                 Row(modifier = Modifier.weight(4f)) {
                     IconEvents()
-                    Text(
-                        text = it.name,
-                        softWrap = false,
-                        style = typography.subtitle1
-                    )
+                    Text(text = it.name, softWrap = false, style = H6_BOLD)
                 }
                 Text(
                     modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp),
                     text = it.contribution,
-                    style = typography.subtitle1,
+                    style = H6,
                     textAlign = TextAlign.Right
                 )
             }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row {
-                    Text(
-                        text = stringResource(id = R.string.event_page_creation_date),
-                        style = typography.subtitle2
-                    )
-                    Text(
-                        text = it.creationDate.formatDate(),
-                        style = typography.subtitle2
-                    )
+                    Text(text = stringResource(id = R.string.event_page_creation_date), style = BODY_GREY)
+                    Text(text = it.creationDate.formatDate(), style = BODY_GREY)
                 }
                 Row {
-                    Text(
-                        text = stringResource(R.string.event_page_deadline),
-                        style = typography.subtitle2
-                    )
-                    Text(
-                        text = it.deadline.formatDate(),
-                        style = typography.subtitle2
-                    )
+                    Text(text = stringResource(R.string.event_page_deadline), style = BODY_GREY)
+                    Text(text = it.deadline.formatDate(), style = BODY_GREY)
                 }
             }
+
             Divider()
         }
     }

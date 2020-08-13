@@ -12,8 +12,7 @@ import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.*
-import com.github.onotoliy.opposite.treasure.ui.Scroller
-import com.github.onotoliy.opposite.treasure.ui.typography
+import com.github.onotoliy.opposite.treasure.ui.*
 
 @Composable
 fun TransactionPageView(
@@ -45,13 +44,13 @@ fun TransactionPageView(
                     Text(
                         text = it.name,
                         softWrap = false,
-                        style = typography.subtitle1
+                        style = H6_BOLD
                     )
                 }
                 Text(
                     modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp),
                     text = it.cash,
-                    style = typography.subtitle1,
+                    style = H6,
                     textAlign = TextAlign.Right
                 )
             }
@@ -59,8 +58,8 @@ fun TransactionPageView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = it.person?.name ?: "", style = typography.subtitle2)
-                Text(text = it.creationDate.formatDate(), style = typography.subtitle2)
+                Text(text = it.person?.name ?: "", style = BODY_GREY)
+                Text(text = it.creationDate.formatDate(), style = BODY_GREY)
             }
             Divider()
         }

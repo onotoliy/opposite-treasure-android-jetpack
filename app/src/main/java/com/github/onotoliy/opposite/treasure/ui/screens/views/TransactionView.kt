@@ -10,65 +10,53 @@ import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.formatDate
-import com.github.onotoliy.opposite.treasure.ui.typography
+import com.github.onotoliy.opposite.treasure.ui.BODY
+import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 
 @Composable
 fun TransactionView(data: Transaction, navigateTo: (Screen) -> Unit) {
     Column {
-        Text(
-            text = stringResource(id = R.string.transaction_name),
-            style = typography.h6
-        )
-        Text(text = data.name, style = typography.body1)
-        Text(
-            text = stringResource(id = R.string.transaction_type),
-            style = typography.h6
-        )
-        Text(text = data.type.label, style = typography.body1)
-        Text(
-            text = stringResource(id = R.string.transaction_cash),
-            style = typography.h6
-        )
-        Text(text = data.cash, style = typography.body1)
+        Text(text = stringResource(id = R.string.transaction_name), style = H6_BOLD)
+        Text(text = data.name, style = BODY)
+
+        Text(text = stringResource(id = R.string.transaction_type), style = H6_BOLD)
+        Text(text = data.type.label, style = BODY)
+
+        Text(text = stringResource(id = R.string.transaction_cash), style = H6_BOLD)
+        Text(text = data.cash, style = BODY)
 
         data.event?.let {
-            Text(
-                text = stringResource(id = R.string.transaction_event),
-                style = typography.h6
-            )
+            Text(text = stringResource(id = R.string.transaction_event), style = H6_BOLD)
             Text(
                 modifier = Modifier.clickable(onClick = {
                     navigateTo(Screen.EventScreen(it.uuid))
                 }),
                 text = it.name,
-                style = typography.body1
+                style = H6_BOLD
             )
         }
+
         data.person?.let {
-            Text(
-                text = stringResource(id = R.string.transaction_person),
-                style = typography.h6
-            )
+            Text(text = stringResource(id = R.string.transaction_person), style = H6_BOLD)
             Text(
                 modifier = Modifier.clickable(onClick = {
                     navigateTo(Screen.DepositScreen(it.uuid))
                 }),
                 text = it.name,
-                style = typography.body1
+                style = BODY
             )
         }
-        Text(
-            text = stringResource(id = R.string.event_creation_date),
-            style = typography.h6
-        )
-        Text(text = data.creationDate.formatDate(), style = typography.body1)
-        Text(text = stringResource(id = R.string.event_author), style = typography.h6)
+
+        Text(text = stringResource(id = R.string.event_creation_date), style = H6_BOLD)
+        Text(text = data.creationDate.formatDate(), style = BODY)
+
+        Text(text = stringResource(id = R.string.event_author), style = H6_BOLD)
         Text(
             modifier = Modifier.clickable(onClick = {
                 navigateTo(Screen.DepositScreen(data.author.uuid))
             }),
             text = data.author.name,
-            style = typography.body1
+            style = BODY
         )
     }
 }

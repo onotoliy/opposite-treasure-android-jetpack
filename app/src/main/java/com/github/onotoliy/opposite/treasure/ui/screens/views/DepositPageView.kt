@@ -14,8 +14,8 @@ import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.ui.H6
 import com.github.onotoliy.opposite.treasure.ui.Scroller
-import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Composable
 fun DepositPageView(
@@ -37,9 +37,9 @@ fun DepositPageView(
         ) {
             Row {
                 IconAccountCircle()
-                Text(text = it.person.name, style = typography.subtitle1)
+                Text(text = it.person.name, style = H6)
             }
-            Text(text = it.deposit, style = typography.subtitle1, textAlign = TextAlign.Right)
+            Text(text = it.deposit, style = H6, textAlign = TextAlign.Right)
         }
         Divider()
     }

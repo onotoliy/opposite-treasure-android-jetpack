@@ -10,28 +10,34 @@ import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.formatDate
-import com.github.onotoliy.opposite.treasure.ui.typography
+import com.github.onotoliy.opposite.treasure.ui.BODY
+import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 
 @Composable
 fun EventView(data: Event, navigateTo: (Screen) -> Unit) {
     Column {
-        Text(text = stringResource(id = R.string.event_name), style = typography.h6)
-        Text(text = data.name, style = typography.body1)
-        Text(text = stringResource(id = R.string.event_contribution), style = typography.h6)
-        Text(text = data.contribution, style = typography.body1)
-        Text(text = stringResource(id = R.string.event_total), style = typography.h6)
-        Text(text = data.total, style = typography.body1)
-        Text(text = stringResource(id = R.string.event_deadline), style = typography.h6)
-        Text(text = data.deadline.formatDate(), style = typography.body1)
-        Text(text = stringResource(id = R.string.event_creation_date), style = typography.h6)
-        Text(text = data.creationDate.formatDate(), style = typography.body1)
-        Text(text = stringResource(id = R.string.event_author), style = typography.h6)
+        Text(text = stringResource(id = R.string.event_name), style = H6_BOLD)
+        Text(text = data.name, style = BODY)
+
+        Text(text = stringResource(id = R.string.event_contribution), style = H6_BOLD)
+        Text(text = data.contribution, style = BODY)
+
+        Text(text = stringResource(id = R.string.event_total), style = H6_BOLD)
+        Text(text = data.total, style = BODY)
+
+        Text(text = stringResource(id = R.string.event_deadline), style = H6_BOLD)
+        Text(text = data.deadline.formatDate(), style = BODY)
+
+        Text(text = stringResource(id = R.string.event_creation_date), style = H6_BOLD)
+        Text(text = data.creationDate.formatDate(), style = BODY)
+
+        Text(text = stringResource(id = R.string.event_author), style = H6_BOLD)
         Text(
             modifier = Modifier.clickable(onClick = {
                 navigateTo(Screen.DepositScreen(data.author.uuid))
             }),
             text = data.author.name,
-            style = typography.body1
+            style = BODY
         )
     }
 }

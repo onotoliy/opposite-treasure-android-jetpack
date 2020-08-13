@@ -4,14 +4,13 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
 import android.util.Base64
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.onotoliy.opposite.treasure.ACCOUNT_TYPE
 import com.github.onotoliy.opposite.treasure.resources.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.charset.StandardCharsets
@@ -28,14 +27,6 @@ fun AccountManager.getUUID(): String =
 fun AccountManager.getPreferredName(): String =
     getUserData(getAccount(), "preferredName")
 
-val AccountManager.retrofit: Retrofit
-    get() = Retrofit
-        .Builder()
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .baseUrl("http://185.12.95.242/")
-        .client(client)
-        .build()
-
 val AccountManager.events: EventResource
     get() = retrofit.create(EventResource::class.java)
 
@@ -51,6 +42,14 @@ val AccountManager.debts: DebtResource
 val AccountManager.cashbox: CashboxResource
     get() = retrofit.create(CashboxResource::class.java)
 
+private val AccountManager.retrofit: Retrofit
+    get() = Retrofit
+        .Builder()
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .baseUrl("http://185.12.95.242/")
+        .client(client)
+        .build()
+
 private val gson: Gson = GsonBuilder().setLenient().create()
 
 private val AccountManager.client: OkHttpClient
@@ -59,11 +58,7 @@ private val AccountManager.client: OkHttpClient
         .addInterceptor {
             val account = getAccount()
             val password = getPassword(account)
-            val token =
-                token(
-                    account.name,
-                    password
-                )
+            val token = token(account.name, password)
             val request: Request =
                 it.request().newBuilder().addHeader("Authorization", "Bearer $token").build()
 
@@ -76,14 +71,14 @@ private fun String.userdata(): Bundle {
     if (parts.size != 3) {
         throw IllegalArgumentException("The token should consist of three parts.")
     }
+
     val payload = String(Base64.decode(parts[1], Base64.URL_SAFE), StandardCharsets.ISO_8859_1)
-    val node: JsonNode = ObjectMapper()
-        .readTree(payload)
+    val node = JSONObject(payload)
 
     return Bundle().apply {
-        putString("uuid", node["sub"].asText())
-        putString("lastName", node["family_name"].asText())
-        putString("firstName", node["given_name"].asText())
-        putString("preferredName", node["preferred_username"].asText())
+        putString("uuid", node.getString("sub"))
+        putString("lastName", node.getString("family_name"))
+        putString("firstName", node.getString("given_name"))
+        putString("preferredName", node.getString("preferred_username"))
     }
 }

@@ -7,27 +7,25 @@ import androidx.ui.res.stringResource
 import com.github.onotoliy.opposite.data.Cashbox
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.ui.typography
+import com.github.onotoliy.opposite.treasure.ui.BODY
+import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 
 @Composable
 fun DepositView(deposit: Deposit?, cashbox: Cashbox?) {
     deposit?.let {
         cashbox?.let {
             Column {
-                Text(text = stringResource(id = R.string.deposit_person), style = typography.h6)
-                Text(text = deposit.person.name, style = typography.body1)
-                Text(
-                    text = stringResource(id = R.string.deposit_contribution),
-                    style = typography.h6
-                )
-                Text(text = deposit.deposit, style = typography.body1)
-                Text(text = stringResource(id = R.string.deposit_cashbox), style = typography.h6)
-                Text(text = cashbox.deposit, style = typography.body1)
-                Text(
-                    text = stringResource(id = R.string.deposit_last_update_date),
-                    style = typography.h6
-                )
-                Text(text = cashbox.lastUpdateDate, style = typography.body1)
+                Text(text = stringResource(id = R.string.deposit_person), style = H6_BOLD)
+                Text(text = deposit.person.name, style = BODY)
+
+                Text(text = stringResource(id = R.string.deposit_contribution), style = H6_BOLD)
+                Text(text = deposit.deposit, style = BODY)
+
+                Text(text = stringResource(id = R.string.deposit_cashbox), style = H6_BOLD)
+                Text(text = cashbox.deposit, style = BODY)
+
+                Text(text = stringResource(id = R.string.deposit_last_update_date), style = H6_BOLD)
+                Text(text = cashbox.lastUpdateDate, style = BODY)
             }
         }
     }

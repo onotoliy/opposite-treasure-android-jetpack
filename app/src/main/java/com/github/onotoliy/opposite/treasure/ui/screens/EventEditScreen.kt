@@ -22,6 +22,7 @@ import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.observe
+import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 
 @Composable
 fun EventEditScreen(model: Screen.EventEditScreen) {
@@ -37,7 +38,7 @@ fun EventEditScreen(model: Screen.EventEditScreen) {
                 val total = state(init = { TextFieldValue(event.total) })
                 val deadline = state(init = { TextFieldValue(event.deadline) })
 
-                Text(text = stringResource(id = R.string.event_edit_name))
+                Text(text = stringResource(id = R.string.event_edit_name), style = H6_BOLD)
                 TextField(
                     value = name.value,
                     onValueChange = { name.value = it },
@@ -54,7 +55,7 @@ fun EventEditScreen(model: Screen.EventEditScreen) {
                     )
                 )
 
-                Text(text = stringResource(id = R.string.event_edit_contribution))
+                Text(text = stringResource(id = R.string.event_edit_contribution), style = H6_BOLD)
                 TextField(
                     value = contribution.value,
                     onValueChange = { contribution.value = it },
@@ -72,7 +73,7 @@ fun EventEditScreen(model: Screen.EventEditScreen) {
                     )
                 )
 
-                Text(text = stringResource(id = R.string.event_edit_total))
+                Text(text = stringResource(id = R.string.event_edit_total), style = H6_BOLD)
                 TextField(
                     value = total.value,
                     onValueChange = { total.value = it },
@@ -90,7 +91,7 @@ fun EventEditScreen(model: Screen.EventEditScreen) {
                     )
                 )
 
-                Text(text = stringResource(id = R.string.event_edit_deadline))
+                Text(text = stringResource(id = R.string.event_edit_deadline), style = H6_BOLD)
                 TextField(
                     value = deadline.value,
                     onValueChange = { deadline.value = it },

@@ -10,8 +10,8 @@ import androidx.ui.res.vectorResource
 import com.github.onotoliy.opposite.data.page.Page
 
 const val ACCOUNT_TYPE = "com.github.onotoliy.opposite.treasure"
-const val DEFAULT_NOTIFICATION_CHANEL_ID = "Nilesh_channel"
-const val DEFAULT_NOTIFICATION_CHANEL_NAME = "Notification"
+const val DEFAULT_NOTIFICATION_CHANEL_ID = "channel_id"
+const val DEFAULT_NOTIFICATION_CHANEL_NAME = "channel_name"
 
 @Composable
 fun IconAccountCircle() = Icon(asset = vectorResource(id = R.drawable.ic_account_circle))

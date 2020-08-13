@@ -24,7 +24,7 @@ import androidx.ui.unit.TextUnit
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.services.token
-import com.github.onotoliy.opposite.treasure.ui.typography
+import com.github.onotoliy.opposite.treasure.ui.H6
 
 @Composable
 fun LoginScreen(
@@ -39,7 +39,7 @@ fun LoginScreen(
     ) {
         Text(
             text = stringResource(id = R.string.auth_login),
-            style = typography.subtitle1,
+            style = H6,
             color = Color.DarkGray
         )
 
@@ -64,7 +64,7 @@ fun LoginScreen(
 
         Text(
             text = stringResource(id = R.string.auth_password),
-            style = typography.subtitle1,
+            style = H6,
             color = Color.DarkGray
         )
         TextField(
