@@ -7,9 +7,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.ui.core.setContent
-import com.github.onotoliy.opposite.treasure.auth.ACCOUNT_TYPE
+import com.github.onotoliy.opposite.treasure.ACCOUNT_TYPE
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.screens.TreasureScreen
+import com.google.firebase.iid.FirebaseInstanceId
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,5 +49,22 @@ class MainActivity : AppCompatActivity() {
                 TreasureScreen(firstScreen, manager)
             }
         }
+
+        getToken()
+    }
+
+    private fun getToken() {
+
+        Thread(Runnable {
+            try {
+
+                val newToken = FirebaseInstanceId.getInstance()
+                    .getToken("827738396697", "FCM")
+                println("Token --> $newToken")
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }).start()
     }
 }

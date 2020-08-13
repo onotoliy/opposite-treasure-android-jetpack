@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.auth
+package com.github.onotoliy.opposite.treasure.services
 
 import android.accounts.AbstractAccountAuthenticator
 import android.accounts.Account
@@ -9,12 +9,31 @@ import android.os.Bundle
 import android.text.TextUtils
 import com.github.onotoliy.opposite.treasure.MainActivity
 
-class TreasureAccountAuthenticator(private val context: Context): AbstractAccountAuthenticator(context) {
+class AccountAuthenticator(private val context: Context): AbstractAccountAuthenticator(context) {
     override fun getAuthTokenLabel(authTokenType: String?): String? = null
-    override fun confirmCredentials(response: AccountAuthenticatorResponse?, account: Account?, options: Bundle?): Bundle? = null
-    override fun updateCredentials(response: AccountAuthenticatorResponse?, account: Account?, authTokenType: String?, options: Bundle?): Bundle? = null
-    override fun hasFeatures(response: AccountAuthenticatorResponse?, account: Account?, features: Array<out String>?): Bundle? = null
-    override fun editProperties(response: AccountAuthenticatorResponse?, accountType: String?): Bundle? = null
+    override fun confirmCredentials(
+        response: AccountAuthenticatorResponse?,
+        account: Account?,
+        options: Bundle?
+    ): Bundle? = null
+
+    override fun updateCredentials(
+        response: AccountAuthenticatorResponse?,
+        account: Account?,
+        authTokenType: String?,
+        options: Bundle?
+    ): Bundle? = null
+
+    override fun hasFeatures(
+        response: AccountAuthenticatorResponse?,
+        account: Account?,
+        features: Array<out String>?
+    ): Bundle? = null
+
+    override fun editProperties(
+        response: AccountAuthenticatorResponse?,
+        accountType: String?
+    ): Bundle? = null
 
     override fun getAuthToken(
         response: AccountAuthenticatorResponse?,

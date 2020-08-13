@@ -8,6 +8,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TransactionResource {
+
     @GET("/api/treasure/v1/transaction/{transaction}")
     fun get(@Path("transaction") transaction: String): Call<Transaction>
 
@@ -20,4 +21,5 @@ interface TransactionResource {
         @Query("offset") offset: Int = 0,
         @Query("numberOfRows") numberOfRows: Int = 20
     ): Call<Page<Transaction>>
+
 }

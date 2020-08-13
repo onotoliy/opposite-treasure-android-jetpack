@@ -1,12 +1,12 @@
-package com.github.onotoliy.opposite.treasure.auth
+package com.github.onotoliy.opposite.treasure.services
 
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
 import android.util.Base64
-import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.onotoliy.opposite.treasure.ACCOUNT_TYPE
 import com.github.onotoliy.opposite.treasure.resources.*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -59,7 +59,11 @@ private val AccountManager.client: OkHttpClient
         .addInterceptor {
             val account = getAccount()
             val password = getPassword(account)
-            val token = asyncAuthToken(account.name, password)
+            val token =
+                token(
+                    account.name,
+                    password
+                )
             val request: Request =
                 it.request().newBuilder().addHeader("Authorization", "Bearer $token").build()
 
@@ -74,7 +78,6 @@ private fun String.userdata(): Bundle {
     }
     val payload = String(Base64.decode(parts[1], Base64.URL_SAFE), StandardCharsets.ISO_8859_1)
     val node: JsonNode = ObjectMapper()
-        .configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true)
         .readTree(payload)
 
     return Bundle().apply {

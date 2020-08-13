@@ -37,8 +37,11 @@ open class DefaultPageCallback<T>(
 }
 
 class CashboxCallback(onResponse: (Cashbox?) -> Unit) : DefaultCallback<Cashbox>(onResponse)
+
 class DepositCallback(onResponse: (Deposit?) -> Unit) : DefaultCallback<Deposit>(onResponse)
+
 class EventCallback(onResponse: (Event?) -> Unit) : DefaultCallback<Event>(onResponse)
+
 class TransactionCallback(onResponse: (Transaction?) -> Unit) :
     DefaultCallback<Transaction>(onResponse)
 

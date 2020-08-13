@@ -1,15 +1,17 @@
-package com.github.onotoliy.opposite.treasure.auth
+package com.github.onotoliy.opposite.treasure.services
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 
-class TreasureAuthenticatorService : Service() {
-    private lateinit var authenticator: TreasureAccountAuthenticator
+class AuthenticatorService : Service() {
+
+    private lateinit var authenticator: AccountAuthenticator
 
     override fun onCreate() {
         super.onCreate()
-        authenticator = TreasureAccountAuthenticator(this)
+
+        authenticator = AccountAuthenticator(this)
     }
 
     override fun onBind(intent: Intent?): IBinder {

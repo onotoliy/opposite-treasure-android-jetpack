@@ -3,8 +3,8 @@ package com.github.onotoliy.opposite.treasure
 import android.accounts.AccountManager
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.*
-import com.github.onotoliy.opposite.treasure.auth.*
 import com.github.onotoliy.opposite.treasure.resources.*
+import com.github.onotoliy.opposite.treasure.services.*
 import com.github.onotoliy.opposite.treasure.ui.screens.DepositTab
 import com.github.onotoliy.opposite.treasure.ui.screens.EventTab
 import java.util.*

@@ -10,7 +10,7 @@ import com.github.onotoliy.opposite.treasure.IconAdd
 import com.github.onotoliy.opposite.treasure.IconEdit
 import com.github.onotoliy.opposite.treasure.IconSave
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.auth.addAccount
+import com.github.onotoliy.opposite.treasure.services.addAccount
 import com.github.onotoliy.opposite.treasure.ui.Menu
 
 @Composable

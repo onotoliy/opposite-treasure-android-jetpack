@@ -9,6 +9,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EventResource {
+
     @GET("/api/treasure/v1/event/{event}")
     fun get(@Path("event") event: String): Call<Event>
 
@@ -21,4 +22,5 @@ interface EventResource {
         @Query("offset") offset: Int = 0,
         @Query("numberOfRows") numberOfRows: Int = 20
     ): Call<Page<Event>>
+
 }

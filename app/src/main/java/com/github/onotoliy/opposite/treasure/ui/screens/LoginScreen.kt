@@ -23,7 +23,7 @@ import androidx.ui.text.style.TextAlign
 import androidx.ui.unit.TextUnit
 import androidx.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.auth.asyncAuthToken
+import com.github.onotoliy.opposite.treasure.services.token
 import com.github.onotoliy.opposite.treasure.ui.typography
 
 @Composable
@@ -91,7 +91,7 @@ fun LoginScreen(
         Button(
             modifier = Modifier.padding(5.dp),
             onClick = {
-                asyncAuthToken(login.value.text, password.value.text)?.let {
+                token(login.value.text, password.value.text)?.let {
                     addAccount(login.value.text, password.value.text, it)
                 }
             }

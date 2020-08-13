@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface UserResource {
+
     @GET("/api/treasure/v1/user/current")
     fun getCurrentUser(): Call<Option>
 
@@ -13,4 +14,5 @@ interface UserResource {
 
     @GET("/api/treasure/v1/user/list")
     fun getAll(): Call<List<Option>>
+
 }

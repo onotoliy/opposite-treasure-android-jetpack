@@ -8,6 +8,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface DepositResource {
+
     @GET("/api/treasure/v1/deposit/{deposit}")
     fun get(@Path("deposit") deposit: String): Call<Deposit>
 
@@ -16,4 +17,5 @@ interface DepositResource {
         @Query("offset") offset: Int = 0,
         @Query("numberOfRows") numberOfRows: Int = 20
     ): Call<Page<Deposit>>
+
 }
