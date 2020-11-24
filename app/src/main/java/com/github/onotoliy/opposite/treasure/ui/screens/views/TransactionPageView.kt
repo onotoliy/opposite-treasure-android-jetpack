@@ -1,13 +1,13 @@
 package com.github.onotoliy.opposite.treasure.ui.screens.views
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.clickable
-import androidx.ui.layout.*
-import androidx.ui.material.Divider
-import androidx.ui.text.style.TextAlign
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.page.Page

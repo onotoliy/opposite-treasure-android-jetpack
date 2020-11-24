@@ -1,10 +1,15 @@
 package com.github.onotoliy.opposite.treasure.services
 
+import com.github.onotoliy.opposite.treasure.resources.DefaultCallback
 import com.github.onotoliy.opposite.treasure.resources.KeycloakResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
+fun token(username: String, password: String, callback: DefaultCallback<AccessToken>) = keycloak
+    .auth(username = username, password = password).enqueue(callback)
 
 fun token(username: String, password: String): String? = keycloak
     .auth(username = username, password = password).execute().body()?.access_token

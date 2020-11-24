@@ -1,10 +1,10 @@
 package com.github.onotoliy.opposite.treasure.ui.screens
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.layout.Column
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.material.LinearProgressIndicator
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.observe
 import com.github.onotoliy.opposite.treasure.ui.screens.views.EventPageView
@@ -13,7 +13,7 @@ import com.github.onotoliy.opposite.treasure.ui.screens.views.EventPageView
 fun EventPageScreen(
     model: Screen.EventPageScreen,
     navigateTo: (Screen) -> Unit
-) {
+) {/*
     model.pending.observe()?.let { pending ->
         Column {
             if (pending) {
@@ -37,5 +37,5 @@ fun EventPageScreen(
                 )
             }
         }
-    }
+    }*/
 }

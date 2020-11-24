@@ -1,9 +1,9 @@
 package com.github.onotoliy.opposite.treasure.ui.screens.views
 
-import androidx.compose.Composable
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Column
-import androidx.ui.res.stringResource
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.data.Cashbox
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.treasure.R

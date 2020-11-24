@@ -1,14 +1,15 @@
 package com.github.onotoliy.opposite.treasure.ui.screens
 
-import androidx.compose.Composable
-import androidx.compose.state
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Column
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.material.LinearProgressIndicator
-import androidx.ui.material.Tab
-import androidx.ui.material.TabRow
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import com.github.onotoliy.opposite.treasure.PageView
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.observe
@@ -21,20 +22,21 @@ enum class EventTab(val label: String) {
 }
 
 @Composable
-fun EventScreen(model: Screen.EventScreen, navigateTo: (Screen) -> Unit) {
-    val selected = state { model.tab }
+fun EventScreen(model: Screen.EventScreen, navigateTo: (Screen) -> Unit) {/*
+    val selected = remember { mutableStateOf(model.tab) }
 
     model.pending.observe()?.let { pending ->
         Column {
             TabRow(
-                items = EventTab.values().toList(),
-                selectedIndex = selected.value.ordinal
-            ) { _, tab ->
-                Tab(
-                    selected = tab == selected.value,
-                    onSelected = { selected.value = tab },
-                    text = { Text(text = tab.label) }
-                )
+                selectedTabIndex = selected.value.ordinal
+            ) {
+                EventTab.values().forEach { tab ->
+                    Tab(
+                        selected = tab == selected.value,
+                        onClick = { selected.value = tab },
+                        text = { Text(text = tab.label) }
+                    )
+                }
             }
 
             if (pending) {
@@ -83,5 +85,5 @@ fun EventScreen(model: Screen.EventScreen, navigateTo: (Screen) -> Unit) {
                 }
             }
         }
-    }
+    }*/
 }

@@ -1,11 +1,12 @@
 package com.github.onotoliy.opposite.treasure.ui.screens
 
 import android.accounts.AccountManager
-import androidx.compose.Composable
-import androidx.compose.state
-import androidx.ui.animation.Crossfade
-import androidx.ui.material.FloatingActionButton
-import androidx.ui.material.Surface
+import androidx.compose.animation.Crossfade
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.github.onotoliy.opposite.treasure.IconAdd
 import com.github.onotoliy.opposite.treasure.IconEdit
 import com.github.onotoliy.opposite.treasure.IconSave
@@ -15,13 +16,13 @@ import com.github.onotoliy.opposite.treasure.ui.Menu
 
 @Composable
 fun TreasureScreen(firstScreen: Screen, manager: AccountManager) {
-    val state = state {
-        firstScreen.loading(manager)
-        firstScreen
+    val state = remember {
+//        firstScreen.loading(manager)
+        mutableStateOf(firstScreen)
     }
     val navigateTo: (Screen) -> Unit = {
         state.value = it
-        state.value.loading(manager)
+//        state.value.loading(manager)
     }
 
     Crossfade(state.value) { screen ->

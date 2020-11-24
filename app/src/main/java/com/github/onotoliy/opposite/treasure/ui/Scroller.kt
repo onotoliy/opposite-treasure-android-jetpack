@@ -1,15 +1,15 @@
 package com.github.onotoliy.opposite.treasure.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.VerticalScroller
-import androidx.ui.layout.Row
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.material.IconButton
-import androidx.ui.res.stringResource
-import androidx.ui.unit.dp
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.IconRefresh
 import com.github.onotoliy.opposite.treasure.PageView
 import com.github.onotoliy.opposite.treasure.R
@@ -22,8 +22,8 @@ fun <D> Scroller(
     itemView: @Composable() (D) -> Unit
 ) {
     view.context?.let { page ->
-        VerticalScroller(
-            scrollerPosition = view.scrollerPosition,
+        ScrollableColumn(
+            scrollState = view.scrollerPosition,
             modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 50.dp)
         ) {
             page.context.forEachIndexed { index, item ->

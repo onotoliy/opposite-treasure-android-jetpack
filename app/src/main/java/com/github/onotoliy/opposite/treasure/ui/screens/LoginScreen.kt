@@ -1,99 +1,69 @@
 package com.github.onotoliy.opposite.treasure.ui.screens
 
-import androidx.compose.Composable
-import androidx.compose.state
-import androidx.ui.core.Alignment
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Text
-import androidx.ui.foundation.TextField
-import androidx.ui.foundation.TextFieldValue
-import androidx.ui.foundation.drawBorder
-import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.Color
-import androidx.ui.input.KeyboardType
-import androidx.ui.input.PasswordVisualTransformation
-import androidx.ui.layout.Column
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.layout.padding
-import androidx.ui.material.Button
-import androidx.ui.res.stringResource
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontStyle
-import androidx.ui.text.style.TextAlign
-import androidx.ui.unit.TextUnit
-import androidx.ui.unit.dp
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.ui.tooling.preview.Preview
 import com.github.onotoliy.opposite.treasure.R
+import com.github.onotoliy.opposite.treasure.resources.DefaultCallback
+import com.github.onotoliy.opposite.treasure.services.AccessToken
 import com.github.onotoliy.opposite.treasure.services.token
-import com.github.onotoliy.opposite.treasure.ui.H6
+import com.github.onotoliy.opposite.treasure.ui.components.AutocompleteFieldPreview
+import com.github.onotoliy.opposite.treasure.ui.components.SelectionFieldPreview
+import com.github.onotoliy.opposite.treasure.ui.components.TextField
+import retrofit2.Callback
+
+@Preview
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(addAccount = { _, _, _ -> })
+}
 
 @Composable
 fun LoginScreen(
     addAccount: (username: String, password: String, token: String) -> Unit
 ) {
-    val login = state(init = { TextFieldValue("") })
-    val password = state(init = { TextFieldValue("") })
+    val login = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalGravity = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(id = R.string.auth_login),
-            style = H6,
-            color = Color.DarkGray
-        )
-
         TextField(
-            modifier = Modifier.drawBorder(
-                1.dp,
-                Color.LightGray,
-                RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)
-            ),
-            textStyle = TextStyle(
-                lineHeight = TextUnit.Companion.Em(5),
-                fontSize = TextUnit.Companion.Em(5),
-                textAlign = TextAlign.Center,
-                color = Color.DarkGray
-            ),
+            label = stringResource(id = R.string.auth_login),
             value = login.value,
-            onValueChange = {
-                login.value = it
-            },
-            keyboardType = KeyboardType.Text
-        )
+            modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp)
+        ) { login.value = it }
 
-        Text(
-            text = stringResource(id = R.string.auth_password),
-            style = H6,
-            color = Color.DarkGray
-        )
         TextField(
-            modifier = Modifier.drawBorder(
-                1.dp,
-                Color.LightGray,
-                RoundedCornerShape(5.dp, 5.dp, 5.dp, 5.dp)
-            ),
-            textStyle = TextStyle(
-                lineHeight = TextUnit.Companion.Em(5),
-                fontSize = TextUnit.Companion.Em(5),
-                textAlign = TextAlign.Center,
-                fontStyle = FontStyle.Normal,
-                color = Color.DarkGray
-            ),
+            label = stringResource(id = R.string.auth_password),
             value = password.value,
-            onValueChange = {
-                password.value = it
-            },
-            keyboardType = KeyboardType.Password,
-            visualTransformation = PasswordVisualTransformation()
-        )
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(0.8f)
+        ) { password.value = it }
 
         Button(
-            modifier = Modifier.padding(5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp),
             onClick = {
-                token(login.value.text, password.value.text)?.let {
-                    addAccount(login.value.text, password.value.text, it)
-                }
+                token(login.value, password.value, DefaultCallback<AccessToken>(
+                    onResponse = {
+                        it?.access_token?.let { token ->
+                            addAccount(login.value, password.value, token)
+                        }
+                    },
+                    onFailure = { }
+                ))
             }
         ) {
             Text(text = stringResource(id = R.string.auth_enter))

@@ -1,12 +1,16 @@
 package com.github.onotoliy.opposite.treasure
 
-import androidx.compose.*
+import androidx.compose.foundation.Icon
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.ScrollerPosition
-import androidx.ui.graphics.Color
-import androidx.ui.res.vectorResource
 import com.github.onotoliy.opposite.data.page.Page
 
 const val ACCOUNT_TYPE = "com.github.onotoliy.opposite.treasure"
@@ -51,6 +55,16 @@ fun IconDown() = Icon(asset = vectorResource(id = R.drawable.ic_trending_down), 
 
 fun String.formatDate() = substring(0, 10)
 
+data class PageViewModel<T>(
+    val offset: Int = 0,
+    val numberOfRows: Int = 10,
+    val context: Page<T>? = null
+) {
+    @Composable
+    val scrollerPosition: ScrollState
+        get() = rememberScrollState()
+}
+
 data class PageView<T>(
     val offset: Int = 0,
     val numberOfRows: Int = 10,
@@ -58,29 +72,29 @@ data class PageView<T>(
     val default: Page<T>? = null
 ) {
     @Composable
-    val scrollerPosition: ScrollerPosition
+    val scrollerPosition: ScrollState
         get() = default.scrollerPosition
 }
 
 @Composable
 fun <T> LiveData<T>.observe(): T? {
     val data: LiveData<T> = this
-    var result by state { data.value }
-    val observer = remember { Observer<T> { result = it } }
+    val result = remember { mutableStateOf(data.value) }
+    val observer = remember { Observer<T> { result.value = it } }
 
     onCommit(data) {
         data.observeForever(observer)
         onDispose { data.removeObserver(observer) }
     }
 
-    return result
+    return result.value
 }
 
 @Composable
 val <T> Page<T>?.scrollerPosition
     get() = this?.context?.let { items ->
-        if (items.size < 10) ScrollerPosition() else ScrollerPosition((100 * items.size).toFloat())
-    } ?: ScrollerPosition()
+        if (items.size < 10) rememberScrollState() else rememberScrollState((100 * items.size).toFloat())
+    } ?: rememberScrollState(0.0f)
 
 val <T> Page<T>?.offset
    get() = this?.context?.size ?: 0

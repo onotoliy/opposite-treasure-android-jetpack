@@ -5,11 +5,10 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.StrictMode
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.ui.core.setContent
-import com.github.onotoliy.opposite.treasure.ACCOUNT_TYPE
-import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.screens.TreasureScreen
+import com.github.onotoliy.opposite.treasure.services.getUUID
 import com.google.firebase.iid.FirebaseInstanceId
 import java.io.IOException
 
@@ -37,17 +36,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val manager: AccountManager = AccountManager.get(applicationContext)
-        val firstScreen = if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
-            Screen.LoginScreen
-        } else {
-            Screen.DepositScreen()
-        }
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
 
-        setContent {
-            TreasureTheme {
-                TreasureScreen(firstScreen, manager)
-            }
+        val manager = AccountManager.get(applicationContext)
+
+        if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
+            Log.i("M", manager.toString())
+
+            goto(Screen.LoginScreen)
+        } else {
+            Log.i("M", manager.toString())
+
+            goto(Screen.DepositScreen(manager.getUUID()))
         }
 
         getToken()
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getToken() {
 
-        Thread(Runnable {
+        Thread {
             try {
 
                 val newToken = FirebaseInstanceId.getInstance()
@@ -65,6 +65,6 @@ class MainActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-        }).start()
+        }.start()
     }
 }

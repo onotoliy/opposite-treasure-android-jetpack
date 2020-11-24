@@ -3,7 +3,9 @@
 
     <string name="auth_login">Логин</string>
     <string name="auth_password">Пароль</string>
+    <string name="auth_telephone">Телефон</string>
     <string name="auth_enter">Войти</string>
+    <string name="auth_get_password">Получить пароль</string>
 
     <string name="deposit_person">Пользователь</string>
     <string name="deposit_contribution">Депозит</string>
