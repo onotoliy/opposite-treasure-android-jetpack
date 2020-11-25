@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.ui.screens.views
+package com.github.onotoliy.opposite.treasure.ui.views
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column

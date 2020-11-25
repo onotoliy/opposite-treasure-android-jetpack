@@ -13,7 +13,7 @@ import com.github.onotoliy.opposite.treasure.di.model.DepositPageActivityModel
 import com.github.onotoliy.opposite.treasure.di.service.DepositService
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.screens.views.DepositPageView
+import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
 import javax.inject.Inject
 
 class DepositPageActivity : AppCompatActivity()  {
@@ -51,7 +51,7 @@ fun DepositPageScreen(model: DepositPageActivityModel, navigateTo: (Screen) -> U
             }
             model.page.observe()?.let { view ->
                 DepositPageView(
-                    view = PageView(view.offset, view.numberOfRows, view.context),
+                    view = view,
                     navigateTo = navigateTo,
                     navigateToNextPageScreen = { offset, numberOfRows, _ ->
                         model.nextDepositPageLoading(offset, numberOfRows)

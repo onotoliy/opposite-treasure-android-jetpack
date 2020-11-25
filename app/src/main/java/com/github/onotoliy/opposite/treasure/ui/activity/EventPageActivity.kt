@@ -12,9 +12,10 @@ import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.di.model.EventPageActivityModel
 import com.github.onotoliy.opposite.treasure.di.service.EventService
+import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.screens.views.EventPageView
+import com.github.onotoliy.opposite.treasure.ui.views.EventPageView
 import javax.inject.Inject
 
 class EventPageActivity : AppCompatActivity()  {
@@ -63,7 +64,7 @@ fun EventPageScreen(
             }
             model.page.observe()?.let { view ->
                 EventPageView(
-                    view =  PageView(view.offset, view.numberOfRows, view.context),
+                    view =  view,
                     navigateTo = navigateTo,
                     navigateToNextPageScreen = { offset, numberOfRows, _ ->
                         model.nextEventPageLoading(offset, numberOfRows)

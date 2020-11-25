@@ -12,9 +12,10 @@ import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.di.model.TransactionActivityModel
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.screens.views.TransactionView
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionView
 import javax.inject.Inject
 
 class TransactionActivity: AppCompatActivity()  {

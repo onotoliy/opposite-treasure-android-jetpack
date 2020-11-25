@@ -6,5 +6,5 @@ import com.github.onotoliy.opposite.treasure.di.database.DebtHelper
 import javax.inject.Inject
 
 class DebtService @Inject constructor(private val helper: DebtHelper) {
-    fun getAll(person: String, offset: Int, limit: Int): Page<Event> = Page()
+    fun getAll(person: String, offset: Int, numberOfRows: Int): Page<Event> = Page()
 }

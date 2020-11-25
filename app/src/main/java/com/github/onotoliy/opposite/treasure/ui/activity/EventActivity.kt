@@ -17,20 +17,24 @@ import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.di.service.DepositService
 import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
+import com.github.onotoliy.opposite.treasure.di.service.DebtorService
 import com.github.onotoliy.opposite.treasure.di.service.EventService
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.screens.EventTab
-import com.github.onotoliy.opposite.treasure.ui.screens.views.DepositPageView
-import com.github.onotoliy.opposite.treasure.ui.screens.views.EventView
-import com.github.onotoliy.opposite.treasure.ui.screens.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
+import com.github.onotoliy.opposite.treasure.ui.views.EventView
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import javax.inject.Inject
 
 class EventActivity : AppCompatActivity()  {
 
     @Inject
     lateinit var eventService: EventService
+
+    @Inject
+    lateinit var debtorService: DebtorService
 
     @Inject
     lateinit var depositService: DepositService
@@ -47,7 +51,7 @@ class EventActivity : AppCompatActivity()  {
         val navigateTo: (Screen) -> Unit = { goto(it) }
         val screen = EventActivityModel(
             pk = pk,
-            depositService = depositService,
+            debtorService = debtorService,
             eventService = eventService,
             transactionService = transactionService
         )
@@ -100,7 +104,7 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
                 }
                 EventTab.DEBTORS -> model.debtors.observe()?.let {
                     DepositPageView(
-                        view = PageView(it.offset, it.numberOfRows, it.context),
+                        view = it,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOrRows, _ ->
                             model.nextDepositPageLoading(offset, numberOrRows)
@@ -109,7 +113,7 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
                 }
                 EventTab.TRANSACTIONS -> model.transactions.observe()?.let {
                     TransactionPageView(
-                        view = PageView(it.offset, it.numberOfRows, it.context),
+                        view = it,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOrRows, _ ->
                             model.nextTransactionPageLoading(offset, numberOrRows)

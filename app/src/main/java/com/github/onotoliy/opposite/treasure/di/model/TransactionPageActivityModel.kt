@@ -2,17 +2,16 @@ package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.treasure.PageViewModel
+import com.github.onotoliy.opposite.data.page.Page
+import com.github.onotoliy.opposite.treasure.concat
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
-import com.github.onotoliy.opposite.treasure.numberOfRows
-import com.github.onotoliy.opposite.treasure.offset
 
 class TransactionPageActivityModel(
     private val transactionService: TransactionService
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
-    val page: MutableLiveData<PageViewModel<Transaction>> = MutableLiveData(PageViewModel())
+    val page: MutableLiveData<Page<Transaction>> = MutableLiveData(Page())
 
     fun loading() {
         nextTransactionPageLoading()
@@ -21,19 +20,8 @@ class TransactionPageActivityModel(
     fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = transactionService
         .getAll(offset = offset, numberOfRows = numberOfRows)
         .let {
-            val context = page.value?.context?.context?.toMutableList() ?: mutableListOf()
-
-            context.addAll(it.context)
-
             pending.postValue(false)
-
-            page.postValue(
-                PageViewModel(
-                    offset = it.offset,
-                    numberOfRows = it.numberOfRows,
-                    context = it
-                )
-            )
+            page.postValue(page.value.concat(it))
         }
 }
 

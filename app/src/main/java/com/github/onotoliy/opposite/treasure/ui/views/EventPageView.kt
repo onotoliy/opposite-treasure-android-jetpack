@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.ui.screens.views
+package com.github.onotoliy.opposite.treasure.ui.views
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -17,14 +17,14 @@ import com.github.onotoliy.opposite.treasure.ui.*
 
 @Composable
 fun EventPageView(
-    view: PageView<Event>,
+    view: Page<Event>,
     navigateTo: (Screen) -> Unit,
     navigateToNextPageScreen: (Int, Int, Page<Event>?) -> Unit
 ) {
     Scroller(
-        view = view,
+        page = view,
         navigateToNextPageScreen = {
-            navigateToNextPageScreen(view.context.offset, view.context.numberOfRows, view.context)
+            navigateToNextPageScreen(view.offset, view.numberOfRows, view)
         }
     ) {
         Column(

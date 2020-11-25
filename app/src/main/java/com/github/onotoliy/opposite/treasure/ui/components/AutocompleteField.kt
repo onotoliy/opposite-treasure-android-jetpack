@@ -14,7 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import com.github.onotoliy.opposite.data.Option
-import com.github.onotoliy.opposite.treasure.IconAccountCircle
+import com.github.onotoliy.opposite.treasure.ui.IconAccountCircle
 import java.util.*
 import kotlin.concurrent.schedule
 

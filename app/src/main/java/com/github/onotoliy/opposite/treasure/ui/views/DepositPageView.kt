@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.ui.screens.views
+package com.github.onotoliy.opposite.treasure.ui.views
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
@@ -15,18 +15,19 @@ import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.ui.H6
+import com.github.onotoliy.opposite.treasure.ui.IconAccountCircle
 import com.github.onotoliy.opposite.treasure.ui.Scroller
 
 @Composable
 fun DepositPageView(
-    view: PageView<Deposit>,
+    view: Page<Deposit>,
     navigateTo: (Screen) -> Unit,
     navigateToNextPageScreen: (Int, Int, Page<Deposit>?) -> Unit
 ) {
     Scroller(
-        view = view,
+        page = view,
         navigateToNextPageScreen = {
-            navigateToNextPageScreen(view.context.offset, view.context.numberOfRows, view.context)
+            navigateToNextPageScreen(view.offset, view.numberOfRows, view)
         }
     ) {
         Row(
