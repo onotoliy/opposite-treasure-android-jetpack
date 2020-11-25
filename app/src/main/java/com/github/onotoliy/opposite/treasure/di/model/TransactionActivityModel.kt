@@ -1,7 +1,8 @@
-package com.github.onotoliy.opposite.treasure.activity.model
+package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Transaction
+import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 
 class TransactionActivityModel(
     private val pk: String,

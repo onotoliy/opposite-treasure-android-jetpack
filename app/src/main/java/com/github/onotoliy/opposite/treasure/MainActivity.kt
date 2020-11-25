@@ -6,12 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import com.github.onotoliy.opposite.treasure.database.SQLiteHelper
 import com.github.onotoliy.opposite.treasure.services.getUUID
 import com.github.onotoliy.opposite.treasure.works.DepositWorker
 import com.google.firebase.iid.FirebaseInstanceId
@@ -53,12 +51,8 @@ class MainActivity : AppCompatActivity() {
             .enqueue(listOf(depositWorkRequest))
 
         if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
-            Log.i("M", manager.toString())
-
             goto(Screen.LoginScreen)
         } else {
-            Log.i("M", manager.toString())
-
             goto(Screen.DepositScreen(manager.getUUID()))
         }
 

@@ -2,8 +2,8 @@ package com.github.onotoliy.opposite.treasure.di
 
 import android.app.Application
 import android.content.Context
-import com.github.onotoliy.opposite.treasure.activity.model.*
-import com.github.onotoliy.opposite.treasure.database.*
+import com.github.onotoliy.opposite.treasure.di.database.*
+import com.github.onotoliy.opposite.treasure.di.service.*
 import dagger.Module
 import dagger.Provides
 
@@ -32,7 +32,7 @@ class AppModule(private val application: Application) {
     fun provideCashboxService(): CashboxService = CashboxService(provideCashboxHelper())
 
     @Provides
-    fun provideSQLiteHelper(): SQLiteHelper = SQLiteHelper(application.applicationContext)
+    fun provideSQLiteHelper(): SQLiteDatabase = SQLiteDatabase(application.applicationContext)
 
     @Provides
     fun provideDebtHelper(): DebtHelper = DebtHelper(provideSQLiteHelper())
@@ -41,14 +41,14 @@ class AppModule(private val application: Application) {
     fun provideDebtorHelper(): DebtorHelper = DebtorHelper(provideSQLiteHelper())
 
     @Provides
-    fun provideTransactionHelper(): TransactionHelper = TransactionHelper(provideSQLiteHelper())
+    fun provideTransactionHelper(): TransactionRepository = TransactionRepository(provideSQLiteHelper())
 
     @Provides
-    fun provideEventHelper(): EventHelper = EventHelper(provideSQLiteHelper())
+    fun provideEventHelper(): EventRepository = EventRepository(provideSQLiteHelper())
 
     @Provides
-    fun provideDepositHelper(): DepositHelper = DepositHelper(provideSQLiteHelper())
+    fun provideDepositHelper(): DepositRepository = DepositRepository(provideSQLiteHelper())
 
     @Provides
-    fun provideCashboxHelper(): CashboxHelper = CashboxHelper(provideSQLiteHelper())
+    fun provideCashboxHelper(): CashboxRepository = CashboxRepository(provideSQLiteHelper())
 }

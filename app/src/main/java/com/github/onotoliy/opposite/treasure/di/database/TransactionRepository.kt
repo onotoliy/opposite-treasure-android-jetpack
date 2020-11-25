@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.database
+package com.github.onotoliy.opposite.treasure.di.database
 
 import android.content.ContentValues
 import android.database.Cursor
@@ -6,7 +6,7 @@ import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.page.Page
 
-class TransactionHelper(helper: SQLiteHelper): AbstractHelper<Transaction>(
+class TransactionRepository(database: SQLiteDatabase): AbstractRepository<Transaction>(
     table = "treasure_transaction",
     columns = listOf(
         "uuid",
@@ -21,7 +21,7 @@ class TransactionHelper(helper: SQLiteHelper): AbstractHelper<Transaction>(
         "person_uuid",
         "person_name"
     ),
-    helper = helper
+    database = database
 ) {
     override fun get(pk: String): Transaction = get(
         whereClause = "uuid = ?",

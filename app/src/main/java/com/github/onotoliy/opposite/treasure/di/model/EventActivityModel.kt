@@ -1,10 +1,13 @@
-package com.github.onotoliy.opposite.treasure.activity.model
+package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.treasure.PageViewModel
+import com.github.onotoliy.opposite.treasure.di.service.DepositService
+import com.github.onotoliy.opposite.treasure.di.service.EventService
+import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import com.github.onotoliy.opposite.treasure.numberOfRows
 import com.github.onotoliy.opposite.treasure.offset
 

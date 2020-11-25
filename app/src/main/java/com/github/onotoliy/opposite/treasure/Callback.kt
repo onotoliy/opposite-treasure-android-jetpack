@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.activity
+package com.github.onotoliy.opposite.treasure
 
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event

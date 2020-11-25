@@ -1,6 +1,5 @@
-package com.github.onotoliy.opposite.treasure.activity
+package com.github.onotoliy.opposite.treasure.ui.activity
 
-import android.accounts.AccountManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
@@ -11,14 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
-import com.github.onotoliy.opposite.treasure.activity.model.TransactionPageActivityModel
-import com.github.onotoliy.opposite.treasure.activity.model.TransactionService
+import com.github.onotoliy.opposite.treasure.di.model.TransactionActivityModel
+import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.screens.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.ui.screens.views.TransactionView
 import javax.inject.Inject
 
-class TransactionPageActivity : AppCompatActivity()  {
+class TransactionActivity: AppCompatActivity()  {
 
     @Inject
     lateinit var transactionService: TransactionService
@@ -28,9 +27,9 @@ class TransactionPageActivity : AppCompatActivity()  {
 
         (application as App).appComponent.inject(this)
 
+        val pk = intent?.getStringExtra("pk") ?: ""
         val navigateTo: (Screen) -> Unit = { goto(it) }
-        val manager: AccountManager = AccountManager.get(applicationContext)
-        val screen = TransactionPageActivityModel(transactionService = transactionService)
+        val screen = TransactionActivityModel(pk = pk, transactionService = transactionService)
 
         screen.loading()
 
@@ -39,38 +38,27 @@ class TransactionPageActivity : AppCompatActivity()  {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconAdd() },
+                            icon = { IconEdit() },
                             onClick = { }
                         )
                     },
-                    bodyContent = { TransactionPageScreen(screen, navigateTo) },
+                    bodyContent = { TransactionScreen(screen, navigateTo) },
                     navigateTo = navigateTo
                 )
             }
         }
     }
-
 }
 
-
 @Composable
-fun TransactionPageScreen(
-    model: TransactionPageActivityModel,
-    navigateTo: (Screen) -> Unit
-) {
+fun TransactionScreen(model: TransactionActivityModel, navigateTo: (Screen) -> Unit) {
     model.pending.observe()?.let { pending ->
         Column {
             if (pending) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            model.page.observe()?.let { view ->
-                TransactionPageView(
-                    view = PageView(view.offset, view.numberOfRows, view.context),
-                    navigateTo = navigateTo,
-                    navigateToNextPageScreen = { offset, numberOfRows, _ ->
-                        model.nextTransactionPageLoading(offset, numberOfRows)
-                    }
-                )
+            model.transaction.observe()?.let {
+                TransactionView(data = it, navigateTo = navigateTo)
             }
         }
     }

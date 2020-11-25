@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>
@@ -46,7 +46,7 @@
         </activity>
 
         <activity
-            android:name=".activity.DepositActivity"
+            android:name=".ui.activity.DepositActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>
@@ -55,7 +55,7 @@
         </activity>
 
         <activity
-            android:name=".activity.DepositPageActivity"
+            android:name=".ui.activity.DepositPageActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>
@@ -64,7 +64,7 @@
         </activity>
 
         <activity
-            android:name=".activity.EventActivity"
+            android:name=".ui.activity.EventActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>
@@ -73,7 +73,7 @@
         </activity>
 
         <activity
-            android:name=".activity.EventPageActivity"
+            android:name=".ui.activity.EventPageActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>
@@ -82,7 +82,7 @@
         </activity>
 
         <activity
-            android:name=".activity.TransactionActivity"
+            android:name=".ui.activity.TransactionActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>
@@ -91,7 +91,7 @@
         </activity>
 
         <activity
-            android:name=".activity.TransactionPageActivity"
+            android:name=".ui.activity.TransactionPageActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Treasure.NoActionBar">
             <intent-filter>

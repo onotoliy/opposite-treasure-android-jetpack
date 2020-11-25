@@ -1,20 +1,17 @@
-package com.github.onotoliy.opposite.treasure.database
+package com.github.onotoliy.opposite.treasure.di.database
 
 import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Cashbox
-import com.github.onotoliy.opposite.data.page.Page
 
-class CashboxHelper(helper: SQLiteHelper): AbstractHelper<Cashbox>(
+class CashboxRepository(database: SQLiteDatabase): AbstractRepository<Cashbox>(
     table = "treasure_cashbox",
     columns = listOf("deposit", "last_update_date"),
-    helper = helper
+    database = database
 ) {
     fun get(): Cashbox = get(whereClause = "1 = 1", whereArgs = arrayOf())
 
     override fun get(pk: String): Cashbox = throw UnsupportedOperationException()
-
-    override fun getAll(offset: Int, limit: Int): Page<Cashbox> = throw UnsupportedOperationException()
 
     override fun merge(dto: Cashbox) {
         if (exists()) {

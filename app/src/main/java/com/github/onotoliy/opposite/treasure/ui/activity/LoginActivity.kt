@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.activity
+package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.accounts.AccountManager
 import android.os.Bundle
@@ -27,7 +27,6 @@ import com.github.onotoliy.opposite.treasure.services.getUUID
 import com.github.onotoliy.opposite.treasure.services.token
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
-
 
 class LoginActivity : AppCompatActivity() {
 

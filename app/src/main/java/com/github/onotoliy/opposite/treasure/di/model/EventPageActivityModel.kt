@@ -1,25 +1,25 @@
-package com.github.onotoliy.opposite.treasure.activity.model
+package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Deposit
-import com.github.onotoliy.opposite.data.page.Page
+import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.treasure.PageViewModel
+import com.github.onotoliy.opposite.treasure.di.service.EventService
 import com.github.onotoliy.opposite.treasure.numberOfRows
 import com.github.onotoliy.opposite.treasure.offset
 
-class DepositPageActivityModel(
-    private val depositService: DepositService
+class EventPageActivityModel(
+    private val eventService: EventService
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
-    val page: MutableLiveData<PageViewModel<Deposit>> = MutableLiveData(PageViewModel())
+    val page: MutableLiveData<PageViewModel<Event>> = MutableLiveData(PageViewModel())
 
     fun loading() {
-        nextDepositPageLoading()
+        nextEventPageLoading()
     }
 
-    fun nextDepositPageLoading(offset: Int = 0, numberOfRows: Int = 10) =
-        depositService.getAll(offset, numberOfRows).let {
+    fun nextEventPageLoading(offset: Int = 0, numberOfRows: Int = 10) =
+        eventService.getAll(offset, numberOfRows).let {
             val context = page.value?.context?.context?.toMutableList() ?: mutableListOf()
 
             context.addAll(it.context)
@@ -30,8 +30,9 @@ class DepositPageActivityModel(
                 PageViewModel(
                     offset = it.offset,
                     numberOfRows = it.numberOfRows,
-                    context = Page(meta = it.meta, context = context)
+                    context = it
                 )
             )
         }
 }
+

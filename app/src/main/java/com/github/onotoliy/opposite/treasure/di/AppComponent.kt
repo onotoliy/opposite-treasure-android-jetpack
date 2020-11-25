@@ -2,7 +2,7 @@ package com.github.onotoliy.opposite.treasure.di
 
 import android.app.Application
 import com.github.onotoliy.opposite.treasure.App
-import com.github.onotoliy.opposite.treasure.activity.*
+import com.github.onotoliy.opposite.treasure.ui.activity.*
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector

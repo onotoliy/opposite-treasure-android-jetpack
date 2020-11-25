@@ -1,11 +1,11 @@
-package com.github.onotoliy.opposite.treasure.database
+package com.github.onotoliy.opposite.treasure.di.database
 
 import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.page.Page
 
-class EventHelper(helper: SQLiteHelper): AbstractHelper<Event>(
+class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
     table = "treasure_event",
     columns = listOf(
         "uuid",
@@ -17,14 +17,14 @@ class EventHelper(helper: SQLiteHelper): AbstractHelper<Event>(
         "author_uuid",
         "author_name"
     ),
-    helper = helper
+    database = database
 ) {
     override fun get(pk: String): Event = get(
         whereClause = "uuid = ?",
         whereArgs = arrayOf(pk)
     )
 
-    override fun getAll(offset: Int, limit: Int): Page<Event> = getAll(offset, limit)
+    fun getAll(offset: Int, limit: Int): Page<Event> = getAll(offset, limit, "1 = 1", arrayOf())
 
     override fun merge(dto: Event) {
         if (exists(whereClause = "user_uuid = ?", whereArgs = arrayOf(dto.uuid))) {

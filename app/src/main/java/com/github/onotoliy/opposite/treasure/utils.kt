@@ -59,11 +59,7 @@ data class PageViewModel<T>(
     val offset: Int = 0,
     val numberOfRows: Int = 10,
     val context: Page<T>? = null
-) {
-    @Composable
-    val scrollerPosition: ScrollState
-        get() = rememberScrollState()
-}
+)
 
 data class PageView<T>(
     val offset: Int = 0,

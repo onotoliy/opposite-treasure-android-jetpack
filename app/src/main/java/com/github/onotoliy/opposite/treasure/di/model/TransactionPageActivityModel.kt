@@ -1,24 +1,26 @@
-package com.github.onotoliy.opposite.treasure.activity.model
+package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Event
+import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.treasure.PageViewModel
+import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import com.github.onotoliy.opposite.treasure.numberOfRows
 import com.github.onotoliy.opposite.treasure.offset
 
-class EventPageActivityModel(
-    private val eventService: EventService
+class TransactionPageActivityModel(
+    private val transactionService: TransactionService
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
-    val page: MutableLiveData<PageViewModel<Event>> = MutableLiveData(PageViewModel())
+    val page: MutableLiveData<PageViewModel<Transaction>> = MutableLiveData(PageViewModel())
 
     fun loading() {
-        nextEventPageLoading()
+        nextTransactionPageLoading()
     }
 
-    fun nextEventPageLoading(offset: Int = 0, numberOfRows: Int = 10) =
-        eventService.getAll(offset, numberOfRows).let {
+    fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = transactionService
+        .getAll(offset = offset, numberOfRows = numberOfRows)
+        .let {
             val context = page.value?.context?.context?.toMutableList() ?: mutableListOf()
 
             context.addAll(it.context)

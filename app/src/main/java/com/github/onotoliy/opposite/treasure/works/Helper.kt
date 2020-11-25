@@ -7,10 +7,10 @@ import androidx.work.WorkerParameters
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.database.CashboxHelper
-import com.github.onotoliy.opposite.treasure.database.DepositHelper
-import com.github.onotoliy.opposite.treasure.database.EventHelper
-import com.github.onotoliy.opposite.treasure.database.SQLiteHelper
+import com.github.onotoliy.opposite.treasure.di.database.CashboxRepository
+import com.github.onotoliy.opposite.treasure.di.database.DepositRepository
+import com.github.onotoliy.opposite.treasure.di.database.EventRepository
+import com.github.onotoliy.opposite.treasure.di.database.SQLiteDatabase
 import com.github.onotoliy.opposite.treasure.resources.CashboxCallback
 import com.github.onotoliy.opposite.treasure.resources.DefaultCallback
 import com.github.onotoliy.opposite.treasure.services.cashbox
@@ -19,9 +19,9 @@ import com.github.onotoliy.opposite.treasure.services.events
 
 class DepositWorker(private val context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork(): Result {
-        val deposit = DepositHelper(SQLiteHelper(context))
-        val cashbox = CashboxHelper(SQLiteHelper(context))
-        val event = EventHelper(SQLiteHelper(context))
+        val deposit = DepositRepository(SQLiteDatabase(context))
+        val cashbox = CashboxRepository(SQLiteDatabase(context))
+        val event = EventRepository(SQLiteDatabase(context))
         val manager = AccountManager.get(context)
 
         manager.events.getAll(offset = 0, numberOfRows = 200).enqueue(

@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.activity.model
+package com.github.onotoliy.opposite.treasure.di.model
 
 import android.accounts.AccountManager
 import androidx.lifecycle.MutableLiveData
@@ -8,8 +8,10 @@ import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.PageViewModel
-import com.github.onotoliy.opposite.treasure.activity.EventPageCallback
-import com.github.onotoliy.opposite.treasure.activity.TransactionPageCallback
+import com.github.onotoliy.opposite.treasure.EventPageCallback
+import com.github.onotoliy.opposite.treasure.TransactionPageCallback
+import com.github.onotoliy.opposite.treasure.di.service.CashboxService
+import com.github.onotoliy.opposite.treasure.di.service.DepositService
 import com.github.onotoliy.opposite.treasure.numberOfRows
 import com.github.onotoliy.opposite.treasure.offset
 import com.github.onotoliy.opposite.treasure.services.debts

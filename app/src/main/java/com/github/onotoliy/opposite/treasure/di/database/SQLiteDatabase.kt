@@ -1,10 +1,10 @@
-package com.github.onotoliy.opposite.treasure.database
+package com.github.onotoliy.opposite.treasure.di.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase", null, 4) {
+class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "MyDatabase", null, 4) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         listOf(
