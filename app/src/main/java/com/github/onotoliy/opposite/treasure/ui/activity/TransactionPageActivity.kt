@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.di.model.TransactionPageActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -21,7 +20,7 @@ import javax.inject.Inject
 class TransactionPageActivity : AppCompatActivity()  {
 
     @Inject
-    lateinit var transactionService: TransactionService
+    lateinit var model: TransactionPageActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +28,8 @@ class TransactionPageActivity : AppCompatActivity()  {
         (application as App).appComponent.inject(this)
 
         val navigateTo: (Screen) -> Unit = { goto(it) }
-        val screen = TransactionPageActivityModel(transactionService = transactionService)
 
-        screen.loading()
+        model.loading()
 
         setContent {
             TreasureTheme {
@@ -42,7 +40,7 @@ class TransactionPageActivity : AppCompatActivity()  {
                             onClick = { }
                         )
                     },
-                    bodyContent = { TransactionPageScreen(screen, navigateTo) },
+                    bodyContent = { TransactionPageScreen(model, navigateTo) },
                     navigateTo = navigateTo
                 )
             }

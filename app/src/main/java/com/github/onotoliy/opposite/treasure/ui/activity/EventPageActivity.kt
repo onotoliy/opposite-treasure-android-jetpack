@@ -9,9 +9,11 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.App
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.EventPageActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.EventService
+import com.github.onotoliy.opposite.treasure.goto
+import com.github.onotoliy.opposite.treasure.observe
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -21,7 +23,7 @@ import javax.inject.Inject
 class EventPageActivity : AppCompatActivity()  {
 
     @Inject
-    lateinit var eventService: EventService
+    lateinit var model: EventPageActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +31,8 @@ class EventPageActivity : AppCompatActivity()  {
         (application as App).appComponent.inject(this)
 
         val navigateTo: (Screen) -> Unit = { goto(it) }
-        val screen = EventPageActivityModel(eventService = eventService)
 
-        screen.loading()
+        model.loading()
 
         setContent {
             TreasureTheme {
@@ -42,7 +43,7 @@ class EventPageActivity : AppCompatActivity()  {
                             onClick = { navigateTo(Screen.EventEditScreen()) }
                         )
                     },
-                    bodyContent = { EventPageScreen(screen, navigateTo) },
+                    bodyContent = { EventPageScreen(model, navigateTo) },
                     navigateTo = navigateTo
                 )
             }

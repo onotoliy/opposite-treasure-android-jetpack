@@ -21,7 +21,7 @@ import javax.inject.Inject
 class TransactionActivity: AppCompatActivity()  {
 
     @Inject
-    lateinit var transactionService: TransactionService
+    lateinit var model: TransactionActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +30,8 @@ class TransactionActivity: AppCompatActivity()  {
 
         val pk = intent?.getStringExtra("pk") ?: ""
         val navigateTo: (Screen) -> Unit = { goto(it) }
-        val screen = TransactionActivityModel(pk = pk, transactionService = transactionService)
 
-        screen.loading()
+        model.loading(pk)
 
         setContent {
             TreasureTheme {
@@ -43,7 +42,7 @@ class TransactionActivity: AppCompatActivity()  {
                             onClick = { }
                         )
                     },
-                    bodyContent = { TransactionScreen(screen, navigateTo) },
+                    bodyContent = { TransactionScreen(model, navigateTo) },
                     navigateTo = navigateTo
                 )
             }

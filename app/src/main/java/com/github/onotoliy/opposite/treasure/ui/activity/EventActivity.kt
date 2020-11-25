@@ -15,11 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
-import com.github.onotoliy.opposite.treasure.di.service.DepositService
 import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.DebtorService
-import com.github.onotoliy.opposite.treasure.di.service.EventService
-import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -31,16 +27,7 @@ import javax.inject.Inject
 class EventActivity : AppCompatActivity()  {
 
     @Inject
-    lateinit var eventService: EventService
-
-    @Inject
-    lateinit var debtorService: DebtorService
-
-    @Inject
-    lateinit var depositService: DepositService
-
-    @Inject
-    lateinit var transactionService: TransactionService
+    lateinit var model: EventActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +36,8 @@ class EventActivity : AppCompatActivity()  {
 
         val pk = intent?.getStringExtra("pk") ?: ""
         val navigateTo: (Screen) -> Unit = { goto(it) }
-        val screen = EventActivityModel(
-            pk = pk,
-            debtorService = debtorService,
-            eventService = eventService,
-            transactionService = transactionService
-        )
 
-        screen.loading()
+        model.loading(pk)
 
         setContent {
             TreasureTheme {
@@ -67,7 +48,7 @@ class EventActivity : AppCompatActivity()  {
                             onClick = { }
                         )
                     },
-                    bodyContent = { EventScreen(screen, navigateTo) },
+                    bodyContent = { EventScreen(model, navigateTo) },
                     navigateTo = navigateTo
                 )
             }

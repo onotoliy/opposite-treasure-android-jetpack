@@ -5,7 +5,7 @@ import android.database.Cursor
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.page.Page
 
-class DepositRepository(database: SQLiteDatabase): AbstractRepository<Deposit>(
+class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
     table = "treasure_deposit",
     columns = listOf("user_uuid", "user_name", "deposit"),
     database = database
@@ -31,10 +31,14 @@ class DepositRepository(database: SQLiteDatabase): AbstractRepository<Deposit>(
         put("deposit", dto.deposit.toDouble())
     })
 
-    override fun update(dto: Deposit) = update(ContentValues().apply {
-        put("user_name", dto.person.name)
-        put("deposit", dto.deposit.toDouble())
-    })
+    override fun update(dto: Deposit) = update(
+        whereClause = "user_uuid = ?",
+        whereArgs = arrayOf(dto.uuid),
+        values = ContentValues().apply {
+            put("user_name", dto.person.name)
+            put("deposit", dto.deposit.toDouble())
+        }
+    )
 
     override fun toDTO(cursor: Cursor): Deposit = cursor.run {
         Deposit(

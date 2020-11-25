@@ -11,21 +11,25 @@ import com.github.onotoliy.opposite.treasure.di.service.CashboxService
 import com.github.onotoliy.opposite.treasure.di.service.DebtService
 import com.github.onotoliy.opposite.treasure.di.service.DepositService
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import javax.inject.Inject
 
-class DepositActivityModel(
-    private val pk: String,
+class DepositActivityModel @Inject constructor(
     private val depositService: DepositService,
     private val cashboxService: CashboxService,
-    private val transactionService: TransactionService,
     private val debtService: DebtService,
+    private val transactionService: TransactionService,
 ) {
+    lateinit var pk: String
+
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
     val cashbox: MutableLiveData<Cashbox> = MutableLiveData()
     val deposit: MutableLiveData<Deposit> = MutableLiveData()
     val events: MutableLiveData<Page<Event>> = MutableLiveData(Page())
     val transactions: MutableLiveData<Page<Transaction>> = MutableLiveData(Page())
 
-    fun loading() {
+    fun loading(pk: String) {
+        this.pk = pk
+
         cashbox.postValue(cashboxService.get())
         deposit.postValue(depositService.get(pk))
 

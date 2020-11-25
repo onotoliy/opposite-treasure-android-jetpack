@@ -31,16 +31,7 @@ import javax.inject.Inject
 class DepositActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var transactionService: TransactionService
-
-    @Inject
-    lateinit var debtService: DebtService
-
-    @Inject
-    lateinit var depositService: DepositService
-
-    @Inject
-    lateinit var cashboxService: CashboxService
+    lateinit var model: DepositActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,20 +40,14 @@ class DepositActivity : AppCompatActivity() {
 
         val navigateTo: (Screen) -> Unit = { goto(it) }
         val manager: AccountManager = AccountManager.get(applicationContext)
-        val screen = DepositActivityModel(
-            pk = intent.getStringExtra("pk") ?: manager.getUUID(),
-            depositService = depositService,
-            cashboxService = cashboxService,
-            transactionService = transactionService,
-            debtService = debtService
-        )
+        val pk = intent.getStringExtra("pk") ?: manager.getUUID()
 
-        screen.loading()
+        model.loading(pk)
 
         setContent {
             TreasureTheme {
                 Menu(
-                    bodyContent = { DepositScreen(screen, navigateTo) },
+                    bodyContent = { DepositScreen(model, navigateTo) },
                     navigateTo = navigateTo
                 )
             }

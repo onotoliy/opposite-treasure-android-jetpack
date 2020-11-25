@@ -34,6 +34,8 @@ class TransactionRepository(database: SQLiteDatabase): AbstractRepository<Transa
         val whereClause = mutableListOf<String>()
         val whereArgs = mutableListOf<String>()
 
+        whereClause.add("1 = 1")
+
         event?.let {
             whereClause.add("event_uuid = ?")
             whereArgs.add(it)

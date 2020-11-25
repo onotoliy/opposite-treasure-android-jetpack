@@ -9,19 +9,22 @@ import com.github.onotoliy.opposite.treasure.concat
 import com.github.onotoliy.opposite.treasure.di.service.DebtorService
 import com.github.onotoliy.opposite.treasure.di.service.EventService
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import javax.inject.Inject
 
-class EventActivityModel(
-    private val pk: String,
+class EventActivityModel @Inject constructor(
     private val eventService: EventService,
-    private val transactionService: TransactionService,
-    private val debtorService: DebtorService
+    private val debtorService: DebtorService,
+    private val transactionService: TransactionService
 ) {
+    lateinit var pk: String
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
     val event: MutableLiveData<Event> = MutableLiveData()
     val debtors: MutableLiveData<Page<Deposit>> = MutableLiveData(Page())
     val transactions: MutableLiveData<Page<Transaction>> = MutableLiveData(Page())
 
-    fun loading() {
+    fun loading(pk: String) {
+        this.pk = pk
+
         event.postValue(eventService.get(pk))
 
         nextDepositPageLoading()
@@ -40,5 +43,4 @@ class EventActivityModel(
             pending.postValue(false)
             transactions.postValue(transactions.value.concat(it))
         }
-
 }

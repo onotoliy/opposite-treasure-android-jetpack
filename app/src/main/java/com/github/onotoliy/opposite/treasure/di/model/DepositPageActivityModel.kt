@@ -5,8 +5,9 @@ import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.concat
 import com.github.onotoliy.opposite.treasure.di.service.DepositService
+import javax.inject.Inject
 
-class DepositPageActivityModel(
+class DepositPageActivityModel @Inject constructor(
     private val depositService: DepositService
 ) {
 

@@ -19,7 +19,7 @@ import javax.inject.Inject
 class DepositPageActivity : AppCompatActivity()  {
 
     @Inject
-    lateinit var depositService: DepositService
+    lateinit var model: DepositPageActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,14 +27,13 @@ class DepositPageActivity : AppCompatActivity()  {
         (application as App).appComponent.inject(this)
 
         val navigateTo: (Screen) -> Unit = { goto(it) }
-        val screen = DepositPageActivityModel(depositService)
 
-        screen.loading()
+        model.loading()
 
         setContent {
             TreasureTheme {
                 Menu(
-                    bodyContent = { DepositPageScreen(screen, navigateTo) },
+                    bodyContent = { DepositPageScreen(model, navigateTo) },
                     navigateTo = navigateTo
                 )
             }

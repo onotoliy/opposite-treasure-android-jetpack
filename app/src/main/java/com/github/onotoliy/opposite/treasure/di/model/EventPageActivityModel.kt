@@ -5,8 +5,9 @@ import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.concat
 import com.github.onotoliy.opposite.treasure.di.service.EventService
+import javax.inject.Inject
 
-class EventPageActivityModel(
+class EventPageActivityModel @Inject constructor(
     private val eventService: EventService
 ) {
 

@@ -14,7 +14,7 @@ class CashboxRepository(database: SQLiteDatabase): AbstractRepository<Cashbox>(
     override fun get(pk: String): Cashbox = throw UnsupportedOperationException()
 
     override fun merge(dto: Cashbox) {
-        if (exists()) {
+        if (exists(whereClause = "1 = 1", whereArgs = arrayOf())) {
             update(dto)
         } else {
             insert(dto)
@@ -26,10 +26,14 @@ class CashboxRepository(database: SQLiteDatabase): AbstractRepository<Cashbox>(
         put("deposit", dto.deposit)
     })
 
-    override fun update(dto: Cashbox) = update(ContentValues().apply {
-        put("last_update_date", dto.lastUpdateDate)
-        put("deposit", dto.deposit)
-    })
+    override fun update(dto: Cashbox) = update(
+        whereClause = "1 = 1",
+        whereArgs = arrayOf(),
+        values = ContentValues().apply {
+            put("last_update_date", dto.lastUpdateDate)
+            put("deposit", dto.deposit)
+        }
+    )
 
     override fun toDTO(cursor: Cursor): Cashbox = cursor.run {
         Cashbox(

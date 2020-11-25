@@ -27,7 +27,7 @@ class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
     fun getAll(offset: Int, limit: Int): Page<Event> = getAll(offset, limit, "1 = 1", arrayOf())
 
     override fun merge(dto: Event) {
-        if (exists(whereClause = "user_uuid = ?", whereArgs = arrayOf(dto.uuid))) {
+        if (exists(whereClause = "uuid = ?", whereArgs = arrayOf(dto.uuid))) {
             update(dto)
         } else {
             insert(dto)
