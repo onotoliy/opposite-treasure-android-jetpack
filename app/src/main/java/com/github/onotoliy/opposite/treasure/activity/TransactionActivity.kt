@@ -10,24 +10,28 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import com.github.onotoliy.opposite.treasure.IconEdit
-import com.github.onotoliy.opposite.treasure.Screen
+import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.activity.model.TransactionActivityModel
-import com.github.onotoliy.opposite.treasure.goto
-import com.github.onotoliy.opposite.treasure.observe
+import com.github.onotoliy.opposite.treasure.activity.model.TransactionService
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.screens.views.TransactionView
+import javax.inject.Inject
 
 class TransactionActivity: AppCompatActivity()  {
+
+    @Inject
+    lateinit var transactionService: TransactionService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as App).appComponent.inject(this)
+
         val pk = intent?.getStringExtra("pk") ?: ""
         val navigateTo: (Screen) -> Unit = { goto(it) }
         val manager: AccountManager = AccountManager.get(applicationContext)
-        val screen = TransactionActivityModel(pk = pk, manager = manager)
+        val screen = TransactionActivityModel(pk = pk, transactionService = transactionService)
 
         screen.loading()
 

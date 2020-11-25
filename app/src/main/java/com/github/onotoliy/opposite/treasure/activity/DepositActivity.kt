@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.activity.model.CashboxService
 import com.github.onotoliy.opposite.treasure.activity.model.DepositActivityModel
 import com.github.onotoliy.opposite.treasure.activity.model.DepositService
 import com.github.onotoliy.opposite.treasure.services.getUUID
@@ -32,6 +33,9 @@ class DepositActivity : AppCompatActivity() {
     @Inject
     lateinit var depositService: DepositService
 
+    @Inject
+    lateinit var cashboxService: CashboxService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,7 +45,9 @@ class DepositActivity : AppCompatActivity() {
         val manager: AccountManager = AccountManager.get(applicationContext)
         val screen = DepositActivityModel(
             pk = intent.getStringExtra("pk") ?: manager.getUUID(),
-            manager = manager
+            manager = manager,
+            depositService = depositService,
+            cashboxService = cashboxService
         )
 
         screen.loading()

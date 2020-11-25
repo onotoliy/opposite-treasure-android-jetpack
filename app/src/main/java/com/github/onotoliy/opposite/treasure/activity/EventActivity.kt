@@ -16,23 +16,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.activity.model.DepositService
 import com.github.onotoliy.opposite.treasure.activity.model.EventActivityModel
+import com.github.onotoliy.opposite.treasure.activity.model.EventService
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.screens.EventTab
 import com.github.onotoliy.opposite.treasure.ui.screens.views.DepositPageView
 import com.github.onotoliy.opposite.treasure.ui.screens.views.EventView
 import com.github.onotoliy.opposite.treasure.ui.screens.views.TransactionPageView
+import javax.inject.Inject
 
 class EventActivity : AppCompatActivity()  {
+
+    @Inject
+    lateinit var eventService: EventService
+
+    @Inject
+    lateinit var depositService: DepositService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as App).appComponent.inject(this)
+
         val pk = intent?.getStringExtra("pk") ?: ""
         val navigateTo: (Screen) -> Unit = { goto(it) }
         val manager: AccountManager = AccountManager.get(applicationContext)
-        val screen = EventActivityModel(pk = pk, manager = manager)
+        val screen = EventActivityModel(pk = pk, manager = manager, depositService = depositService, eventService = eventService)
 
         screen.loading()
 

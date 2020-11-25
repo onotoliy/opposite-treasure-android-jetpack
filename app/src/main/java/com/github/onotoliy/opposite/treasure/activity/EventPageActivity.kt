@@ -12,18 +12,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.activity.model.EventPageActivityModel
+import com.github.onotoliy.opposite.treasure.activity.model.EventService
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.screens.views.EventPageView
+import javax.inject.Inject
 
 class EventPageActivity : AppCompatActivity()  {
+
+    @Inject
+    lateinit var eventService: EventService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as App).appComponent.inject(this)
+
         val navigateTo: (Screen) -> Unit = { goto(it) }
         val manager: AccountManager = AccountManager.get(applicationContext)
-        val screen = EventPageActivityModel(manager = manager)
+        val screen = EventPageActivityModel(eventService = eventService)
 
         screen.loading()
 

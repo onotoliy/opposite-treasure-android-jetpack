@@ -8,7 +8,12 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import com.github.onotoliy.opposite.treasure.database.SQLiteHelper
 import com.github.onotoliy.opposite.treasure.services.getUUID
+import com.github.onotoliy.opposite.treasure.works.DepositWorker
 import com.google.firebase.iid.FirebaseInstanceId
 import java.io.IOException
 
@@ -39,6 +44,13 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
 
         val manager = AccountManager.get(applicationContext)
+
+        val depositWorkRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<DepositWorker>()
+                .build()
+        WorkManager
+            .getInstance(applicationContext)
+            .enqueue(listOf(depositWorkRequest))
 
         if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
             Log.i("M", manager.toString())

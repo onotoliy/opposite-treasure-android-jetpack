@@ -12,16 +12,14 @@ import com.github.onotoliy.opposite.treasure.activity.EventPageCallback
 import com.github.onotoliy.opposite.treasure.activity.TransactionPageCallback
 import com.github.onotoliy.opposite.treasure.numberOfRows
 import com.github.onotoliy.opposite.treasure.offset
-import com.github.onotoliy.opposite.treasure.resources.CashboxCallback
-import com.github.onotoliy.opposite.treasure.resources.DepositCallback
-import com.github.onotoliy.opposite.treasure.services.cashbox
 import com.github.onotoliy.opposite.treasure.services.debts
-import com.github.onotoliy.opposite.treasure.services.deposits
 import com.github.onotoliy.opposite.treasure.services.transactions
 
 class DepositActivityModel(
     private val pk: String,
-    private val manager: AccountManager
+    private val manager: AccountManager,
+    private val depositService: DepositService,
+    private val cashboxService: CashboxService
 ) {
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
     val cashbox: MutableLiveData<Cashbox> = MutableLiveData()
@@ -30,12 +28,8 @@ class DepositActivityModel(
     val transactions: MutableLiveData<PageViewModel<Transaction>> = MutableLiveData(PageViewModel())
 
     fun loading() {
-        manager.cashbox.get().enqueue(CashboxCallback {
-            cashbox.postValue(it)
-        })
-        manager.deposits.get(pk).enqueue(DepositCallback {
-            deposit.postValue(it)
-        })
+        cashbox.postValue(cashboxService.get())
+        deposit.postValue(depositService.get(pk))
 
         nextEventPageLoading()
         nextTransactionPageLoading()

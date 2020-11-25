@@ -78,6 +78,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-beta01"
 
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
 
     implementation "com.google.dagger:dagger:2.29.1"
     kapt "com.google.dagger:dagger-compiler:2.29.1"

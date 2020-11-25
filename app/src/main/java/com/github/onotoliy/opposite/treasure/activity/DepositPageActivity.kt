@@ -9,35 +9,27 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Cashbox
-import com.github.onotoliy.opposite.data.Deposit
-import com.github.onotoliy.opposite.data.Event
-import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.PageView
-import com.github.onotoliy.opposite.treasure.Screen
+import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.activity.model.DepositPageActivityModel
-import com.github.onotoliy.opposite.treasure.goto
-import com.github.onotoliy.opposite.treasure.observe
-import com.github.onotoliy.opposite.treasure.resources.CashboxCallback
-import com.github.onotoliy.opposite.treasure.resources.DepositCallback
-import com.github.onotoliy.opposite.treasure.services.*
+import com.github.onotoliy.opposite.treasure.activity.model.DepositService
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.screens.views.DepositPageView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import javax.inject.Inject
 
 class DepositPageActivity : AppCompatActivity()  {
+
+    @Inject
+    lateinit var depositService: DepositService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as App).appComponent.inject(this)
+
         val navigateTo: (Screen) -> Unit = { goto(it) }
         val manager: AccountManager = AccountManager.get(applicationContext)
-        val screen = DepositPageActivityModel(manager)
+        val screen = DepositPageActivityModel(depositService)
 
         screen.loading()
 

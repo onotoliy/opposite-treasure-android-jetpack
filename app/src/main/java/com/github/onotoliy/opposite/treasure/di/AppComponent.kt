@@ -1,8 +1,8 @@
 package com.github.onotoliy.opposite.treasure.di
 
 import android.app.Application
-import com.github.onotoliy.opposite.treasure.activity.DepositActivity
 import com.github.onotoliy.opposite.treasure.App
+import com.github.onotoliy.opposite.treasure.activity.*
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
@@ -20,6 +20,14 @@ interface AppComponent : AndroidInjector<App> {
     }
 
     fun inject(activity: DepositActivity)
+    fun inject(activity: DepositPageActivity)
+
+    fun inject(activity: EventActivity)
+    fun inject(activity: EventPageActivity)
+
+    fun inject(activity: TransactionActivity)
+    fun inject(activity: TransactionPageActivity)
+
     override fun inject(app: App)
 
     class Initializer private constructor() {

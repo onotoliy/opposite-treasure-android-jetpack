@@ -14,6 +14,7 @@ import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.TimeUnit
 
 fun AccountManager.addAccount(username: String, password: String, token: String) =
     addAccountExplicitly(Account(username, ACCOUNT_TYPE), password, token.userdata())
@@ -55,6 +56,8 @@ private val gson: Gson = GsonBuilder().setLenient().create()
 private val AccountManager.client: OkHttpClient
     get() = OkHttpClient
         .Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
         .addInterceptor {
             val account = getAccount()
             val password = getPassword(account)

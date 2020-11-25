@@ -1,20 +1,13 @@
 package com.github.onotoliy.opposite.treasure.activity.model
 
-import android.accounts.AccountManager
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.PageViewModel
-import com.github.onotoliy.opposite.treasure.activity.EventPageCallback
-import com.github.onotoliy.opposite.treasure.activity.TransactionPageCallback
 import com.github.onotoliy.opposite.treasure.numberOfRows
 import com.github.onotoliy.opposite.treasure.offset
-import com.github.onotoliy.opposite.treasure.services.events
-import com.github.onotoliy.opposite.treasure.services.transactions
 
 class TransactionPageActivityModel(
-    private val manager: AccountManager
+    private val transactionService: TransactionService
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -24,19 +17,22 @@ class TransactionPageActivityModel(
         nextTransactionPageLoading()
     }
 
-    fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = manager
-        .transactions
+    fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = transactionService
         .getAll(offset = offset, numberOfRows = numberOfRows)
-        .enqueue(
-            TransactionPageCallback(page.value?.context ?: Page()) {
-                page.postValue(
-                    PageViewModel(
-                        offset = it.offset,
-                        numberOfRows = it.numberOfRows,
-                        context = it
-                    )
+        .let {
+            val context = page.value?.context?.context?.toMutableList() ?: mutableListOf()
+
+            context.addAll(it.context)
+
+            pending.postValue(false)
+
+            page.postValue(
+                PageViewModel(
+                    offset = it.offset,
+                    numberOfRows = it.numberOfRows,
+                    context = it
                 )
-            }
-        )
+            )
+        }
 }
 
