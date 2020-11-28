@@ -19,28 +19,27 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.goto
-import com.github.onotoliy.opposite.treasure.resources.DefaultCallback
-import com.github.onotoliy.opposite.treasure.services.AccessToken
-import com.github.onotoliy.opposite.treasure.services.addAccount
-import com.github.onotoliy.opposite.treasure.services.getUUID
-import com.github.onotoliy.opposite.treasure.services.token
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
+import com.github.onotoliy.opposite.treasure.utils.addAccount
+import com.github.onotoliy.opposite.treasure.utils.getAuthToken
+import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
 
+    @Inject lateinit var manager: AccountManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val manager: AccountManager = AccountManager.get(applicationContext)
 
         setContent {
             TreasureTheme {
                 LoginScreen { account, password, token ->
                     manager.addAccount(account, password, token)
 
-                    goto(Screen.DepositScreen(manager.getUUID()))
+                    navigateTo(Screen.DepositScreen(manager.getUUID()))
                 }
             }
         }
@@ -75,14 +74,16 @@ fun LoginScreen(
         Button(
             modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp),
             onClick = {
-                token(login.value, password.value, DefaultCallback<AccessToken>(
+                getAuthToken(
+                    username = login.value,
+                    password = password.value,
                     onResponse = {
                         it?.access_token?.let { token ->
                             addAccount(login.value, password.value, token)
                         }
                     },
                     onFailure = { }
-                ))
+                )
             }
         ) {
             Text(text = stringResource(id = R.string.auth_enter))

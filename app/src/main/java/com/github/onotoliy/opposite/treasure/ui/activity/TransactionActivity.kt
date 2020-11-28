@@ -9,29 +9,28 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.TransactionActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionView
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
 class TransactionActivity: AppCompatActivity()  {
 
-    @Inject
-    lateinit var model: TransactionActivityModel
+    @Inject lateinit var model: TransactionActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).appComponent.inject(this)
+        inject()
 
-        val pk = intent?.getStringExtra("pk") ?: ""
-        val navigateTo: (Screen) -> Unit = { goto(it) }
-
-        model.loading(pk)
+        model.loading(intent.pk ?: throw IllegalArgumentException())
 
         setContent {
             TreasureTheme {
@@ -42,8 +41,8 @@ class TransactionActivity: AppCompatActivity()  {
                             onClick = { }
                         )
                     },
-                    bodyContent = { TransactionScreen(model, navigateTo) },
-                    navigateTo = navigateTo
+                    bodyContent = { TransactionScreen(model, ::navigateTo) },
+                    navigateTo = ::navigateTo
                 )
             }
         }

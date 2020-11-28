@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.concat
+import com.github.onotoliy.opposite.treasure.utils.concat
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import javax.inject.Inject
 

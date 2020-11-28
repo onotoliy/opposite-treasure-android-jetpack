@@ -1,21 +1,12 @@
-package com.github.onotoliy.opposite.treasure
+package com.github.onotoliy.opposite.treasure.utils
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.activity.*
-import dagger.android.support.DaggerAppCompatActivity
 
-fun <T: Any> AppCompatActivity.goto(clazz: Class<T>, options: Intent.() -> Unit = {}) {
-    val intent = Intent(applicationContext, clazz).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-        options()
-    }
-    applicationContext.startActivity(intent, Bundle())
-}
-
-fun AppCompatActivity.goto(screen: Screen) {
+fun AppCompatActivity.navigateTo(screen: Screen) =
     when(screen) {
         is Screen.LoginScreen -> goto(LoginActivity::class.java)
         is Screen.DepositPageScreen -> goto(DepositPageActivity::class.java)
@@ -32,8 +23,13 @@ fun AppCompatActivity.goto(screen: Screen) {
         }
         else -> throw IllegalArgumentException()
     }
-}
 
-fun bundle(block: Bundle.() -> Unit): Bundle {
-    return Bundle().apply { block() }
+
+private fun <T: Any> AppCompatActivity.goto(clazz: Class<T>, options: Intent.() -> Unit = {}) {
+    val intent = Intent(applicationContext, clazz).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
+        options()
+    }
+    applicationContext.startActivity(intent, Bundle())
 }

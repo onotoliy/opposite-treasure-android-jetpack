@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.size
+import com.github.onotoliy.opposite.treasure.utils.size
 
 @Composable
 fun <D> Scroller(

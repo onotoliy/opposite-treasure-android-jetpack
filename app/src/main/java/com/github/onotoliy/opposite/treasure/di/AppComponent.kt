@@ -10,6 +10,9 @@ import dagger.android.AndroidInjector
 @Component(modules = [
     AndroidInjectionModule::class,
     AppModule::class,
+    RepositoryModel::class,
+    ServiceModel::class,
+    ResourceModule::class,
     ViewModelFactoryModule::class
 ])
 interface AppComponent : AndroidInjector<App> {
@@ -28,6 +31,8 @@ interface AppComponent : AndroidInjector<App> {
 
     fun inject(activity: TransactionActivity)
     fun inject(activity: TransactionPageActivity)
+
+    fun inject(activity: LoginActivity)
 
     override fun inject(app: App)
 

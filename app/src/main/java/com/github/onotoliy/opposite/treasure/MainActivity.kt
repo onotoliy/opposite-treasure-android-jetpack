@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import com.github.onotoliy.opposite.treasure.services.getUUID
-import com.github.onotoliy.opposite.treasure.works.DepositWorker
+import com.github.onotoliy.opposite.treasure.di.worker.SyncWorker
+import com.github.onotoliy.opposite.treasure.utils.ACCOUNT_TYPE
+import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.google.firebase.iid.FirebaseInstanceId
 import java.io.IOException
 
@@ -42,18 +44,14 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
 
         val manager = AccountManager.get(applicationContext)
+        val syncWorker: WorkRequest = OneTimeWorkRequestBuilder<SyncWorker>().build()
 
-        val depositWorkRequest: WorkRequest =
-            OneTimeWorkRequestBuilder<DepositWorker>()
-                .build()
-        WorkManager
-            .getInstance(applicationContext)
-            .enqueue(listOf(depositWorkRequest))
+        WorkManager.getInstance(applicationContext).enqueue(listOf(syncWorker))
 
         if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
-            goto(Screen.LoginScreen)
+            navigateTo(Screen.LoginScreen)
         } else {
-            goto(Screen.DepositScreen(manager.getUUID()))
+            navigateTo(Screen.DepositScreen(manager.getUUID()))
         }
 
         getToken()
@@ -63,11 +61,9 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             try {
+                val newToken = FirebaseInstanceId.getInstance().getToken("827738396697", "FCM")
 
-                val newToken = FirebaseInstanceId.getInstance()
-                    .getToken("827738396697", "FCM")
                 println("Token --> $newToken")
-
             } catch (e: IOException) {
                 e.printStackTrace()
             }

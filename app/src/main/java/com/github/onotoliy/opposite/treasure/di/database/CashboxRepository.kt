@@ -3,6 +3,8 @@ package com.github.onotoliy.opposite.treasure.di.database
 import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Cashbox
+import com.github.onotoliy.opposite.treasure.utils.getString
+import com.github.onotoliy.opposite.treasure.utils.getBigDecimal
 
 class CashboxRepository(database: SQLiteDatabase): AbstractRepository<Cashbox>(
     table = "treasure_cashbox",

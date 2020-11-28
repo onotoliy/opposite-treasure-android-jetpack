@@ -6,7 +6,7 @@ import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.concat
+import com.github.onotoliy.opposite.treasure.utils.concat
 import com.github.onotoliy.opposite.treasure.di.service.CashboxService
 import com.github.onotoliy.opposite.treasure.di.service.DebtService
 import com.github.onotoliy.opposite.treasure.di.service.DepositService
@@ -38,7 +38,7 @@ class DepositActivityModel @Inject constructor(
     }
 
     fun nextEventPageLoading(offset: Int = 0, numberOfRows: Int = 10) = debtService
-        .getAll(person = pk, offset = offset, numberOfRows = numberOfRows)
+        .getDebtAll(deposit = pk, offset = offset, numberOfRows = numberOfRows)
         .let {
             pending.postValue(false)
             events.postValue(events.value.concat(it))

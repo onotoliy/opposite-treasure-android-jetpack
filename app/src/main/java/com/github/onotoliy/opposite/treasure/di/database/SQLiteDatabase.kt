@@ -54,7 +54,21 @@ class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "MyDatabase",
                 |    event_uuid TEXT, 
                 |    event_name TEXT
                 |)
-            """.trimMargin()
+            """.trimMargin(),
+            """
+                |CREATE TABLE IF NOT EXISTS treasure_debt (
+                |    deposit_user_uuid TEXT PRIMARY KEY, 
+                |    deposit_user_name TEXT, deposit NUMERIC DEFAULT 0,
+                |    event_uuid TEXT PRIMARY KEY, 
+                |    event_total NUMERIC DEFAULT 0, 
+                |    event_contribution NUMERIC DEFAULT 0, 
+                |    event_name TEXT NOT NULL, 
+                |    event_deadline TEXT NOT NULL, 
+                |    event_creation_date TEXT NOT NULL, 
+                |    event_author_uuid TEXT NOT NULL, 
+                |    event_author_name TEXT NOT NULL
+                |)
+            """.trimIndent()
         ).forEach {
             db?.execSQL(it)
         }

@@ -9,12 +9,15 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.github.onotoliy.opposite.treasure.DEFAULT_NOTIFICATION_CHANEL_ID
-import com.github.onotoliy.opposite.treasure.DEFAULT_NOTIFICATION_CHANEL_NAME
 import com.github.onotoliy.opposite.treasure.R
 import com.google.firebase.messaging.RemoteMessage
 
 class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessagingService() {
+
+    companion object{
+        const val DEFAULT_NOTIFICATION_CHANEL_ID = "channel_id"
+        const val DEFAULT_NOTIFICATION_CHANEL_NAME = "channel_name"
+    }
 
     override fun onNewToken(s: String) {
         Log.e("NEW_TOKEN", s)

@@ -15,44 +15,47 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.*
-import com.github.onotoliy.opposite.treasure.di.service.CashboxService
 import com.github.onotoliy.opposite.treasure.di.model.DepositActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.DebtService
-import com.github.onotoliy.opposite.treasure.di.service.DepositService
-import com.github.onotoliy.opposite.treasure.di.service.TransactionService
-import com.github.onotoliy.opposite.treasure.services.getUUID
+import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositView
 import com.github.onotoliy.opposite.treasure.ui.views.EventPageView
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
 class DepositActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var model: DepositActivityModel
+    @Inject lateinit var model: DepositActivityModel
+
+    @Inject lateinit var manager: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).appComponent.inject(this)
+        inject()
 
-        val navigateTo: (Screen) -> Unit = { goto(it) }
-        val manager: AccountManager = AccountManager.get(applicationContext)
-        val pk = intent.getStringExtra("pk") ?: manager.getUUID()
-
-        model.loading(pk)
+        model.loading(intent.pk ?: manager.getUUID())
 
         setContent {
             TreasureTheme {
                 Menu(
-                    bodyContent = { DepositScreen(model, navigateTo) },
-                    navigateTo = navigateTo
+                    bodyContent = { DepositScreen(model, ::navigateTo) },
+                    navigateTo = ::navigateTo
                 )
             }
         }
     }
+}
+
+enum class DepositTab(val label: String) {
+    GENERAL("Общее"),
+    DEBT("Долги"),
+    TRANSACTION("Операции")
 }
 
 @Composable

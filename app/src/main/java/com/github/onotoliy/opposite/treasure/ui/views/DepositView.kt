@@ -16,7 +16,7 @@ fun DepositView(deposit: Deposit?, cashbox: Cashbox?) {
         cashbox?.let {
             Column {
                 Text(text = stringResource(id = R.string.deposit_person), style = H6_BOLD)
-                Text(text = deposit.person.name, style = BODY)
+                Text(text = deposit.name, style = BODY)
 
                 Text(text = stringResource(id = R.string.deposit_contribution), style = H6_BOLD)
                 Text(text = deposit.deposit, style = BODY)

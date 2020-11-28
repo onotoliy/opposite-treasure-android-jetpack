@@ -9,25 +9,25 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.TransactionPageActivityModel
+import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import javax.inject.Inject
 
 class TransactionPageActivity : AppCompatActivity()  {
 
-    @Inject
-    lateinit var model: TransactionPageActivityModel
+    @Inject lateinit var model: TransactionPageActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).appComponent.inject(this)
-
-        val navigateTo: (Screen) -> Unit = { goto(it) }
+        inject()
 
         model.loading()
 
@@ -40,8 +40,8 @@ class TransactionPageActivity : AppCompatActivity()  {
                             onClick = { }
                         )
                     },
-                    bodyContent = { TransactionPageScreen(model, navigateTo) },
-                    navigateTo = navigateTo
+                    bodyContent = { TransactionPageScreen(model, ::navigateTo) },
+                    navigateTo = ::navigateTo
                 )
             }
         }

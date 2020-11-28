@@ -1,6 +1,6 @@
-package com.github.onotoliy.opposite.treasure.resources
+package com.github.onotoliy.opposite.treasure.di.resource
 
-import com.github.onotoliy.opposite.treasure.services.AccessToken
+import com.github.onotoliy.opposite.treasure.utils.AccessToken
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

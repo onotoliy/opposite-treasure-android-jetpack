@@ -3,7 +3,7 @@ package com.github.onotoliy.opposite.treasure.di.model
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.concat
+import com.github.onotoliy.opposite.treasure.utils.concat
 import com.github.onotoliy.opposite.treasure.di.service.EventService
 import javax.inject.Inject
 

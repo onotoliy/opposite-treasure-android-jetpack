@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.resources
+package com.github.onotoliy.opposite.treasure.di.resource
 
 import com.github.onotoliy.opposite.data.Cashbox
 import retrofit2.Call

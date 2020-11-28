@@ -4,6 +4,9 @@ import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.page.Page
+import com.github.onotoliy.opposite.treasure.utils.getBigDecimal
+import com.github.onotoliy.opposite.treasure.utils.getString
+import com.github.onotoliy.opposite.treasure.utils.getOption
 
 class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
     table = "treasure_event",

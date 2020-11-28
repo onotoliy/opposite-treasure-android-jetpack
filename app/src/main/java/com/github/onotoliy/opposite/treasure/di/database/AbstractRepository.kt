@@ -2,16 +2,14 @@ package com.github.onotoliy.opposite.treasure.di.database
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Meta
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.data.page.Paging
-import java.math.BigDecimal
 
 abstract class AbstractRepository<T>(
-    private val table: String,
-    private val columns: List<String>,
-    private val database: SQLiteDatabase
+    protected val table: String,
+    protected val columns: List<String>,
+    protected val database: SQLiteDatabase
 ) {
     abstract fun get(pk: String): T
     abstract fun merge(dto: T)
@@ -19,6 +17,11 @@ abstract class AbstractRepository<T>(
     abstract fun update(dto: T)
 
     protected abstract fun toDTO(cursor: Cursor): T
+
+    fun beginTransaction() = database.writableDatabase.beginTransaction()
+    fun endTransaction() = database.writableDatabase.endTransaction()
+    fun setTransactionSuccessful() = database.writableDatabase.setTransactionSuccessful()
+    fun version(): Int = 0
 
     protected fun merge(
         values: ContentValues,
@@ -96,29 +99,4 @@ abstract class AbstractRepository<T>(
 
             getInt(getColumnIndex("total")) == 1
         }
-
-    protected fun Cursor.getOption(columnName: String): Option = Option(
-        uuid = getString("${columnName}_uuid"),
-        name = getString("${columnName}_name")
-    )
-    protected fun Cursor.getString(columnName: String): String =
-        getStringOrNull(columnName) ?: ""
-    protected fun Cursor.getBigDecimal(columnName: String): String =
-        getBigDecimalOrNull(columnName) ?: "0.0"
-
-    protected fun Cursor.getOptionOrNull(columnName: String): Option? {
-        val uuid = getStringOrNull("${columnName}_uuid")
-        val name = getStringOrNull("${columnName}_name")
-
-        return if (uuid.isNullOrEmpty() || name.isNullOrEmpty()) {
-            null
-        } else {
-            Option(uuid, name)
-        }
-    }
-    private fun Cursor.getStringOrNull(columnName: String): String? =
-        getString(getColumnIndex(columnName))
-    private fun Cursor.getBigDecimalOrNull(columnName: String): String? = BigDecimal
-        .valueOf(getDouble(getColumnIndex(columnName)))
-        .toPlainString()
 }

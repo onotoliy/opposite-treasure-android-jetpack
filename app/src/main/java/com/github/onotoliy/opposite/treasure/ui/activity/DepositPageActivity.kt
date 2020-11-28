@@ -8,33 +8,32 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.DepositPageActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.DepositService
+import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import javax.inject.Inject
 
 class DepositPageActivity : AppCompatActivity()  {
 
-    @Inject
-    lateinit var model: DepositPageActivityModel
+    @Inject lateinit var model: DepositPageActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).appComponent.inject(this)
-
-        val navigateTo: (Screen) -> Unit = { goto(it) }
+        inject()
 
         model.loading()
 
         setContent {
             TreasureTheme {
                 Menu(
-                    bodyContent = { DepositPageScreen(model, navigateTo) },
-                    navigateTo = navigateTo
+                    bodyContent = { DepositPageScreen(model, ::navigateTo) },
+                    navigateTo = ::navigateTo
                 )
             }
         }

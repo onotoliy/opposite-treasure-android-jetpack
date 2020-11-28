@@ -5,6 +5,9 @@ import android.database.Cursor
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.page.Page
+import com.github.onotoliy.opposite.treasure.utils.getString
+import com.github.onotoliy.opposite.treasure.utils.getOption
+import com.github.onotoliy.opposite.treasure.utils.getOptionOrNull
 
 class TransactionRepository(database: SQLiteDatabase): AbstractRepository<Transaction>(
     table = "treasure_transaction",

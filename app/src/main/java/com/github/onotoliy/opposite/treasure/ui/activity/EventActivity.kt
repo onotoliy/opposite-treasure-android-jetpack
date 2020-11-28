@@ -22,22 +22,22 @@ import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
 import com.github.onotoliy.opposite.treasure.ui.views.EventView
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.observe
+import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
 class EventActivity : AppCompatActivity()  {
 
-    @Inject
-    lateinit var model: EventActivityModel
+    @Inject lateinit var model: EventActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as App).appComponent.inject(this)
+        inject()
 
-        val pk = intent?.getStringExtra("pk") ?: ""
-        val navigateTo: (Screen) -> Unit = { goto(it) }
-
-        model.loading(pk)
+        model.loading(intent.pk ?: throw IllegalArgumentException())
 
         setContent {
             TreasureTheme {
@@ -48,13 +48,19 @@ class EventActivity : AppCompatActivity()  {
                             onClick = { }
                         )
                     },
-                    bodyContent = { EventScreen(model, navigateTo) },
-                    navigateTo = navigateTo
+                    bodyContent = { EventScreen(model, ::navigateTo) },
+                    navigateTo = ::navigateTo
                 )
             }
         }
     }
 
+}
+
+enum class EventTab(val label: String) {
+    GENERAL("Общее"),
+    DEBTORS("Должники"),
+    TRANSACTIONS("Операции")
 }
 
 @Composable

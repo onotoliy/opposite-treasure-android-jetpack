@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.page.Page
+import com.github.onotoliy.opposite.treasure.utils.getBigDecimal
+import com.github.onotoliy.opposite.treasure.utils.getOption
 
 class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
     table = "treasure_deposit",
@@ -26,8 +28,8 @@ class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
     }
 
     override fun insert(dto: Deposit) = insert(ContentValues().apply {
-        put("user_uuid", dto.person.uuid)
-        put("user_name", dto.person.name)
+        put("user_uuid", dto.uuid)
+        put("user_name", dto.name)
         put("deposit", dto.deposit.toDouble())
     })
 
@@ -35,7 +37,7 @@ class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
         whereClause = "user_uuid = ?",
         whereArgs = arrayOf(dto.uuid),
         values = ContentValues().apply {
-            put("user_name", dto.person.name)
+            put("user_name", dto.name)
             put("deposit", dto.deposit.toDouble())
         }
     )

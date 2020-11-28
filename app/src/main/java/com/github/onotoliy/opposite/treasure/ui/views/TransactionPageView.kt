@@ -13,6 +13,8 @@ import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.ui.*
+import com.github.onotoliy.opposite.treasure.utils.numberOfRows
+import com.github.onotoliy.opposite.treasure.utils.offset
 
 @Composable
 fun TransactionPageView(
