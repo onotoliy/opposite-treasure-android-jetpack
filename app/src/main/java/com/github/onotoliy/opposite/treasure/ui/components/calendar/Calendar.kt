@@ -254,7 +254,7 @@ private fun DaySelectedStatus.isMarked(): Boolean {
     }
 }
 
-private val CELL_SIZE = 48.dp
+val CELL_SIZE = 48.dp
 
 val DayStatusKey = SemanticsPropertyKey<DaySelectedStatus>("DayStatusKey")
 var SemanticsPropertyReceiver.dayStatusProperty by DayStatusKey

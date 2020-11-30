@@ -36,6 +36,7 @@ fun TextField(
     isErrorValue: Boolean = false,
     imeAction: ImeAction = ImeAction.Unspecified,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardType: KeyboardType = KeyboardType.Text,
     onImeActionPerformed: (ImeAction, SoftwareKeyboardController?) -> Unit = { _, _ -> },
     onTextInputStarted: (SoftwareKeyboardController) -> Unit = {},
     onValueChange: (String) -> Unit
@@ -50,7 +51,7 @@ fun TextField(
         isErrorValue = isErrorValue,
         leadingIcon = leadingIcon,
         onValueChange = onValueChange,
-        keyboardType = KeyboardType.Text,
+        keyboardType = keyboardType,
         backgroundColor = Color.White,
         imeAction = imeAction,
         visualTransformation = visualTransformation,

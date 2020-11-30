@@ -7,6 +7,12 @@ import androidx.compose.ui.res.vectorResource
 import com.github.onotoliy.opposite.treasure.R
 
 @Composable
+fun IconLeftArrow() = Icon(asset = vectorResource(id = R.drawable.ic_left_arrow))
+
+@Composable
+fun IconRightArrow() = Icon(asset = vectorResource(id = R.drawable.ic_right_arrow))
+
+@Composable
 fun IconAccountCircle() = Icon(asset = vectorResource(id = R.drawable.ic_account_circle))
 
 @Composable
