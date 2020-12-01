@@ -61,7 +61,7 @@ fun TransactionPageView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = it.person?.name ?: "", style = BODY_GREY)
-                Text(text = it.creationDate.formatDate(), style = BODY_GREY)
+                Text(text = it.creationDate.fromISO().toShortDate(), style = BODY_GREY)
             }
             Divider()
         }

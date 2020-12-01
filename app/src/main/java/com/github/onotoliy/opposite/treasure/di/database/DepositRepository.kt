@@ -19,21 +19,21 @@ class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
 
     fun getAll(offset: Int, limit: Int): Page<Deposit> = getAll(offset, limit)
 
-    override fun merge(dto: Deposit) {
+    override fun merge(dto: Deposit, local: Boolean) {
         if (exists(whereClause = "user_uuid = ?", whereArgs = arrayOf(dto.uuid))) {
-            update(dto)
+            update(dto, local)
         } else {
-            insert(dto)
+            insert(dto, local)
         }
     }
 
-    override fun insert(dto: Deposit) = insert(ContentValues().apply {
+    override fun insert(dto: Deposit, local: Boolean) = insert(ContentValues().apply {
         put("user_uuid", dto.uuid)
         put("user_name", dto.name)
         put("deposit", dto.deposit.toDouble())
     })
 
-    override fun update(dto: Deposit) = update(
+    override fun update(dto: Deposit, local: Boolean) = update(
         whereClause = "user_uuid = ?",
         whereArgs = arrayOf(dto.uuid),
         values = ContentValues().apply {
@@ -43,9 +43,13 @@ class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
     )
 
     override fun toDTO(cursor: Cursor): Deposit = cursor.run {
-        Deposit(
-            person = getOption("user"),
-            deposit = getBigDecimal("deposit")
-        )
+        if (cursor.count == 0) {
+            Deposit()
+        } else {
+            Deposit(
+                person = getOption("user"),
+                deposit = getBigDecimal("deposit")
+            )
+        }
     }
 }

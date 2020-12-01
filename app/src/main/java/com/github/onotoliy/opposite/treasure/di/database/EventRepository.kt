@@ -29,15 +29,15 @@ class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
 
     fun getAll(offset: Int, limit: Int): Page<Event> = getAll(offset, limit, "1 = 1", arrayOf())
 
-    override fun merge(dto: Event) {
+    override fun merge(dto: Event, local: Boolean) {
         if (exists(whereClause = "uuid = ?", whereArgs = arrayOf(dto.uuid))) {
-            update(dto)
+            update(dto, local)
         } else {
-            insert(dto)
+            insert(dto, local)
         }
     }
 
-    override fun insert(dto: Event) = insert(ContentValues().apply {
+    override fun insert(dto: Event, local: Boolean) = insert(ContentValues().apply {
         put("uuid", dto.uuid)
         put("total", dto.total.toDouble())
         put("contribution", dto.contribution.toDouble())
@@ -48,7 +48,7 @@ class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
         put("author_name", dto.author.name)
     })
 
-    override fun update(dto: Event) = update(ContentValues().apply {
+    override fun update(dto: Event, local: Boolean) = update(ContentValues().apply {
         put("total", dto.total.toDouble())
         put("contribution", dto.contribution.toDouble())
         put("name", dto.name)

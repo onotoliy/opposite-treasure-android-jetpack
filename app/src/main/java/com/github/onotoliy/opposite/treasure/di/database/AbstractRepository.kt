@@ -12,9 +12,9 @@ abstract class AbstractRepository<T>(
     protected val database: SQLiteDatabase
 ) {
     abstract fun get(pk: String): T
-    abstract fun merge(dto: T)
-    abstract fun insert(dto: T)
-    abstract fun update(dto: T)
+    abstract fun merge(dto: T, local: Boolean = false)
+    abstract fun insert(dto: T, local: Boolean = false)
+    abstract fun update(dto: T, local: Boolean = false)
 
     protected abstract fun toDTO(cursor: Cursor): T
 
@@ -70,10 +70,12 @@ abstract class AbstractRepository<T>(
         .run {
             val list = mutableListOf<T>()
 
-            moveToFirst()
+            if (count > 0) {
+                moveToFirst()
 
-            while (moveToNext()) {
-                list.add(toDTO(this))
+                do {
+                    list.add(toDTO(this))
+                } while (moveToNext())
             }
 
             Page(meta = Meta(total = count(), paging = Paging(offset + limit, limit)), context = list)

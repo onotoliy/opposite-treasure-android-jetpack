@@ -18,6 +18,9 @@ fun AccountManager.getAccount(): Account =
 fun AccountManager.getUUID(): String =
     getUserData(getAccount(), "uuid")
 
+fun AccountManager.getName(): String =
+    getUserData(getAccount(), "preferredName")
+
 private fun String.userdata(): Bundle {
     val parts = split(".")
     if (parts.size != 3) {

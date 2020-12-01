@@ -2,15 +2,18 @@ package com.github.onotoliy.opposite.treasure.ui
 
 import androidx.compose.foundation.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.vectorResource
 import com.github.onotoliy.opposite.treasure.R
 
 @Composable
-fun IconLeftArrow() = Icon(asset = vectorResource(id = R.drawable.ic_left_arrow))
+fun IconLeftArrow(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_left_arrow), modifier = modifier)
 
 @Composable
-fun IconRightArrow() = Icon(asset = vectorResource(id = R.drawable.ic_right_arrow))
+fun IconRightArrow(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_right_arrow), modifier = modifier)
 
 @Composable
 fun IconAccountCircle() = Icon(asset = vectorResource(id = R.drawable.ic_account_circle))

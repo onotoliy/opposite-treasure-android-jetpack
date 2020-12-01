@@ -15,20 +15,20 @@ class CashboxRepository(database: SQLiteDatabase): AbstractRepository<Cashbox>(
 
     override fun get(pk: String): Cashbox = throw UnsupportedOperationException()
 
-    override fun merge(dto: Cashbox) {
+    override fun merge(dto: Cashbox, local: Boolean) {
         if (exists(whereClause = "1 = 1", whereArgs = arrayOf())) {
-            update(dto)
+            update(dto, local)
         } else {
-            insert(dto)
+            insert(dto, local)
         }
     }
 
-    override fun insert(dto: Cashbox) = insert(ContentValues().apply {
+    override fun insert(dto: Cashbox, local: Boolean) = insert(ContentValues().apply {
         put("last_update_date", dto.lastUpdateDate)
         put("deposit", dto.deposit)
     })
 
-    override fun update(dto: Cashbox) = update(
+    override fun update(dto: Cashbox, local: Boolean) = update(
         whereClause = "1 = 1",
         whereArgs = arrayOf(),
         values = ContentValues().apply {
@@ -38,9 +38,13 @@ class CashboxRepository(database: SQLiteDatabase): AbstractRepository<Cashbox>(
     )
 
     override fun toDTO(cursor: Cursor): Cashbox = cursor.run {
-        Cashbox(
-            lastUpdateDate = getString("last_update_date"),
-            deposit = getBigDecimal("deposit")
-        )
+        if (cursor.count == 0) {
+            Cashbox()
+        } else {
+            Cashbox(
+                lastUpdateDate = getString("last_update_date"),
+                deposit = getBigDecimal("deposit")
+            )
+        }
     }
 }

@@ -56,15 +56,15 @@ class TransactionRepository(database: SQLiteDatabase): AbstractRepository<Transa
         )
     }
 
-    override fun merge(dto: Transaction) {
+    override fun merge(dto: Transaction, local: Boolean) {
         if (exists(whereClause = "uuid = ?", whereArgs = arrayOf(dto.uuid))) {
-            update(dto)
+            update(dto, local)
         } else {
-            insert(dto)
+            insert(dto, local)
         }
     }
 
-    override fun insert(dto: Transaction) = insert(ContentValues().apply {
+    override fun insert(dto: Transaction, local: Boolean) = insert(ContentValues().apply {
         put("uuid", dto.uuid)
         put("name", dto.name)
         put("cash", dto.cash.toDouble())
@@ -78,7 +78,7 @@ class TransactionRepository(database: SQLiteDatabase): AbstractRepository<Transa
         put("person_name", dto.person?.name)
     })
 
-    override fun update(dto: Transaction) = update(ContentValues().apply {
+    override fun update(dto: Transaction, local: Boolean) = update(ContentValues().apply {
         put("name", dto.name)
         put("cash", dto.cash.toDouble())
         put("creation_date", dto.creationDate)

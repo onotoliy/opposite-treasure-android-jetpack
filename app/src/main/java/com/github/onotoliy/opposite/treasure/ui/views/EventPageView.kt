@@ -56,11 +56,11 @@ fun EventPageView(
             ) {
                 Row {
                     Text(text = stringResource(id = R.string.event_page_creation_date), style = BODY_GREY)
-                    Text(text = it.creationDate.formatDate(), style = BODY_GREY)
+                    Text(text = it.creationDate.fromISO().toShortDate(), style = BODY_GREY)
                 }
                 Row {
                     Text(text = stringResource(R.string.event_page_deadline), style = BODY_GREY)
-                    Text(text = it.deadline.formatDate(), style = BODY_GREY)
+                    Text(text = it.deadline.fromISO().toShortDate(), style = BODY_GREY)
                 }
             }
 

@@ -4,10 +4,15 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "MyDatabase", null, 4) {
+class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "MyDatabase", null, 6) {
 
     override fun onCreate(db: SQLiteDatabase?) {
         listOf(
+            "drop table treasure_deposit",
+            "drop table treasure_cashbox",
+            "drop table treasure_event",
+            "drop table treasure_transaction",
+            "drop table treasure_debt",
             """
                 |CREATE TABLE IF NOT EXISTS treasure_deposit (
                 |    user_uuid TEXT PRIMARY KEY, 
@@ -49,17 +54,10 @@ class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "MyDatabase",
             """.trimMargin(),
             """
                 |CREATE TABLE IF NOT EXISTS treasure_debt (
-                |    user_uuid TEXT, 
-                |    user_name TEXT,
+                |    deposit_user_uuid TEXT, 
+                |    deposit_user_name TEXT, 
+                |    deposit_deposit NUMERIC DEFAULT 0,
                 |    event_uuid TEXT, 
-                |    event_name TEXT
-                |)
-            """.trimMargin(),
-            """
-                |CREATE TABLE IF NOT EXISTS treasure_debt (
-                |    deposit_user_uuid TEXT PRIMARY KEY, 
-                |    deposit_user_name TEXT, deposit NUMERIC DEFAULT 0,
-                |    event_uuid TEXT PRIMARY KEY, 
                 |    event_total NUMERIC DEFAULT 0, 
                 |    event_contribution NUMERIC DEFAULT 0, 
                 |    event_name TEXT NOT NULL, 
@@ -68,7 +66,7 @@ class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "MyDatabase",
                 |    event_author_uuid TEXT NOT NULL, 
                 |    event_author_name TEXT NOT NULL
                 |)
-            """.trimIndent()
+            """.trimMargin()
         ).forEach {
             db?.execSQL(it)
         }

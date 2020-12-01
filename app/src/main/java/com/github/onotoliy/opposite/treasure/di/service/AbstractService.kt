@@ -1,5 +1,6 @@
 package com.github.onotoliy.opposite.treasure.di.service
 
+import android.util.Log
 import androidx.work.ListenableWorker
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.AbstractRepository
@@ -11,6 +12,18 @@ abstract class AbstractService<T>(
 ) {
 
     abstract fun sync(): ListenableWorker.Result
+
+    fun merge(dto: T) {
+        try {
+            repository.beginTransaction()
+            repository.merge(dto, true)
+            repository.setTransactionSuccessful()
+        } catch (exc: Exception) {
+            Log.e("Error", exc.message, exc)
+        } finally {
+            repository.endTransaction()
+        }
+    }
 
     protected fun syncTransactional(apply: () -> Unit): ListenableWorker.Result =
         try {

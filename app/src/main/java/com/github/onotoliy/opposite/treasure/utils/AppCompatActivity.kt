@@ -15,6 +15,9 @@ fun AppCompatActivity.navigateTo(screen: Screen) =
         is Screen.EventScreen -> goto(EventActivity::class.java) {
             putExtra("pk", screen.pk)
         }
+        is Screen.EventEditScreen -> goto(EventEditActivity::class.java) {
+            putExtra("pk", screen.pk)
+        }
         is Screen.TransactionScreen -> goto(TransactionActivity::class.java) {
             putExtra("pk", screen.pk)
         }

@@ -32,9 +32,9 @@ class DebtRepository(database: SQLiteDatabase): AbstractRepository<Debt>(
 
     override fun get(pk: String): Debt = throw UnsupportedOperationException()
 
-    override fun merge(dto: Debt) = throw UnsupportedOperationException()
+    override fun merge(dto: Debt, local: Boolean) = throw UnsupportedOperationException()
 
-    override fun update(dto: Debt) = throw UnsupportedOperationException()
+    override fun update(dto: Debt, local: Boolean) = throw UnsupportedOperationException()
 
     override fun toDTO(cursor: Cursor): Debt = throw UnsupportedOperationException()
 
@@ -42,7 +42,7 @@ class DebtRepository(database: SQLiteDatabase): AbstractRepository<Debt>(
         database.writableDatabase.delete("treasure_debt", "1 = 1", null)
     }
 
-    override fun insert(dto: Debt) = insert(
+    override fun insert(dto: Debt, local: Boolean) = insert(
         ContentValues().apply {
             put("deposit_user_uuid", dto.deposit.uuid)
             put("deposit_user_name", dto.deposit.name)

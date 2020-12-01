@@ -1,11 +1,11 @@
 package com.github.onotoliy.opposite.treasure
 
 import androidx.compose.ui.text.AnnotatedString
-import com.github.onotoliy.opposite.treasure.ui.components.MoneyVisualTransformation
-import com.github.onotoliy.opposite.treasure.ui.components.TelephoneVisualTransformation
+import com.github.onotoliy.opposite.treasure.ui.components.*
 import org.junit.Test
 
 import org.junit.Assert.*
+import java.util.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -49,5 +49,54 @@ class ExampleUnitTest {
         assertEquals("123 456 789", transformation.filter(AnnotatedString("123456789")).transformedText.text)
 
         assertEquals("123 456 789.000", transformation.filter(AnnotatedString("123456789.000")).transformedText.text)
+    }
+
+    @Test
+    fun test_Calendar() {
+        val calendar: Calendar = Calendar.getInstance()
+
+        calendar.time = Date()
+
+        calendar.set(Calendar.HOUR, 1)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        val month: Int = calendar.get(Calendar.MONTH)
+        val year: Int = calendar.get(Calendar.YEAR)
+
+        println(((year - 5)..(year + 5)).map { "$it" })
+        println("$year")
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+
+        val days = mutableListOf<Day>()
+
+        while (month == calendar.get(Calendar.MONTH)) {
+            val week = calendar.get(Calendar.WEEK_OF_MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val dayOfWeek = when (Calendar.DAY_OF_WEEK) {
+                Calendar.MONDAY -> DayOfWeek.Monday
+                Calendar.TUESDAY -> DayOfWeek.Tuesday
+                Calendar.WEDNESDAY -> DayOfWeek.Wednesday
+                Calendar.THURSDAY -> DayOfWeek.Thursday
+                Calendar.FRIDAY -> DayOfWeek.Friday
+                Calendar.SATURDAY -> DayOfWeek.Saturday
+                Calendar.SUNDAY -> DayOfWeek.Sunday
+                else -> throw IllegalArgumentException()
+            }
+
+            days.add(Day(dayOfWeek, "$day", week))
+
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+
+        val m = Month(
+            year = year.toString(),
+            name = month.toString(),
+            code = month.toString(),
+            weeks = days.groupBy { it.week }.map { Week(it.value) })
+
+        println(m)
     }
 }

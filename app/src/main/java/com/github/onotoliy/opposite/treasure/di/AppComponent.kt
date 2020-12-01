@@ -27,6 +27,7 @@ interface AppComponent : AndroidInjector<App> {
     fun inject(activity: DepositPageActivity)
 
     fun inject(activity: EventActivity)
+    fun inject(activity: EventEditActivity)
     fun inject(activity: EventPageActivity)
 
     fun inject(activity: TransactionActivity)

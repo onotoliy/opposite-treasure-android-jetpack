@@ -21,10 +21,7 @@ import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
-import com.github.onotoliy.opposite.treasure.utils.addAccount
-import com.github.onotoliy.opposite.treasure.utils.getAuthToken
-import com.github.onotoliy.opposite.treasure.utils.getUUID
-import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.*
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
@@ -33,6 +30,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        inject()
 
         setContent {
             TreasureTheme {
