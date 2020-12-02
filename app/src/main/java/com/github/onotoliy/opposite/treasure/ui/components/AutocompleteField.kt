@@ -81,13 +81,10 @@ fun AutocompleteField(
 
                     Timer().schedule(2000) {
                         if (timer.value.isNotEmpty()) {
-                            Log.i("Timer", "Timer Start ${timer.value}")
                             state.value = search(timer.value)
                             timer.value = ""
                             expanded.value = true
-                            Log.i("Timer", "Timer End ${timer.value}")
                         }
-                        Log.i("Timer", "200")
                     }
                 }
             )

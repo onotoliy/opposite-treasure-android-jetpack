@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.service
 
 import com.github.onotoliy.opposite.data.Event
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.EventRepository
 import com.github.onotoliy.opposite.treasure.di.resource.EventResource
@@ -14,6 +15,8 @@ class EventService @Inject constructor(
     fun get(pk: String): Event = repository.get(pk)
 
     fun getAll(offset: Int, limit: Int): Page<Event> = repository.getAll(offset, limit)
+
+    fun getAllOption(name: String?): List<Option> = repository.getAllOption(name)
 
     override fun sync() = syncTransactional {
         val version = repository.version()

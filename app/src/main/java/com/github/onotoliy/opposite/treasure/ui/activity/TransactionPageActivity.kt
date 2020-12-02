@@ -37,7 +37,7 @@ class TransactionPageActivity : AppCompatActivity()  {
                     floatingActionButton = {
                         FloatingActionButton(
                             icon = { IconAdd() },
-                            onClick = { }
+                            onClick = { navigateTo(Screen.TransactionEditScreen()) }
                         )
                     },
                     bodyContent = { TransactionPageScreen(model, ::navigateTo) },

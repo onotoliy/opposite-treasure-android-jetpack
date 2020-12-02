@@ -10,6 +10,8 @@ import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.ui.BODY
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
+import com.github.onotoliy.opposite.treasure.utils.fromISO
+import com.github.onotoliy.opposite.treasure.utils.toShortDate
 
 @Composable
 fun TransactionView(data: Transaction, navigateTo: (Screen) -> Unit) {

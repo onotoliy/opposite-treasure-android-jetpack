@@ -3,12 +3,13 @@ package com.github.onotoliy.opposite.treasure.di.database
 import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Event
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.utils.getBigDecimal
 import com.github.onotoliy.opposite.treasure.utils.getString
 import com.github.onotoliy.opposite.treasure.utils.getOption
 
-class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
+class EventRepository(database: SQLiteDatabase) : AbstractRepository<Event>(
     table = "treasure_event",
     columns = listOf(
         "uuid",
@@ -28,6 +29,22 @@ class EventRepository(database: SQLiteDatabase): AbstractRepository<Event>(
     )
 
     fun getAll(offset: Int, limit: Int): Page<Event> = getAll(offset, limit, "1 = 1", arrayOf())
+
+    fun getAllOption(name: String?): List<Option> {
+        val whereClause = mutableListOf("1 = 1")
+        val whereArgs = mutableListOf<String>()
+
+        name.let {
+            whereClause.add("name LIKE ?")
+            whereArgs.add("%$it%")
+        }
+
+        return getAllOption(
+            listOf("uuid", "name"), whereClause.joinToString(" AND "), whereArgs.toTypedArray()
+        ) {
+            Option(getString("uuid"), getString("name"))
+        }
+    }
 
     override fun merge(dto: Event, local: Boolean) {
         if (exists(whereClause = "uuid = ?", whereArgs = arrayOf(dto.uuid))) {

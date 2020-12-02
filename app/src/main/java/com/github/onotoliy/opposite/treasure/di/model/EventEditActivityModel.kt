@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.treasure.di.service.EventService
-import com.github.onotoliy.opposite.treasure.fromShortDate
-import com.github.onotoliy.opposite.treasure.toISO
-import com.github.onotoliy.opposite.treasure.utils.getName
-import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import javax.inject.Inject
 
@@ -28,7 +25,7 @@ class EventEditActivityModel @Inject constructor(
 
     fun loading(pk: String) {
         if (pk.isEmpty()) {
-            uuid.postValue("")
+            uuid.postValue(randomUUID())
             name.postValue("")
             contribution.postValue("0.0")
             total.postValue("0.0")
@@ -57,6 +54,7 @@ class EventEditActivityModel @Inject constructor(
                 total = total.value ?: "",
                 deadline = deadline.value?.fromShortDate()?.toISO() ?: "",
                 creationDate = creationDate.value ?: "",
+                author = author.value ?: Option()
             )
         )
     }

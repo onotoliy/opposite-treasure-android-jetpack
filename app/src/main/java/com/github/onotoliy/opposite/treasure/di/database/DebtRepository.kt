@@ -5,6 +5,7 @@ import android.database.Cursor
 import com.github.onotoliy.opposite.data.Debt
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Meta
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.data.page.Paging
@@ -58,6 +59,27 @@ class DebtRepository(database: SQLiteDatabase): AbstractRepository<Debt>(
         }
     )
 
+    fun getDebtorAllOption(
+        event: String,
+        name: String?
+    ): List<Option> {
+        val whereClause = mutableListOf("event_uuid = ?")
+        val whereArgs = mutableListOf(event)
+
+        name.let {
+            whereClause.add("name LIKE ?")
+            whereArgs.add("%$it%")
+        }
+
+        return getAllOption(
+            listOf("deposit_user_uuid", "deposit_user_name"),
+            whereClause.joinToString(" AND "),
+            whereArgs.toTypedArray()
+        ) {
+            getOption("deposit_user")
+        }
+    }
+
     fun getDebtorAll(
         event: String,
         offset: Int,
@@ -75,11 +97,32 @@ class DebtRepository(database: SQLiteDatabase): AbstractRepository<Debt>(
         }
     )
 
+    fun getDebtAllOption(
+        person: String,
+        name: String?
+    ): List<Option> {
+        val whereClause = mutableListOf("event_uuid = ?")
+        val whereArgs = mutableListOf(person)
+
+        name.let {
+            whereClause.add("name LIKE ?")
+            whereArgs.add("%$it%")
+        }
+
+        return getAllOption(
+            listOf("event_uuid", "event_name"),
+            whereClause.joinToString(" AND "),
+            whereArgs.toTypedArray()
+        ) {
+            getOption("event")
+        }
+    }
+
     fun getDebtAll(
         deposit: String,
         offset: Int,
         limit: Int
-    ): Page<Event> = getAll<Event>(
+    ): Page<Event> = getAll(
         offset = offset,
         limit = limit,
         whereClause = "deposit_user_uuid = ?",

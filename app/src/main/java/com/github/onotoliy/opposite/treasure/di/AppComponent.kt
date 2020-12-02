@@ -31,6 +31,7 @@ interface AppComponent : AndroidInjector<App> {
     fun inject(activity: EventPageActivity)
 
     fun inject(activity: TransactionActivity)
+    fun inject(activity: TransactionEditActivity)
     fun inject(activity: TransactionPageActivity)
 
     fun inject(activity: LoginActivity)

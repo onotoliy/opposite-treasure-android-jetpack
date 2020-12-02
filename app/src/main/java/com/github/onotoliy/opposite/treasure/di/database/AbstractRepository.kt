@@ -2,9 +2,11 @@ package com.github.onotoliy.opposite.treasure.di.database
 
 import android.content.ContentValues
 import android.database.Cursor
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Meta
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.data.page.Paging
+import com.github.onotoliy.opposite.treasure.utils.getString
 
 abstract class AbstractRepository<T>(
     protected val table: String,
@@ -79,6 +81,28 @@ abstract class AbstractRepository<T>(
             }
 
             Page(meta = Meta(total = count(), paging = Paging(offset + limit, limit)), context = list)
+        }
+
+    protected fun getAllOption(
+        columns: List<String> = listOf("uuid", "name"),
+        whereClause: String = "1 = 1",
+        whereArgs: Array<String> = arrayOf(),
+        toDTO: Cursor.() -> Option
+    ): List<Option> = database
+        .readableDatabase
+        .rawQuery("SELECT ${columns.joinToString(", ")} FROM $table WHERE $whereClause", whereArgs)
+        .run {
+            val list = mutableListOf<Option>()
+
+            if (count > 0) {
+                moveToFirst()
+
+                do {
+                    list.add(toDTO())
+                } while (moveToNext())
+            }
+
+            list
         }
 
     private fun count() = database

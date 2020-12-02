@@ -3,6 +3,7 @@ package com.github.onotoliy.opposite.treasure.di.database
 import android.content.ContentValues
 import android.database.Cursor
 import com.github.onotoliy.opposite.data.Deposit
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.utils.getBigDecimal
 import com.github.onotoliy.opposite.treasure.utils.getOption
@@ -17,7 +18,30 @@ class DepositRepository(database: SQLiteDatabase) : AbstractRepository<Deposit>(
         whereArgs = arrayOf(pk)
     )
 
-    fun getAll(offset: Int, limit: Int): Page<Deposit> = getAll(offset, limit)
+    fun getAll(offset: Int, limit: Int): Page<Deposit> = getAll(
+        offset = offset,
+        limit = limit,
+        whereClause = "1 = 1",
+        whereArgs = arrayOf()
+    )
+
+    fun getAllOption(name: String?): List<Option> {
+        val whereClause = mutableListOf("1 = 1")
+        val whereArgs = mutableListOf<String>()
+
+        name.let {
+            whereClause.add("name LIKE ?")
+            whereArgs.add("%$it%")
+        }
+
+        return getAllOption(
+            listOf("user_uuid", "user_name"),
+            whereClause.joinToString(" AND "),
+            whereArgs.toTypedArray()
+        ) {
+            getOption("user")
+        }
+    }
 
     override fun merge(dto: Deposit, local: Boolean) {
         if (exists(whereClause = "user_uuid = ?", whereArgs = arrayOf(dto.uuid))) {

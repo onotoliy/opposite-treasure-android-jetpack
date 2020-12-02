@@ -33,6 +33,13 @@
     <string name="transaction_event">Событие</string>
     <string name="transaction_person">Пользователь</string>
 
+    <string name="transaction_edit_name">Название</string>
+    <string name="transaction_edit_type">Тип</string>
+    <string name="transaction_edit_cash">Сумма</string>
+    <string name="transaction_edit_event">Событие</string>
+    <string name="transaction_edit_person">Пользователь</string>
+    <string name="transaction_edit_date">Дата создания</string>
+
     <string name="transaction_page_creation_date">Дата создания: </string>
     <string name="transaction_page_person">Пользователь: </string>
 

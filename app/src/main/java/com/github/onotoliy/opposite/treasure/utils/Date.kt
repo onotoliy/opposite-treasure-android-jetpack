@@ -1,10 +1,8 @@
-package com.github.onotoliy.opposite.treasure
+package com.github.onotoliy.opposite.treasure.utils
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
-
-fun String.formatDate() = substring(0, 10)
 
 @SuppressLint("SimpleDateFormat")
 fun Date.toShortDate(): String = SimpleDateFormat("dd.MM.yyyy").format(this)

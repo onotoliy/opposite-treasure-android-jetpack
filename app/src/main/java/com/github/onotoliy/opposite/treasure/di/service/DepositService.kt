@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.service
 
 import com.github.onotoliy.opposite.data.Deposit
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.DepositRepository
 import com.github.onotoliy.opposite.treasure.di.resource.DepositResource
@@ -14,6 +15,8 @@ class DepositService @Inject constructor(
     fun get(pk: String): Deposit = repository.get(pk)
 
     fun getAll(offset: Int, limit: Int): Page<Deposit> = repository.getAll(offset, limit)
+
+    fun getAllOption(name: String?): List<Option> = repository.getAllOption(name)
 
     override fun sync() = syncTransactional {
         val version = repository.version()
