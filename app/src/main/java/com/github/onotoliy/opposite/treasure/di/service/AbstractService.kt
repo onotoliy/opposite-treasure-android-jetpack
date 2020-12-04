@@ -1,41 +1,38 @@
 package com.github.onotoliy.opposite.treasure.di.service
 
-import android.util.Log
+import androidx.sqlite.db.SupportSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.work.ListenableWorker
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.di.database.AbstractRepository
 import retrofit2.Response
-import java.lang.Exception
 
-abstract class AbstractService<T>(
-    private val repository: AbstractRepository<T>
-) {
+abstract class AbstractService<T> {
 
     abstract fun sync(): ListenableWorker.Result
 
-    fun merge(dto: T) {
-        try {
-            repository.beginTransaction()
-            repository.merge(dto, true)
-            repository.setTransactionSuccessful()
-        } catch (exc: Exception) {
-            Log.e("Error", exc.message, exc)
-        } finally {
-            repository.endTransaction()
-        }
-    }
+    abstract fun replace(dto: T)
 
-    protected fun syncTransactional(apply: () -> Unit): ListenableWorker.Result =
-        try {
-            repository.beginTransaction()
-            apply()
-            repository.setTransactionSuccessful()
-            ListenableWorker.Result.success()
-        } catch (exc: Exception) {
-            ListenableWorker.Result.failure()
-        } finally {
-            repository.endTransaction()
-        }
+    protected  fun getAll(
+        table: String,
+        whereCause: String = "1 = 1",
+        whereArgs: Array<String> = arrayOf(),
+        limit: String? = null
+    ) : SupportSQLiteQuery =
+        SupportSQLiteQueryBuilder
+            .builder(table)
+            .selection(whereCause, whereArgs)
+            .limit(limit)
+            .create()
+
+    protected fun count(
+        table: String,
+        whereCause: String = "1 = 1",
+        whereArgs: Array<String> = arrayOf()
+    ) : SupportSQLiteQuery  =
+        SupportSQLiteQueryBuilder
+            .builder(table)
+            .selection(whereCause, whereArgs)
+            .create()
 
     protected fun syncObject(
         get: () -> Response<T>
@@ -46,7 +43,7 @@ abstract class AbstractService<T>(
             return ListenableWorker.Result.failure()
         }
 
-        repository.merge(response.body() ?: return ListenableWorker.Result.failure())
+        replace(response.body() ?: return ListenableWorker.Result.failure())
 
         return ListenableWorker.Result.success()
     }
@@ -64,7 +61,7 @@ abstract class AbstractService<T>(
 
         val page = response.body() ?: return ListenableWorker.Result.failure()
 
-        page.context.forEach(repository::merge)
+        page.context.forEach { replace(it)}
 
         return if (page.meta.total == page.meta.paging.start + page.meta.paging.size) {
             ListenableWorker.Result.success()
@@ -72,5 +69,6 @@ abstract class AbstractService<T>(
             syncPage(offset + numberOfRows, numberOfRows, getAll)
         }
     }
+
 
 }

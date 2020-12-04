@@ -1,6 +1,16 @@
 package com.github.onotoliy.opposite.treasure.utils
 
+import com.github.onotoliy.opposite.data.page.Meta
 import com.github.onotoliy.opposite.data.page.Page
+
+fun <T> Page<T>?.concat(other: List<T>): Page<T> =
+    Page(
+        meta = this?.meta ?: Meta(),
+        context = mutableListOf<T>().apply {
+            addAll(this@concat?.context ?: listOf())
+            addAll(other)
+        }
+    )
 
 fun <T> Page<T>?.concat(other: Page<T>): Page<T> =
     Page(

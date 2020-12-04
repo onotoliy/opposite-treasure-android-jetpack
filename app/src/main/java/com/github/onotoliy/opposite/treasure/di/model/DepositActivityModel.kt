@@ -6,11 +6,9 @@ import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
+import com.github.onotoliy.opposite.treasure.di.database.CashboxVO
+import com.github.onotoliy.opposite.treasure.di.service.*
 import com.github.onotoliy.opposite.treasure.utils.concat
-import com.github.onotoliy.opposite.treasure.di.service.CashboxService
-import com.github.onotoliy.opposite.treasure.di.service.DebtService
-import com.github.onotoliy.opposite.treasure.di.service.DepositService
-import com.github.onotoliy.opposite.treasure.di.service.TransactionService
 import javax.inject.Inject
 
 class DepositActivityModel @Inject constructor(
@@ -30,18 +28,24 @@ class DepositActivityModel @Inject constructor(
     fun loading(pk: String) {
         this.pk = pk
 
-        cashbox.postValue(cashboxService.get())
-        deposit.postValue(depositService.get(pk))
+        cashboxService.get().observeForever {
+            cashbox.postValue(it.toDTO())
+        }
+        depositService.get(pk).observeForever {
+            deposit.postValue(it.toDTO())
+        }
 
         nextEventPageLoading()
         nextTransactionPageLoading()
     }
 
-    fun nextEventPageLoading(offset: Int = 0, numberOfRows: Int = 10) = debtService
+    fun nextEventPageLoading(offset: Int = 0, numberOfRows: Int = 10) {
+        debtService
         .getDebtAll(deposit = pk, offset = offset, numberOfRows = numberOfRows)
-        .let {
+        .content.observeForever { other ->
             pending.postValue(false)
-            events.postValue(events.value.concat(it))
+            events.postValue(events.value.concat(other.map { it.toDTO().event }))
+        }
         }
 
     fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = transactionService

@@ -46,8 +46,8 @@ class ResourceModule {
         .client(
             OkHttpClient
                 .Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(2, TimeUnit.MINUTES)
+                .readTimeout(2, TimeUnit.MINUTES)
                 .addInterceptor {
                     val token = manager.getAuthToken()
                     val request: Request =

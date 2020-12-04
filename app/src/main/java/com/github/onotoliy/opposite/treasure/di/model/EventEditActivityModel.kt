@@ -46,7 +46,7 @@ class EventEditActivityModel @Inject constructor(
     }
 
     fun merge() {
-        eventService.merge(
+        eventService.replace(
             Event(
                 uuid = uuid.value ?: "",
                 name = name.value ?: "",

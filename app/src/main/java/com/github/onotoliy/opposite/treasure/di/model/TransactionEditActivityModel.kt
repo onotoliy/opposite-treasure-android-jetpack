@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType
-import com.github.onotoliy.opposite.treasure.di.service.DebtService
-import com.github.onotoliy.opposite.treasure.di.service.DepositService
-import com.github.onotoliy.opposite.treasure.di.service.EventService
-import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import com.github.onotoliy.opposite.treasure.di.service.*
 import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import javax.inject.Inject
@@ -75,7 +72,7 @@ class TransactionEditActivityModel @Inject constructor(
     }
 
     fun merge() {
-        transactionService.merge(
+        transactionService.replace(
             Transaction(
                 uuid = uuid.value ?: "",
                 name = name.value ?: "",
@@ -94,13 +91,14 @@ class TransactionEditActivityModel @Inject constructor(
             val tt = TransactionType.valueOf(type)
 
             if (tt == TransactionType.CONTRIBUTION || tt == TransactionType.WRITE_OFF) {
-                events.postValue(
-                    debtService
-                        .getDebtAll(person, 0, 20)
-                        .context
-                        .map { Option(it.uuid, it.name) }
-                )
-
+                debtService
+                    .getDebtAll(person, 0, 20)
+                    .content
+                    .observeForever { other ->
+                        events.postValue(other
+                            .map { it.toDTO().event }
+                            .map { Option(it.uuid, it.name) })
+                    }
                 return
             }
         }

@@ -11,26 +11,26 @@ class ServiceModel {
 
     @Provides
     fun provideDebtService(
-        repository: DebtRepository, retrofit: DebtResource
-    ): DebtService = DebtService(repository, retrofit)
+        dao: DebtDAO, retrofit: DebtResource
+    ): DebtService = DebtService(dao, retrofit)
 
     @Provides
     fun provideEventService(
-        repository: EventRepository, retrofit: EventResource
-    ): EventService = EventService(repository, retrofit)
+        dao: EventDAO, retrofit: EventResource
+    ): EventService = EventService(dao, retrofit)
 
     @Provides
     fun provideDepositService(
-        repository: DepositRepository, retrofit: DepositResource
-    ): DepositService = DepositService(repository, retrofit)
+        dao: DepositDAO, retrofit: DepositResource
+    ): DepositService = DepositService(dao, retrofit)
 
     @Provides
     fun provideCashboxService(
-        repository: CashboxRepository, retrofit: CashboxResource
-    ): CashboxService = CashboxService(repository, retrofit)
+        dao: CashboxDAO, retrofit: CashboxResource
+    ): CashboxService = CashboxService(dao, retrofit)
 
     @Provides
     fun provideTransactionService(
-        repository: TransactionRepository, retrofit: TransactionResource
-    ): TransactionService = TransactionService(repository, retrofit)
+        dao: TransactionDAO, retrofit: TransactionResource
+    ): TransactionService = TransactionService(dao, retrofit)
 }

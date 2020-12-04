@@ -9,6 +9,7 @@ import com.github.onotoliy.opposite.treasure.utils.concat
 import com.github.onotoliy.opposite.treasure.di.service.DebtService
 import com.github.onotoliy.opposite.treasure.di.service.EventService
 import com.github.onotoliy.opposite.treasure.di.service.TransactionService
+import com.github.onotoliy.opposite.treasure.di.service.toDTO
 import javax.inject.Inject
 
 class EventActivityModel @Inject constructor(
@@ -32,9 +33,9 @@ class EventActivityModel @Inject constructor(
     }
 
     fun nextDepositPageLoading(offset: Int = 0, numberOfRows: Int = 10) =
-        debtService.getDebtorAll(pk, offset, numberOfRows).let {
+        debtService.getDebtorAll(pk, offset, numberOfRows).content.observeForever { other ->
             pending.postValue(false)
-            debtors.postValue(debtors.value.concat(it))
+            debtors.postValue(debtors.value.concat(other.map { it.toDTO().deposit }))
         }
 
     fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = transactionService

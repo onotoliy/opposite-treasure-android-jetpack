@@ -44,9 +44,7 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
 
         val manager = AccountManager.get(applicationContext)
-        val syncWorker: WorkRequest = OneTimeWorkRequestBuilder<SyncWorker>().build()
 
-        WorkManager.getInstance(applicationContext).enqueue(listOf(syncWorker))
 
         if (manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
             navigateTo(Screen.LoginScreen)

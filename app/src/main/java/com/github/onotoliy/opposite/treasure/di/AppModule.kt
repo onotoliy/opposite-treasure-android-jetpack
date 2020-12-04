@@ -8,6 +8,7 @@ import com.github.onotoliy.opposite.treasure.di.database.*
 import com.github.onotoliy.opposite.treasure.di.service.*
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class AppModule(private val application: Application) {
