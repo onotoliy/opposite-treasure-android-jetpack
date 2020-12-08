@@ -20,7 +20,7 @@ import androidx.work.WorkRequest
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.di.model.DepositActivityModel
 import com.github.onotoliy.opposite.treasure.di.service.toDTO
-import com.github.onotoliy.opposite.treasure.di.worker.SyncWorker
+import com.github.onotoliy.opposite.treasure.di.worker.*
 import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.Menu
@@ -37,18 +37,23 @@ class DepositActivity : AppCompatActivity() {
 
     @Inject lateinit var model: DepositActivityModel
 
-    @Inject lateinit var manager: AccountManager
+    @Inject lateinit var account: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         inject()
 
-        val syncWorker: WorkRequest = OneTimeWorkRequestBuilder<SyncWorker>().build()
+        val manager = WorkManager.getInstance(applicationContext)
 
-       WorkManager.getInstance(applicationContext).enqueue(listOf(syncWorker))
+        val debt: WorkRequest = OneTimeWorkRequestBuilder<DebtWorker>().build()
+        val event: WorkRequest = OneTimeWorkRequestBuilder<EventWorker>().build()
+        val transaction: WorkRequest = OneTimeWorkRequestBuilder<TransactionWorker>().build()
+        val deposit: WorkRequest = OneTimeWorkRequestBuilder<DepositWorker>().build()
 
-        model.loading(intent.pk ?: manager.getUUID())
+        val operation = manager.enqueue(listOf(debt, event, transaction, deposit))
+
+        model.loading(intent.pk ?: account.getUUID())
 
         setContent {
             TreasureTheme {

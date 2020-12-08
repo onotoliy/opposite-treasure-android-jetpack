@@ -11,4 +11,6 @@ fun EventEditActivity.inject() = (application as App).appComponent.inject(this)
 fun EventPageActivity.inject() = (application as App).appComponent.inject(this)
 fun DepositActivity.inject() = (application as App).appComponent.inject(this)
 fun DepositPageActivity.inject() = (application as App).appComponent.inject(this)
+
 fun LoginActivity.inject() = (application as App).appComponent.inject(this)
+fun LoadingActivity.inject() = (application as App).appComponent.inject(this)

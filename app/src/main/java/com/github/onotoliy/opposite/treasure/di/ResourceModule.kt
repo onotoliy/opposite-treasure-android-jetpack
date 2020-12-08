@@ -2,8 +2,8 @@ package com.github.onotoliy.opposite.treasure.di
 
 import android.accounts.AccountManager
 import com.github.onotoliy.opposite.treasure.di.resource.*
-import com.github.onotoliy.opposite.treasure.utils.getAccount
 import com.github.onotoliy.opposite.treasure.utils.getAuthToken
+import com.github.onotoliy.opposite.treasure.utils.getNewAuthToken
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -46,16 +46,16 @@ class ResourceModule {
         .client(
             OkHttpClient
                 .Builder()
+                .writeTimeout(2, TimeUnit.MINUTES)
                 .connectTimeout(2, TimeUnit.MINUTES)
                 .readTimeout(2, TimeUnit.MINUTES)
-                .addInterceptor {
-                    val token = manager.getAuthToken()
-                    val request: Request =
-                        it.request().newBuilder().addHeader("Authorization", "Bearer $token").build()
-
-
-                    it.proceed(request)
-                }
+//                .addInterceptor {
+//                    val token = manager.getNewAuthToken()
+//                    val request: Request =
+//                        it.request().newBuilder().addHeader("Authorization", "Bearer $token").build()
+//
+//                    it.proceed(request)
+//                }
                 .build()
         )
         .build()

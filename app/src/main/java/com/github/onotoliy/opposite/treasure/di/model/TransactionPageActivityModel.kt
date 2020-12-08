@@ -12,7 +12,7 @@ import com.github.onotoliy.opposite.treasure.di.service.toDTO
 import javax.inject.Inject
 
 class TransactionPageActivityModel @Inject constructor(
-    private val transaction: TransactionDAO
+    private val dao: TransactionDAO
 ): ViewModel() {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -25,13 +25,13 @@ class TransactionPageActivityModel @Inject constructor(
     fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) {
         pending.postValue(true)
 
-        this.transaction.count().observeForever {
+        dao.count().observeForever {
             val meta = Meta(it.toInt(), Paging(offset, numberOfRows))
 
             page.postValue(Page(meta, page.value?.context ?: listOf()))
         }
 
-        this.transaction.getAll(offset, numberOfRows).observeForever { list ->
+        dao.getAll(offset, numberOfRows).observeForever { list ->
             pending.postValue(false)
             page.postValue(Page(
                 page.value?.meta ?: Meta(),

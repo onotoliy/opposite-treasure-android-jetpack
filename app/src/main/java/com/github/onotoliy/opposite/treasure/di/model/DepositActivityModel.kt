@@ -1,21 +1,19 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Cashbox
-import com.github.onotoliy.opposite.data.Deposit
-import com.github.onotoliy.opposite.data.Event
-import com.github.onotoliy.opposite.data.Transaction
+import com.github.onotoliy.opposite.data.*
+import com.github.onotoliy.opposite.data.page.Meta
 import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.treasure.di.database.CashboxVO
+import com.github.onotoliy.opposite.data.page.Paging
+import com.github.onotoliy.opposite.treasure.di.database.*
 import com.github.onotoliy.opposite.treasure.di.service.*
-import com.github.onotoliy.opposite.treasure.utils.concat
 import javax.inject.Inject
 
 class DepositActivityModel @Inject constructor(
-    private val depositService: DepositService,
-    private val cashboxService: CashboxService,
-    private val debtService: DebtService,
-    private val transactionService: TransactionService,
+    private val depositDAO: DepositDAO,
+    private val cashboxDAO: CashboxDAO,
+    private val debtDAO: DebtDAO,
+    private val transactionDAO: TransactionDAO,
 ) {
     lateinit var pk: String
 
@@ -28,11 +26,11 @@ class DepositActivityModel @Inject constructor(
     fun loading(pk: String) {
         this.pk = pk
 
-        cashboxService.get().observeForever {
+        cashboxDAO.get().observeForever {
             cashbox.postValue(it.toDTO())
         }
-        depositService.get(pk).observeForever {
-            deposit.postValue(it.toDTO())
+        depositDAO.get(pk).observeForever {
+            deposit.postValue(it?.toDTO() ?: Deposit())
         }
 
         nextEventPageLoading()
@@ -40,18 +38,40 @@ class DepositActivityModel @Inject constructor(
     }
 
     fun nextEventPageLoading(offset: Int = 0, numberOfRows: Int = 10) {
-        debtService
-        .getDebtAll(deposit = pk, offset = offset, numberOfRows = numberOfRows)
-        .content.observeForever { other ->
-            pending.postValue(false)
-            events.postValue(events.value.concat(other.map { it.toDTO().event }))
-        }
+        this.debtDAO.countByPerson(pk).observeForever {
+            val meta = Meta(it.toInt(), Paging(offset, numberOfRows))
+
+            events.postValue(Page(meta, events.value?.context ?: listOf()))
         }
 
-    fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) = transactionService
-        .getAll(person = pk, offset = offset, numberOfRows = numberOfRows)
-        .let {
+        this.debtDAO.getByPersonAll(pk, offset, numberOfRows).observeForever { list ->
             pending.postValue(false)
-            transactions.postValue(transactions.value.concat(it))
+            events.postValue(Page(
+                events.value?.meta ?: Meta(),
+                mutableListOf<Event>().apply {
+                    addAll(events.value?.context ?: listOf())
+                    addAll(list.map(DebtVO::toDTO).map(Debt::event))
+                }
+            ))
         }
+    }
+
+    fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10) {
+        this.transactionDAO.countByPerson(pk).observeForever {
+            val meta = Meta(it.toInt(), Paging(offset, numberOfRows))
+
+            transactions.postValue(Page(meta, transactions.value?.context ?: listOf()))
+        }
+
+        this.transactionDAO.getByPersonAll(pk, offset, numberOfRows).observeForever { list ->
+            pending.postValue(false)
+            transactions.postValue(Page(
+                transactions.value?.meta ?: Meta(),
+                mutableListOf<Transaction>().apply {
+                    addAll(transactions.value?.context ?: listOf())
+                    addAll(list.map(TransactionVO::toDTO))
+                }
+            ))
+        }
+    }
 }

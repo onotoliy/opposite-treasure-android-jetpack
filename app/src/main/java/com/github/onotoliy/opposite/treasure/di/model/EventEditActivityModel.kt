@@ -4,13 +4,15 @@ import android.accounts.AccountManager
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
-import com.github.onotoliy.opposite.treasure.di.service.EventService
+import com.github.onotoliy.opposite.treasure.di.database.EventDAO
+import com.github.onotoliy.opposite.treasure.di.service.toDTO
+import com.github.onotoliy.opposite.treasure.di.service.toVO
 import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import javax.inject.Inject
 
 class EventEditActivityModel @Inject constructor(
-    private val eventService: EventService,
+    private val dao: EventDAO,
     private val manager: AccountManager
 ) {
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -33,20 +35,22 @@ class EventEditActivityModel @Inject constructor(
             creationDate.postValue(Date().toISO())
             author.postValue(Option(uuid = manager.getUUID(), name = manager.getName()))
         } else {
-            val event = eventService.get(pk)
-
-            uuid.postValue(event.uuid)
-            name.postValue(event.name)
-            contribution.postValue(event.contribution)
-            total.postValue(event.total)
-            deadline.postValue(event.contribution)
-            creationDate.postValue(event.creationDate)
-            author.postValue(event.author)
+            dao.get(pk).observeForever { it ->
+                it.toDTO().let { event ->
+                    uuid.postValue(event.uuid)
+                    name.postValue(event.name)
+                    contribution.postValue(event.contribution)
+                    total.postValue(event.total)
+                    deadline.postValue(event.contribution)
+                    creationDate.postValue(event.creationDate)
+                    author.postValue(event.author)
+                }
+            }
         }
     }
 
     fun merge() {
-        eventService.replace(
+        dao.replace(
             Event(
                 uuid = uuid.value ?: "",
                 name = name.value ?: "",
@@ -55,7 +59,7 @@ class EventEditActivityModel @Inject constructor(
                 deadline = deadline.value?.fromShortDate()?.toISO() ?: "",
                 creationDate = creationDate.value ?: "",
                 author = author.value ?: Option()
-            )
+            ).toVO()
         )
     }
 }

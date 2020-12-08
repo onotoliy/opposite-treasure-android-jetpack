@@ -7,7 +7,7 @@ import android.accounts.AccountManager
 import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import com.github.onotoliy.opposite.treasure.MainActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.LoginActivity
 
 class AccountAuthenticator(private val context: Context): AbstractAccountAuthenticator(context) {
     override fun getAuthTokenLabel(authTokenType: String?): String? = null
@@ -47,7 +47,7 @@ class AccountAuthenticator(private val context: Context): AbstractAccountAuthent
             return Bundle().apply {
                 putParcelable(
                     AccountManager.KEY_INTENT,
-                    MainActivity.getIntent(
+                    LoginActivity.getIntent(
                         context,
                         response,
                         account?.type,
@@ -76,7 +76,7 @@ class AccountAuthenticator(private val context: Context): AbstractAccountAuthent
         return Bundle().apply {
             putParcelable(
                 AccountManager.KEY_INTENT,
-                MainActivity.getIntent(context, response, accountType, authTokenType, true)
+                LoginActivity.getIntent(context, response, accountType, authTokenType, true)
             )
         }
     }

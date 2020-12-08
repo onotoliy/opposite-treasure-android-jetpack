@@ -18,8 +18,6 @@ import java.util.concurrent.Executors
 @Component(modules = [
     AndroidInjectionModule::class,
     AppModule::class,
-//    RepositoryModel::class,
-    ServiceModel::class,
     ResourceModule::class,
     ViewModelFactoryModule::class,
     WorkerModule::class,
@@ -46,6 +44,7 @@ interface AppComponent : AndroidInjector<App> {
     fun inject(activity: TransactionPageActivity)
 
     fun inject(activity: LoginActivity)
+    fun inject(activity: LoadingActivity)
 
     fun getWorkerFactory(): WorkerFactory
 

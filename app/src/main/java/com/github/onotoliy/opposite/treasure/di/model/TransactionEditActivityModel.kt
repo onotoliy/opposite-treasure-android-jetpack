@@ -5,16 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.TransactionType
+import com.github.onotoliy.opposite.treasure.di.database.DebtDAO
+import com.github.onotoliy.opposite.treasure.di.database.DepositDAO
+import com.github.onotoliy.opposite.treasure.di.database.EventDAO
+import com.github.onotoliy.opposite.treasure.di.database.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.service.*
 import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import javax.inject.Inject
 
 class TransactionEditActivityModel @Inject constructor(
-    private val transactionService: TransactionService,
-    private val depositService: DepositService,
-    private val eventService: EventService,
-    private val debtService: DebtService,
+    private val transactionDAO: TransactionDAO,
+    private val depositDAO: DepositDAO,
+    private val eventDAO: EventDAO,
+    private val debtDAO: DebtDAO,
     private val manager: AccountManager
 ) {
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -43,11 +47,7 @@ class TransactionEditActivityModel @Inject constructor(
     }
 
     fun loading(pk: String) {
-
-
         if (pk.isEmpty()) {
-            Transaction
-
             uuid.postValue(randomUUID())
             cash.postValue("0.0")
             name.postValue("")
@@ -58,21 +58,23 @@ class TransactionEditActivityModel @Inject constructor(
             author.postValue(Option(uuid = manager.getUUID(), name = manager.getName()))
             creationDate.postValue(Date().toISO())
         } else {
-            val transaction = transactionService.get(pk)
-
-            uuid.postValue(transaction.uuid)
-            cash.postValue(transaction.cash)
-            name.postValue(transaction.name)
-            transactionDate.postValue(transaction.creationDate.fromISO().toShortDate())
-            person.postValue(transaction.person)
-            event.postValue(transaction.event)
-            type.postValue(transaction.type.run { Option(name, label) })
-            author.postValue(Option(uuid = manager.getUUID(), name = manager.getName()))
+            transactionDAO.get(pk).observeForever {
+                it.toDTO().let { transaction ->
+                    uuid.postValue(transaction.uuid)
+                    cash.postValue(transaction.cash)
+                    name.postValue(transaction.name)
+                    transactionDate.postValue(transaction.creationDate.fromISO().toShortDate())
+                    person.postValue(transaction.person)
+                    event.postValue(transaction.event)
+                    type.postValue(transaction.type.run { Option(name, label) })
+                    author.postValue(Option(uuid = manager.getUUID(), name = manager.getName()))
+                }
+            }
         }
     }
 
     fun merge() {
-        transactionService.replace(
+        transactionDAO.replace(
             Transaction(
                 uuid = uuid.value ?: "",
                 name = name.value ?: "",
@@ -82,43 +84,19 @@ class TransactionEditActivityModel @Inject constructor(
                 type = TransactionType.valueOf(type.value?.uuid ?: ""),
                 creationDate = creationDate.value ?: "",
                 author = author.value ?: Option()
-            )
+            ).toVO()
         )
     }
 
     private fun postValueEvents(person: String?, type: String?) {
-        if (!person.isNullOrEmpty() && !type.isNullOrEmpty()) {
-            val tt = TransactionType.valueOf(type)
 
-            if (tt == TransactionType.CONTRIBUTION || tt == TransactionType.WRITE_OFF) {
-                debtService
-                    .getDebtAll(person, 0, 20)
-                    .content
-                    .observeForever { other ->
-                        events.postValue(other
-                            .map { it.toDTO().event }
-                            .map { Option(it.uuid, it.name) })
-                    }
-                return
-            }
-        }
-
-        events.postValue(eventService.getAllOption(this.event.value?.name))
     }
 
     fun getPersons(name: String? = null): List<Option> {
-        return if (name.isNullOrEmpty()) {
-            depositService.getAllOption(null)
-        } else {
-            depositService.getAllOption(name)
-        }
+        return emptyList()
     }
 
     fun getEvents(name: String? = null): List<Option> {
-        return if (name.isNullOrEmpty()) {
-            eventService.getAllOption(null)
-        } else {
-            eventService.getAllOption(name)
-        }
+        return emptyList()
     }
 }

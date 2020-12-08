@@ -3,6 +3,8 @@ package com.github.onotoliy.opposite.treasure
 sealed class Screen {
     object LoginScreen : Screen()
 
+    object LoadingScreen : Screen()
+
     object DepositPageScreen : Screen()
 
     object EventPageScreen : Screen()

@@ -9,8 +9,9 @@ import com.github.onotoliy.opposite.treasure.ui.activity.*
 fun AppCompatActivity.navigateTo(screen: Screen) =
     when(screen) {
         is Screen.LoginScreen -> goto(LoginActivity::class.java)
-        is Screen.DepositPageScreen -> goto(DepositPageActivity::class.java)
+        is Screen.LoadingScreen -> goto(LoadingActivity::class.java)
         is Screen.EventPageScreen -> goto(EventPageActivity::class.java)
+        is Screen.DepositPageScreen -> goto(DepositPageActivity::class.java)
         is Screen.TransactionPageScreen -> goto(TransactionPageActivity::class.java)
         is Screen.EventScreen -> goto(EventActivity::class.java) {
             putExtra("pk", screen.pk)
@@ -21,10 +22,12 @@ fun AppCompatActivity.navigateTo(screen: Screen) =
         is Screen.TransactionScreen -> goto(TransactionActivity::class.java) {
             putExtra("pk", screen.pk)
         }
+        is Screen.TransactionEditScreen -> goto(TransactionEditActivity::class.java) {
+            putExtra("pk", screen.pk)
+        }
         is Screen.DepositScreen -> goto(DepositActivity::class.java) {
             putExtra("pk", screen.pk)
         }
-        else -> throw IllegalArgumentException()
     }
 
 

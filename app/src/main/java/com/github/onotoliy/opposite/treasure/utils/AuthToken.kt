@@ -4,11 +4,14 @@ import android.accounts.AccountManager
 import com.github.onotoliy.opposite.treasure.di.resource.KeycloakResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import okhttp3.ConnectionPool
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 fun getAuthToken(
     username: String,
@@ -45,6 +48,14 @@ private val keycloak: KeycloakResource
 private val retrofit: Retrofit
     get() = Retrofit
         .Builder()
+        .client(OkHttpClient
+            .Builder()
+            .writeTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .connectionPool(ConnectionPool(15, 5, TimeUnit.MINUTES))
+            .build()
+        )
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl("http://185.12.95.242/")
         .build()
