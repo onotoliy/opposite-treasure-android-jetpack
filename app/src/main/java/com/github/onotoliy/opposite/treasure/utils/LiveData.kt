@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 @Composable
@@ -20,3 +21,10 @@ fun <T> LiveData<T>.observe(): T? {
 
     return result.value
 }
+
+data class LiveDataPage<T>(
+    var total: MutableLiveData<Long> = MutableLiveData(),
+    var offset: Int = 0,
+    var numberOfRows: Int = 10,
+    var context: MutableLiveData<List<T>> = MutableLiveData(),
+)

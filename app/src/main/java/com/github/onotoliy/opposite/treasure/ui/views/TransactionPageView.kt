@@ -13,10 +13,59 @@ import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.ui.*
-import com.github.onotoliy.opposite.treasure.utils.fromISO
-import com.github.onotoliy.opposite.treasure.utils.numberOfRows
-import com.github.onotoliy.opposite.treasure.utils.offset
-import com.github.onotoliy.opposite.treasure.utils.toShortDate
+import com.github.onotoliy.opposite.treasure.utils.*
+
+@Composable
+fun TransactionPageView(
+    view: LiveDataPage<Transaction>,
+    navigateTo: (Screen) -> Unit,
+    navigateToNextPageScreen: (Int, Int, LiveDataPage<Transaction>?) -> Unit
+)  {
+    Scroller(
+        page = view,
+        navigateToNextPageScreen = {
+            navigateToNextPageScreen(view.offset, view.numberOfRows, view)
+        }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(6.dp, 3.dp).clickable(onClick = {
+                navigateTo(Screen.TransactionScreen(it.uuid))
+            })
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(modifier = Modifier.weight(4f)) {
+                    when (it.type) {
+                        TransactionType.NONE, TransactionType.WRITE_OFF -> IconDown()
+                        TransactionType.COST, TransactionType.PAID -> IconDown()
+                        TransactionType.CONTRIBUTION, TransactionType.EARNED -> IconUp()
+                    }
+                    Text(
+                        text = it.name,
+                        softWrap = false,
+                        style = H6_BOLD
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp),
+                    text = it.cash,
+                    style = H6,
+                    textAlign = TextAlign.Right
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = it.person?.name ?: "", style = BODY_GREY)
+                Text(text = it.creationDate.fromISO().toShortDate(), style = BODY_GREY)
+            }
+            Divider()
+        }
+    }
+}
 
 @Composable
 fun TransactionPageView(

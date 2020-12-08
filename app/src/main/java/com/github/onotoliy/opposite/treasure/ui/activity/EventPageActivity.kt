@@ -16,6 +16,7 @@ import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.EventPageView
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import javax.inject.Inject
@@ -60,15 +61,13 @@ fun EventPageScreen(
             if (pending) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            model.page.observe()?.let { view ->
-                EventPageView(
-                    view =  view,
-                    navigateTo = navigateTo,
-                    navigateToNextPageScreen = { offset, numberOfRows, _ ->
-                        model.nextEventPageLoading(offset, numberOfRows)
-                    }
-                )
-            }
+            EventPageView(
+                view = model.page,
+                navigateTo = navigateTo,
+                navigateToNextPageScreen = { offset, numberOfRows, _ ->
+                    model.nextEventPageLoading(offset, numberOfRows)
+                }
+            )
         }
     }
 }

@@ -14,13 +14,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.github.onotoliy.opposite.treasure.*
 import com.github.onotoliy.opposite.treasure.di.model.DepositActivityModel
-import com.github.onotoliy.opposite.treasure.di.service.toDTO
-import com.github.onotoliy.opposite.treasure.di.worker.*
 import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.Menu
@@ -43,15 +38,6 @@ class DepositActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         inject()
-
-        val manager = WorkManager.getInstance(applicationContext)
-
-        val debt: WorkRequest = OneTimeWorkRequestBuilder<DebtWorker>().build()
-        val event: WorkRequest = OneTimeWorkRequestBuilder<EventWorker>().build()
-        val transaction: WorkRequest = OneTimeWorkRequestBuilder<TransactionWorker>().build()
-        val deposit: WorkRequest = OneTimeWorkRequestBuilder<DepositWorker>().build()
-
-        val operation = manager.enqueue(listOf(debt, event, transaction, deposit))
 
         model.loading(intent.pk ?: account.getUUID())
 

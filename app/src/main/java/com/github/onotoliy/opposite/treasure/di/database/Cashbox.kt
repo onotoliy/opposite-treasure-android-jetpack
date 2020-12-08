@@ -159,7 +159,7 @@ interface DebtDAO: Replace<DebtVO> {
     fun countByEvent(event: String): LiveData<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override fun replace(vos: DebtVO)
+    override fun replace(vo: DebtVO)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replace(vos: List<DebtVO>)

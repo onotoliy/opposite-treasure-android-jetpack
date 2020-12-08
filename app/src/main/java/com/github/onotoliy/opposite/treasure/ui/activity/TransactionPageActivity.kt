@@ -60,15 +60,13 @@ fun TransactionPageScreen(
             if (pending) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            model.page.observe()?.let { view ->
                 TransactionPageView(
-                    view = view,
+                    view = model.page,
                     navigateTo = navigateTo,
                     navigateToNextPageScreen = { offset, numberOfRows, _ ->
                         model.nextTransactionPageLoading(offset, numberOfRows)
                     }
                 )
-            }
         }
     }
 }

@@ -14,6 +14,7 @@ import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import javax.inject.Inject
@@ -47,15 +48,13 @@ fun DepositPageScreen(model: DepositPageActivityModel, navigateTo: (Screen) -> U
             if (pending) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-            model.page.observe()?.let { view ->
-                DepositPageView(
-                    view = view,
-                    navigateTo = navigateTo,
-                    navigateToNextPageScreen = { offset, numberOfRows, _ ->
-                        model.nextDepositPageLoading(offset, numberOfRows)
-                    }
-                )
-            }
+            DepositPageView(
+                view = model.page,
+                navigateTo = navigateTo,
+                navigateToNextPageScreen = { offset, numberOfRows, _ ->
+                    model.nextDepositPageLoading(offset, numberOfRows)
+                }
+            )
         }
     }
 }
