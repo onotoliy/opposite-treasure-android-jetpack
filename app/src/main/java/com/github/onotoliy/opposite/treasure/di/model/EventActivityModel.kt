@@ -1,15 +1,12 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Debt
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.data.page.Meta
-import com.github.onotoliy.opposite.data.page.Page
-import com.github.onotoliy.opposite.data.page.Paging
 import com.github.onotoliy.opposite.treasure.di.database.*
 import com.github.onotoliy.opposite.treasure.di.service.toDTO
+import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
 class EventActivityModel @Inject constructor(
@@ -20,12 +17,18 @@ class EventActivityModel @Inject constructor(
     lateinit var pk: String
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
     val event: MutableLiveData<Event> = MutableLiveData()
-    val debtors: MutableLiveData<Page<Deposit>> = MutableLiveData(Page())
-    val transactions: MutableLiveData<Page<Transaction>> = MutableLiveData(Page())
+    val debtors: LiveDataPage<Deposit> = LiveDataPage()
+    val transactions: LiveDataPage<Transaction> = LiveDataPage()
 
     fun loading(pk: String) {
         this.pk = pk
 
+        debtDAO.countByEvent(pk).observeForever {
+            debtors.total.postValue(it)
+        }
+        transactionDAO.countByEvent(pk).observeForever {
+            transactions.total.postValue(it)
+        }
         eventDAO.get(pk).observeForever {
             event.postValue(it?.toDTO() ?: Event())
         }
@@ -37,42 +40,28 @@ class EventActivityModel @Inject constructor(
     fun nextDepositPageLoading(offset: Int = 0, numberOfRows: Int = 10) {
         pending.postValue(true)
 
-        this.debtDAO.countByEvent(pk).observeForever {
-            val meta = Meta(it.toInt(), Paging(offset, numberOfRows))
-
-            debtors.postValue(Page(meta, debtors.value?.context ?: listOf()))
-        }
-
-        this.debtDAO.getByEventAll(pk, offset, numberOfRows).observeForever { list ->
+        debtDAO.getByEventAll(pk, offset, numberOfRows).observeForever { list ->
             pending.postValue(false)
-            debtors.postValue(Page(
-                debtors.value?.meta ?: Meta(),
-                mutableListOf<Deposit>().apply {
-                    addAll(debtors.value?.context ?: listOf())
-                    addAll(list.map(DebtVO::toDTO).map(Debt::deposit))
-                }
-            ))
+            debtors.offset = offset + numberOfRows
+            debtors.numberOfRows = numberOfRows
+            debtors.context.postValue(mutableListOf<Deposit>().apply{
+                addAll(debtors.context.value ?: listOf())
+                addAll(list.map { it.toDTO() }.map { it.deposit })
+            })
         }
     }
 
     fun nextTransactionPageLoading(offset: Int = 0, numberOfRows: Int = 10){
         pending.postValue(true)
 
-        this.transactionDAO.countByEvent(pk).observeForever {
-            val meta = Meta(it.toInt(), Paging(offset, numberOfRows))
-
-            transactions.postValue(Page(meta, transactions.value?.context ?: listOf()))
-        }
-
-        this.transactionDAO.getByEventAll(pk, offset, numberOfRows).observeForever { list ->
+        transactionDAO.getByEventAll(pk, offset, numberOfRows).observeForever { list ->
             pending.postValue(false)
-            transactions.postValue(Page(
-                transactions.value?.meta ?: Meta(),
-                mutableListOf<Transaction>().apply {
-                    addAll(transactions.value?.context ?: listOf())
-                    addAll(list.map(TransactionVO::toDTO))
-                }
-            ))
+            transactions.offset = offset + numberOfRows
+            transactions.numberOfRows = numberOfRows
+            transactions.context.postValue(mutableListOf<Transaction>().apply{
+                addAll(transactions.context.value ?: listOf())
+                addAll(list.map { it.toDTO() })
+            })
         }
     }
 }

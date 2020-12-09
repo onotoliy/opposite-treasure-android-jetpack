@@ -38,19 +38,19 @@ class LoginActivity : AppCompatActivity() {
 
         inject()
 
-//        if (!manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
-            navigateTo(Screen.TransactionPageScreen)
-//        }
-//
-//        setContent {
-//            TreasureTheme {
-//                LoginScreen { account, password, token ->
-//                    manager.addAccount(account, password, token)
-//
-//                    navigateTo(Screen.DepositScreen(manager.getUUID()))
-//                }
-//            }
-//        }
+        if (!manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
+            navigateTo(Screen.LoadingScreen)
+        }
+
+        setContent {
+            TreasureTheme {
+                LoginScreen { account, password, token ->
+                    manager.addAccount(account, password, token)
+
+                    navigateTo(Screen.LoadingScreen)
+                }
+            }
+        }
 
         getToken()
     }

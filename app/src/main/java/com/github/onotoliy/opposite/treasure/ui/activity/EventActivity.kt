@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
-import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
@@ -28,9 +28,10 @@ import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
-class EventActivity : AppCompatActivity()  {
+class EventActivity : AppCompatActivity() {
 
-    @Inject lateinit var model: EventActivityModel
+    @Inject
+    lateinit var model: EventActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,24 +90,23 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
                 EventTab.GENERAL -> model.event.observe()?.let {
                     EventView(data = it, navigateTo = navigateTo)
                 }
-                EventTab.DEBTORS -> model.debtors.observe()?.let {
+                EventTab.DEBTORS ->
                     DepositPageView(
-                        view = it,
+                        view = model.debtors,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOrRows, _ ->
                             model.nextDepositPageLoading(offset, numberOrRows)
                         }
                     )
-                }
-                EventTab.TRANSACTIONS -> model.transactions.observe()?.let {
+
+                EventTab.TRANSACTIONS ->
                     TransactionPageView(
-                        view = it,
+                        view = model.transactions,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOrRows, _ ->
                             model.nextTransactionPageLoading(offset, numberOrRows)
                         }
                     )
-                }
             }
         }
     }

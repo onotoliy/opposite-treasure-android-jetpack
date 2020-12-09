@@ -6,7 +6,8 @@ import com.github.onotoliy.opposite.treasure.di.database.DebtVO
 fun DebtVO.toDTO() = this.run {
     Debt(
         deposit = Deposit(
-            person = Option(depositUserUUID, depositUsername),
+            uuid = depositUserUUID,
+            name = depositUsername,
             deposit = depositDeposit
         ),
         event = Event(
@@ -23,6 +24,7 @@ fun DebtVO.toDTO() = this.run {
 }
 
 fun Debt.toVO() = DebtVO(
+    pk = deposit.uuid + "-" + event.uuid,
     depositUserUUID = deposit.uuid,
     depositUsername = deposit.name,
     depositDeposit = deposit.deposit,

@@ -28,7 +28,7 @@ class DebtWorker @Inject constructor(
     version: VersionDAO,
     private val retrofit: DebtResource,
     private val account: AccountManager
-) : AbstractPageWorker<Debt, DebtVO>(context, params, dao, version) {
+) : AbstractPageWorker<Debt, DebtVO>(context, params, "Долги", dao, version) {
     override fun toVO(dto: Debt): DebtVO = dto.toVO()
 
     override fun getVersion(): Int = 1
@@ -62,7 +62,7 @@ class EventWorker @Inject constructor(
     version: VersionDAO,
     private val retrofit: EventResource,
     private val account: AccountManager
-) : AbstractPageWorker<Event, EventVO>(context, params, dao, version) {
+) : AbstractPageWorker<Event, EventVO>(context, params, "События", dao, version) {
     override fun toVO(dto: Event): EventVO = dto.toVO()
 
     override fun getVersion(): Int = 1
@@ -96,7 +96,7 @@ class TransactionWorker @Inject constructor(
     version: VersionDAO,
     private val retrofit: TransactionResource,
     private val account: AccountManager
-) : AbstractPageWorker<Transaction, TransactionVO>(context, params,  dao, version) {
+) : AbstractPageWorker<Transaction, TransactionVO>(context, params, "Операции", dao, version) {
     override fun toVO(dto: Transaction): TransactionVO = dto.toVO()
 
     override fun getVersion(): Int = 1
@@ -130,7 +130,7 @@ class DepositWorker @Inject constructor(
     version: VersionDAO,
     private val retrofit: DepositResource,
     private val account: AccountManager
-) : AbstractPageWorker<Deposit, DepositVO>(context, params, dao, version) {
+) : AbstractPageWorker<Deposit, DepositVO>(context, params, "Депозиты", dao, version) {
     override fun toVO(dto: Deposit): DepositVO = dto.toVO()
 
     override fun getVersion(): Int = 1
@@ -160,6 +160,7 @@ class DepositWorker @Inject constructor(
 abstract class AbstractPageWorker<D, E> constructor(
     context: Context,
     params: WorkerParameters,
+    private val name: String,
     private val dao: Replace<E>,
     private val version: VersionDAO
 ) : CoroutineWorker(context, params) {
@@ -186,15 +187,9 @@ abstract class AbstractPageWorker<D, E> constructor(
         }
 
         return if (syncPage(builder, localVersion.toInt())) {
-            val data = builder.putBoolean("success", true).putBoolean("finished" , true).build()
-            Log.i("AbstractPageWorker", data.keyValueMap.toString())
-
-            Result.success(data)
+            Result.success(builder.putBoolean("success", true).putBoolean("finished" , true).build())
         } else {
-            val data = builder.putBoolean("success", false).putBoolean("finished" , true).build()
-            Log.e("AbstractPageWorker", data.keyValueMap.toString())
-
-            Result.failure(data)
+            Result.failure(builder.putBoolean("success", false).putBoolean("finished" , true).build())
         }
     }
 
@@ -209,8 +204,6 @@ abstract class AbstractPageWorker<D, E> constructor(
         try {
             response = sync(version, offset, numberOfRows).execute()
         } catch (exc: SocketTimeoutException) {
-            Log.e("AbstractPageWorker", exc.message, exc)
-
             return syncPage(builder, version, offset, numberOfRows)
         }
 
@@ -218,8 +211,6 @@ abstract class AbstractPageWorker<D, E> constructor(
 
         if (!response.isSuccessful || page == null) {
             if (response.code() == 504) {
-                Log.i("AbstractPageWorker", "Response is error 504 before sleep ${this.javaClass.simpleName}")
-
                 return syncPage(builder, version, offset, numberOfRows)
             }
 
@@ -236,6 +227,7 @@ abstract class AbstractPageWorker<D, E> constructor(
         setProgress(Data.Builder()
             .putInt("total", page.meta.total)
             .putInt("offset", offset + numberOfRows)
+            .putString("name", name)
             .build()
         )
 
@@ -245,6 +237,10 @@ abstract class AbstractPageWorker<D, E> constructor(
 
         return if (offset > page.meta.total) {
             builder.putString("message", "Данные успешно загружены (${page.meta.total})")
+
+            dao.getAll().forEach {
+                Log.i("AbstractPageWorker", it.toString())
+            }
 
             return true
         } else {

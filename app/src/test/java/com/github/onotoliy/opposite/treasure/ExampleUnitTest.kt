@@ -16,6 +16,19 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+
+        println("""{
+            |'uuid': 'uuid', 
+            |'name': 'name', 
+            |'cash': 'cash', 
+            |'type': 'type', 
+            |'person': person, 
+            |'event': event, 
+            |'transactionDate': 'transactionDate', 
+            |'creationDate': 'creationDate', 
+            |'author': author, 
+            |'deletionDate':'deletionDate'
+            |}""".trimMargin())
     }
 
     @Test
@@ -53,7 +66,7 @@ class ExampleUnitTest {
 
     @Test
     fun test_Calendar() {
-        val calendar: Calendar = Calendar.getInstance()
+        /*val calendar: Calendar = Calendar.getInstance()
 
         calendar.time = Date()
 
@@ -97,6 +110,6 @@ class ExampleUnitTest {
             code = month.toString(),
             weeks = days.groupBy { it.week }.map { Week(it.value) })
 
-        println(m)
+        println(m)*/
     }
 }

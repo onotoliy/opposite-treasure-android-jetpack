@@ -10,7 +10,7 @@ import dagger.Module
 import dagger.Provides
 
 @Entity(tableName = "treasure_cashbox")
-class CashboxVO(
+data class CashboxVO(
     @PrimaryKey
     @ColumnInfo(name = "pk", typeAffinity = ColumnInfo.TEXT, defaultValue = "1")
     var pk: String = "1",
@@ -21,7 +21,7 @@ class CashboxVO(
 )
 
 @Entity(tableName = "treasure_debt")
-class DebtVO(
+data class DebtVO(
     @PrimaryKey
     @ColumnInfo(name = "pk", typeAffinity = ColumnInfo.TEXT, defaultValue = "1")
     var pk: String = "1",
@@ -52,7 +52,7 @@ class DebtVO(
 )
 
 @Entity(tableName = "treasure_deposit")
-class DepositVO(
+data class DepositVO(
     @PrimaryKey
     @ColumnInfo(name = "user_uuid", typeAffinity = ColumnInfo.TEXT, defaultValue = "1")
     var uuid: String = "1",
@@ -63,7 +63,7 @@ class DepositVO(
 )
 
 @Entity(tableName = "treasure_event")
-class EventVO(
+data class EventVO(
     @PrimaryKey
     @ColumnInfo(name = "uuid", typeAffinity = ColumnInfo.TEXT, defaultValue = "")
     var uuid: String = "",
@@ -86,7 +86,7 @@ class EventVO(
 )
 
 @Entity(tableName = "treasure_transaction")
-class TransactionVO(
+data class TransactionVO(
     @PrimaryKey
     @ColumnInfo(name = "uuid", typeAffinity = ColumnInfo.TEXT, defaultValue = "")
     var uuid: String = "",
@@ -117,7 +117,7 @@ class TransactionVO(
 )
 
 @Entity(tableName = "treasure_version")
-class VersionVO(
+data class VersionVO(
     @PrimaryKey
     @ColumnInfo(name = "type", typeAffinity = ColumnInfo.TEXT, defaultValue = "")
     val type: String = "",
@@ -142,6 +142,9 @@ interface CashboxDAO: Replace<CashboxVO> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: CashboxVO)
+
+    @Query("SELECT * FROM treasure_cashbox")
+    override fun getAll(): List<CashboxVO>
 }
 
 @Dao
@@ -161,8 +164,8 @@ interface DebtDAO: Replace<DebtVO> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: DebtVO)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun replace(vos: List<DebtVO>)
+    @Query("SELECT * FROM treasure_debt")
+    override fun getAll(): List<DebtVO>
 }
 
 @Dao
@@ -179,8 +182,8 @@ interface DepositDAO: Replace<DepositVO> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: DepositVO)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun replace(vo: List<DepositVO>)
+    @Query("SELECT * FROM treasure_deposit")
+    override fun getAll(): List<DepositVO>
 }
 
 @Dao
@@ -197,8 +200,8 @@ interface EventDAO: Replace<EventVO> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: EventVO)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun replace(vo: List<EventVO>)
+    @Query("SELECT * FROM treasure_event")
+    override fun getAll(): List<EventVO>
 }
 
 @Dao
@@ -227,11 +230,12 @@ interface TransactionDAO: Replace<TransactionVO> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: TransactionVO)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun replace(vo: List<TransactionVO>)
+    @Query("SELECT * FROM treasure_transaction")
+    override fun getAll(): List<TransactionVO>
 }
 
 interface Replace<T> {
+    fun getAll(): List<T>
     fun replace(vo: T)
 }
 

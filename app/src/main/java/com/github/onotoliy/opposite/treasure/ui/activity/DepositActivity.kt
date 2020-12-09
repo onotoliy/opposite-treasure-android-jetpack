@@ -88,24 +88,22 @@ fun DepositScreen(
                     deposit = model.deposit.observe(),
                     cashbox = model.cashbox.observe()
                 )
-                DepositTab.DEBT -> model.events.observe()?.let {
+                DepositTab.DEBT ->
                     EventPageView(
-                        view = it,
+                        view = model.debts,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOfRows, _ ->
                             model.nextEventPageLoading(offset, numberOfRows)
                         }
                     )
-                }
-                DepositTab.TRANSACTION -> model.transactions.observe()?.let {
+                DepositTab.TRANSACTION ->
                     TransactionPageView(
-                        view = it,
+                        view = model.transactions,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOfRows, _ ->
                             model.nextTransactionPageLoading(offset, numberOfRows)
                         }
                     )
-                }
             }
         }
     }
