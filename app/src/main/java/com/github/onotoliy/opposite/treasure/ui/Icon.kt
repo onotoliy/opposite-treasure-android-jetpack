@@ -20,37 +20,49 @@ fun IconRightArrow(modifier: Modifier = Modifier) =
     Icon(asset = vectorResource(id = R.drawable.ic_right_arrow), modifier = modifier)
 
 @Composable
-fun IconAccountCircle() = Icon(asset = vectorResource(id = R.drawable.ic_account_circle))
+fun IconAccountCircle(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_account_circle), modifier = modifier)
 
 @Composable
-fun IconAdd() = Icon(asset = vectorResource(id = R.drawable.ic_add))
+fun IconAdd(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_add), modifier = modifier)
 
 @Composable
-fun IconHome() = Icon(asset = vectorResource(id = R.drawable.ic_home))
+fun IconHome(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_home), modifier = modifier)
 
 @Composable
-fun IconDeposits() = Icon(asset = vectorResource(id = R.drawable.ic_people))
+fun IconDeposits(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_people), modifier = modifier)
 
 @Composable
-fun IconTransactions() = Icon(asset = vectorResource(id = R.drawable.ic_payments))
+fun IconTransactions(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_payments), modifier = modifier)
 
 @Composable
-fun IconEvents() = Icon(asset = vectorResource(id = R.drawable.ic_event))
+fun IconEvents(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_event), modifier = modifier)
 
 @Composable
-fun IconRefresh() = Icon(asset = vectorResource(id = R.drawable.ic_refresh))
+fun IconRefresh(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_refresh), modifier = modifier)
 
 @Composable
-fun IconSave() = Icon(asset = vectorResource(id = R.drawable.ic_save))
+fun IconSave(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_save), modifier = modifier)
 
 @Composable
-fun IconEdit() = Icon(asset = vectorResource(id = R.drawable.ic_edit))
+fun IconEdit(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_edit), modifier = modifier)
 
 @Composable
-fun IconRemove() = Icon(asset = vectorResource(id = R.drawable.ic_delete))
+fun IconRemove(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_delete), modifier = modifier)
 
 @Composable
-fun IconUp() = Icon(asset = vectorResource(id = R.drawable.ic_trending_up), tint = Color.Green)
+fun IconUp(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_trending_up), tint = Color.Green, modifier = modifier)
 
 @Composable
-fun IconDown() = Icon(asset = vectorResource(id = R.drawable.ic_trending_down), tint = Color.Red)
+fun IconDown(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_trending_down), tint = Color.Red, modifier = modifier)
