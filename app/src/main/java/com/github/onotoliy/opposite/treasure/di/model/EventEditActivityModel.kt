@@ -2,11 +2,9 @@ package com.github.onotoliy.opposite.treasure.di.model
 
 import android.accounts.AccountManager
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Event
-import com.github.onotoliy.opposite.data.Option
-import com.github.onotoliy.opposite.treasure.di.database.EventDAO
-import com.github.onotoliy.opposite.treasure.di.service.toDTO
-import com.github.onotoliy.opposite.treasure.di.service.toVO
+import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
+import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import javax.inject.Inject
@@ -23,7 +21,7 @@ class EventEditActivityModel @Inject constructor(
     val total: MutableLiveData<String> = MutableLiveData("0.0")
     val deadline: MutableLiveData<String> = MutableLiveData("")
     private val creationDate: MutableLiveData<String> = MutableLiveData("")
-    private val author: MutableLiveData<Option> = MutableLiveData(Option())
+    private val author: MutableLiveData<OptionVO> = MutableLiveData(OptionVO())
 
     fun loading(pk: String) {
         if (pk.isEmpty()) {
@@ -33,10 +31,10 @@ class EventEditActivityModel @Inject constructor(
             total.postValue("0.0")
             deadline.postValue("")
             creationDate.postValue(Date().toISO())
-            author.postValue(Option(uuid = manager.getUUID(), name = manager.getName()))
+            author.postValue(OptionVO(uuid = manager.getUUID(), name = manager.getName()))
         } else {
             dao.get(pk).observeForever { it ->
-                it.toDTO().let { event ->
+                it.let { event ->
                     uuid.postValue(event.uuid)
                     name.postValue(event.name)
                     contribution.postValue(event.contribution)
@@ -51,15 +49,15 @@ class EventEditActivityModel @Inject constructor(
 
     fun merge() {
         dao.replace(
-            Event(
+            EventVO(
                 uuid = uuid.value ?: "",
                 name = name.value ?: "",
                 contribution = contribution.value ?: "",
                 total = total.value ?: "",
                 deadline = deadline.value?.fromShortDate()?.toISO() ?: "",
                 creationDate = creationDate.value ?: "",
-                author = author.value ?: Option()
-            ).toVO()
+                author = author.value ?: OptionVO()
+            )
         )
     }
 }

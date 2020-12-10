@@ -7,11 +7,13 @@ import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.data.Cashbox
 import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.treasure.R
+import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
+import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.ui.BODY
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 
 @Composable
-fun DepositView(deposit: Deposit?, cashbox: Cashbox?) {
+fun DepositView(deposit: DepositVO?, cashbox: CashboxVO?) {
     deposit?.let {
         cashbox?.let {
             Column {

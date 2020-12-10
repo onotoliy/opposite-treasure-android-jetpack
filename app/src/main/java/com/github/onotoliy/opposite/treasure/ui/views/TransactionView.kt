@@ -6,21 +6,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.github.onotoliy.opposite.data.Transaction
+import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.BODY
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 import com.github.onotoliy.opposite.treasure.utils.fromISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 
 @Composable
-fun TransactionView(data: Transaction, navigateTo: (Screen) -> Unit) {
+fun TransactionView(data: TransactionVO, navigateTo: (Screen) -> Unit) {
     Column {
         Text(text = stringResource(id = R.string.transaction_name), style = H6_BOLD)
         Text(text = data.name, style = BODY)
 
         Text(text = stringResource(id = R.string.transaction_type), style = H6_BOLD)
-        Text(text = data.type.label, style = BODY)
+        Text(text = TransactionType.valueOf(data.type).label, style = BODY)
 
         Text(text = stringResource(id = R.string.transaction_cash), style = H6_BOLD)
         Text(text = data.cash, style = BODY)

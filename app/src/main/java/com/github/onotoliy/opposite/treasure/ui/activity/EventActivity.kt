@@ -19,9 +19,7 @@ import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
-import com.github.onotoliy.opposite.treasure.ui.views.EventView
-import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.ui.views.*
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.observe
@@ -91,7 +89,7 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
                     EventView(data = it, navigateTo = navigateTo)
                 }
                 EventTab.DEBTORS ->
-                    DepositPageView(
+                    DepositPageViewVO(
                         view = model.debtors,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOrRows, _ ->
@@ -100,7 +98,7 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
                     )
 
                 EventTab.TRANSACTIONS ->
-                    TransactionPageView(
+                    TransactionPageViewVO(
                         view = model.transactions,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOrRows, _ ->

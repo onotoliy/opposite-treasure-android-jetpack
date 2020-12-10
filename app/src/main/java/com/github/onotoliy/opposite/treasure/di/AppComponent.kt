@@ -6,8 +6,8 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.github.onotoliy.opposite.treasure.App
-import com.github.onotoliy.opposite.treasure.di.database.AppDatabase
-import com.github.onotoliy.opposite.treasure.di.database.RoomModule
+import com.github.onotoliy.opposite.treasure.di.database.TreasureDatabase
+import com.github.onotoliy.opposite.treasure.di.database.DatabaseModule
 import com.github.onotoliy.opposite.treasure.di.worker.WorkerModule
 import com.github.onotoliy.opposite.treasure.ui.activity.*
 import dagger.Component
@@ -21,14 +21,14 @@ import java.util.concurrent.Executors
     ResourceModule::class,
     ViewModelFactoryModule::class,
     WorkerModule::class,
-    RoomModule::class
+    DatabaseModule::class
 ])
 interface AppComponent : AndroidInjector<App> {
 
     @Component.Builder
     interface Builder {
         fun appModule(appModule: AppModule): Builder
-        fun roomModule(roomModule: RoomModule): Builder
+        fun roomModule(roomModule: DatabaseModule): Builder
         fun build(): AppComponent
     }
 
@@ -56,8 +56,8 @@ interface AppComponent : AndroidInjector<App> {
 
                 val coreDataComponent = DaggerAppComponent.builder()
                     .appModule(AppModule(application))
-                    .roomModule(RoomModule(Room
-                        .databaseBuilder(application, AppDatabase::class.java, "treasure-db")
+                    .roomModule(DatabaseModule(Room
+                        .databaseBuilder(application, TreasureDatabase::class.java, "treasure-db")
                         .build())
                     )
                     .build()

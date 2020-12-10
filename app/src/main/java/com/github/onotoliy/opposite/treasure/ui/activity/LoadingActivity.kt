@@ -2,7 +2,6 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.accounts.AccountManager
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
@@ -12,14 +11,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
-import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
@@ -33,7 +33,7 @@ import com.github.onotoliy.opposite.treasure.di.worker.DebtWorker
 import com.github.onotoliy.opposite.treasure.di.worker.DepositWorker
 import com.github.onotoliy.opposite.treasure.di.worker.EventWorker
 import com.github.onotoliy.opposite.treasure.di.worker.TransactionWorker
-import com.github.onotoliy.opposite.treasure.ui.IconSave
+import com.github.onotoliy.opposite.treasure.ui.IconCheck
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.inject
@@ -58,9 +58,9 @@ class LoadingActivity : AppCompatActivity() {
 
         worker
             .beginWith(event)
-//            .then(debt)
-//            .then(deposit)
-//            .then(transaction)
+            .then(deposit)
+            .then(transaction)
+            .then(debt)
             .enqueue()
 
         setContent {
@@ -85,34 +85,35 @@ fun LoadingScreen(
     transaction: LiveData<WorkInfo>,
     onClick: () -> Unit
 ) {
-    val enabled = remember(mutableMapOf<String, Boolean>()) {
-        mutableStateOf(mutableMapOf(
-            "debt" to true,
-            "event" to false,
-            "deposit" to true,
-            "transaction" to true
-        ))
+    val workFinished = remember(mutableMapOf<String, Boolean>()) {
+        mutableStateOf(
+            mutableMapOf(
+                "debt" to true,
+                "event" to false,
+                "deposit" to true,
+                "transaction" to true
+            )
+        )
     }
-    val f = remember(false) {
-        mutableStateOf(enabled.value.all { it.value })
+    val finished = remember(false) {
+        mutableStateOf(workFinished.value.all { it.value })
     }
-//    debt.observeForever {
-//        Log.i("LoadingActivity", "Debt ${it.finished} : ${enabled.value} : ${it.outputData.keyValueMap}")
-//        enabled.value["debt"] = it.finished
-//    }
+    debt.observeForever {
+        workFinished.value["debt"] = it.finished
+        finished.value = workFinished.value.all { k -> k.value }
+    }
     event.observeForever {
-        Log.i("LoadingActivity", "Event ${it.finished} : ${enabled.value} : ${it.outputData.keyValueMap}")
-        enabled.value["event"] = it.finished
-        f.value = enabled.value.all { k -> k.value }
+        workFinished.value["event"] = it.finished
+        finished.value = workFinished.value.all { k -> k.value }
     }
-//    deposit.observeForever {
-//        Log.i("LoadingActivity", "Deposit ${it.finished} : ${enabled.value} : ${it.outputData.keyValueMap}")
-//        enabled.value["deposit"] = it.finished
-//    }
-//    transaction.observeForever {
-//        Log.i("LoadingActivity", "Transaction ${it.finished} : ${enabled.value} : ${it.outputData.keyValueMap}")
-//        enabled.value["transaction"] = it.finished
-//    }
+    deposit.observeForever {
+        workFinished.value["deposit"] = it.finished
+        finished.value = workFinished.value.all { k -> k.value }
+    }
+    transaction.observeForever {
+        workFinished.value["transaction"] = it.finished
+        finished.value = workFinished.value.all { k -> k.value }
+    }
 
     Box(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
@@ -123,29 +124,37 @@ fun LoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = enabled.value.toString() + " : " + f.value)
             Image(asset = vectorResource(id = R.drawable.ic_launcher_foreground))
-            if (enabled.value.all { it.value }) {
-                Text(text = "Загрузка завершена успешно!")
+            if (finished.value) {
+                Text(text = stringResource(id = R.string.loading_finished))
             } else {
-                Text(text = "Выполняется загрузка данных...")
-                Text(text = "Пожалуйста, подождите.")
+                Text(text = stringResource(id = R.string.loading_loading))
+                Text(text = stringResource(id = R.string.loading_please_wait))
 
-                WorkInfoProgress(title = "Долги", value = debt)
-                WorkInfoProgress(title = "События", value = event)
-                WorkInfoProgress(title = "Депозиты", value = deposit)
-                WorkInfoProgress(title = "Операции", value = transaction)
+                WorkInfoProgress(title = stringResource(id = R.string.loading_debts), value = debt)
+                WorkInfoProgress(
+                    title = stringResource(id = R.string.loading_events),
+                    value = event
+                )
+                WorkInfoProgress(
+                    title = stringResource(id = R.string.loading_deposits),
+                    value = deposit
+                )
+                WorkInfoProgress(
+                    title = stringResource(id = R.string.loading_transactions),
+                    value = transaction
+                )
             }
 
             IconButton(
-                modifier = Modifier.clip(CircleShape).background(
-                    if (f.value) MaterialTheme.colors.primary else Color.Gray,
+                modifier = Modifier.padding(vertical = 5.dp).clip(CircleShape).background(
+                    if (finished.value) MaterialTheme.colors.primary else Color.Gray,
                     CircleShape
                 ),
-                enabled = f.value,
+                enabled = finished.value,
                 onClick = onClick
             ) {
-                IconSave()
+                IconCheck()
             }
         }
     }
@@ -154,28 +163,30 @@ fun LoadingScreen(
 @Composable
 fun WorkInfoProgress(title: String, value: LiveData<WorkInfo>) {
     value.observe()?.let {
-        val total = it.progress.getInt("total", 0)
-        val offset = it.progress.getInt("offset", 0)
-        val progress =
-            if (it.outputData.getBoolean("finished", false)) {
-                1f
-            } else {
-                if (offset == 0 || total == 0) 0f else offset.toFloat() / total.toFloat()
-            }
-
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = title)
-            LinearProgressIndicator(progress = progress)
+            LinearProgressIndicator(progress = it.indicator)
         }
     }
 }
 
+private val WorkInfo.indicator: Float
+    get() =
+        if (this.finished) {
+            1f
+        } else {
+            if (this.offset == 0 || this.total == 0) 0f else this.offset.toFloat() / this.total.toFloat()
+        }
+
+private val WorkInfo.total: Int
+    get() = this.progress.getInt("total", 0)
+
+private val WorkInfo.offset: Int
+    get() = this.progress.getInt("offset", 0)
+
 private val WorkInfo?.finished: Boolean
     get() = this?.outputData?.getBoolean("finished", false) ?: false
-
-private val State<WorkInfo?>.finished: Boolean
-    get() = this.value?.outputData?.getBoolean("finished", false) ?: false

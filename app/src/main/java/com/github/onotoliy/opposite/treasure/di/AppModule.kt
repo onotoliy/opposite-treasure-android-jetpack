@@ -4,11 +4,8 @@ import android.accounts.AccountManager
 import android.app.Application
 import android.content.Context
 import androidx.work.WorkManager
-import com.github.onotoliy.opposite.treasure.di.database.*
-import com.github.onotoliy.opposite.treasure.di.service.*
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class AppModule(private val application: Application) {

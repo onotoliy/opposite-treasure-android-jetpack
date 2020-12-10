@@ -8,6 +8,10 @@ import androidx.compose.ui.res.vectorResource
 import com.github.onotoliy.opposite.treasure.R
 
 @Composable
+fun IconCheck(modifier: Modifier = Modifier) =
+    Icon(asset = vectorResource(id = R.drawable.ic_baseline_check_24), modifier = modifier)
+
+@Composable
 fun IconLeftArrow(modifier: Modifier = Modifier) =
     Icon(asset = vectorResource(id = R.drawable.ic_left_arrow), modifier = modifier)
 

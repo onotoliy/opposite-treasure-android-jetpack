@@ -2,9 +2,8 @@ package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.treasure.di.database.TransactionDAO
-import com.github.onotoliy.opposite.treasure.di.service.toDTO
+import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
@@ -13,7 +12,7 @@ class TransactionPageActivityModel @Inject constructor(
 ): ViewModel() {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(false)
-    val page: LiveDataPage<Transaction> = LiveDataPage()
+    val page: LiveDataPage<TransactionVO> = LiveDataPage()
 
     fun loading() {
         dao.count().observeForever {
@@ -30,9 +29,9 @@ class TransactionPageActivityModel @Inject constructor(
             pending.postValue(false)
             page.offset = offset + numberOfRows
             page.numberOfRows = numberOfRows
-            page.context.postValue(mutableListOf<Transaction>().apply{
+            page.context.postValue(mutableListOf<TransactionVO>().apply{
                 addAll(page.context.value ?: listOf())
-                addAll(list.map { it.toDTO() })
+                addAll(list)
             })
         }
     }

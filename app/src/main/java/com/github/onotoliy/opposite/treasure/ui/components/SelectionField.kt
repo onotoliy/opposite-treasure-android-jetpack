@@ -16,48 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
-import com.github.onotoliy.opposite.data.Option
-
-@Preview
-@Composable
-fun SelectionFieldPreview() {
-    val list = listOf(
-        Option("1", "Иван"),
-        Option("2", "Петр"),
-        Option("3", "Алексей"),
-        Option("4", "Владимир"),
-        Option("5", "Игорь"),
-        Option("6", "Валентин"),
-        Option("7", "Анатолий"),
-        Option("8", "Евгений"),
-        Option("9", "Александр"),
-        Option("10", "Олег")
-    )
-
-    SelectionField(
-        label = "Пользователь",
-        list = list,
-        modifier = Modifier.fillMaxWidth(0.8f),
-        onValueChange = { }
-    )
-}
+import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 
 @Composable
 fun SelectionField(
     label: String,
-    list: List<Option>,
-    value: Option = Option(),
+    list: List<OptionVO>,
+    value: OptionVO = OptionVO(),
     modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyleLeft,
     leadingIcon: @Composable (() -> Unit)? = null,
-    onValueChange: (Option) -> Unit
+    onValueChange: (OptionVO) -> Unit
 ) {
     val state = remember { mutableStateOf(list) }
     val selected = remember { mutableStateOf(value) }

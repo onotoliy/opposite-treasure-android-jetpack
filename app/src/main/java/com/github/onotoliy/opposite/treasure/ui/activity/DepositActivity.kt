@@ -20,9 +20,7 @@ import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.DepositView
-import com.github.onotoliy.opposite.treasure.ui.views.EventPageView
-import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.ui.views.*
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
@@ -89,7 +87,7 @@ fun DepositScreen(
                     cashbox = model.cashbox.observe()
                 )
                 DepositTab.DEBT ->
-                    EventPageView(
+                    EventPageViewVO(
                         view = model.debts,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOfRows, _ ->
@@ -97,7 +95,7 @@ fun DepositScreen(
                         }
                     )
                 DepositTab.TRANSACTION ->
-                    TransactionPageView(
+                    TransactionPageViewVO(
                         view = model.transactions,
                         navigateTo = navigateTo,
                         navigateToNextPageScreen = { offset, numberOfRows, _ ->

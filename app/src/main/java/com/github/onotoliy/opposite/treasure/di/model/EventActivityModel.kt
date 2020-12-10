@@ -5,7 +5,12 @@ import com.github.onotoliy.opposite.data.Deposit
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.treasure.di.database.*
-import com.github.onotoliy.opposite.treasure.di.service.toDTO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
+import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
+import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
@@ -16,9 +21,9 @@ class EventActivityModel @Inject constructor(
 ) {
     lateinit var pk: String
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
-    val event: MutableLiveData<Event> = MutableLiveData()
-    val debtors: LiveDataPage<Deposit> = LiveDataPage()
-    val transactions: LiveDataPage<Transaction> = LiveDataPage()
+    val event: MutableLiveData<EventVO> = MutableLiveData()
+    val debtors: LiveDataPage<DepositVO> = LiveDataPage()
+    val transactions: LiveDataPage<TransactionVO> = LiveDataPage()
 
     fun loading(pk: String) {
         this.pk = pk
@@ -30,7 +35,7 @@ class EventActivityModel @Inject constructor(
             transactions.total.postValue(it)
         }
         eventDAO.get(pk).observeForever {
-            event.postValue(it?.toDTO() ?: Event())
+            event.postValue(it)
         }
 
         nextDepositPageLoading()
@@ -44,9 +49,9 @@ class EventActivityModel @Inject constructor(
             pending.postValue(false)
             debtors.offset = offset + numberOfRows
             debtors.numberOfRows = numberOfRows
-            debtors.context.postValue(mutableListOf<Deposit>().apply{
+            debtors.context.postValue(mutableListOf<DepositVO>().apply{
                 addAll(debtors.context.value ?: listOf())
-                addAll(list.map { it.toDTO() }.map { it.deposit })
+                addAll(list.map { it.deposit })
             })
         }
     }
@@ -58,9 +63,9 @@ class EventActivityModel @Inject constructor(
             pending.postValue(false)
             transactions.offset = offset + numberOfRows
             transactions.numberOfRows = numberOfRows
-            transactions.context.postValue(mutableListOf<Transaction>().apply{
+            transactions.context.postValue(mutableListOf<TransactionVO>().apply{
                 addAll(transactions.context.value ?: listOf())
-                addAll(list.map { it.toDTO() })
+                addAll(list)
             })
         }
     }

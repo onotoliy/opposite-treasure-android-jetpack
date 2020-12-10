@@ -1,9 +1,8 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Event
-import com.github.onotoliy.opposite.treasure.di.database.EventDAO
-import com.github.onotoliy.opposite.treasure.di.service.toDTO
+import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
@@ -12,7 +11,7 @@ class EventPageActivityModel @Inject constructor(
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
-    val page: LiveDataPage<Event> = LiveDataPage()
+    val page: LiveDataPage<EventVO> = LiveDataPage()
 
     fun loading() {
         dao.count().observeForever {
@@ -29,9 +28,9 @@ class EventPageActivityModel @Inject constructor(
             pending.postValue(false)
             page.offset = offset + numberOfRows
             page.numberOfRows = numberOfRows
-            page.context.postValue(mutableListOf<Event>().apply{
+            page.context.postValue(mutableListOf<EventVO>().apply{
                 addAll(page.context.value ?: listOf())
-                addAll(list.map { it.toDTO() })
+                addAll(list)
             })
         }
     }

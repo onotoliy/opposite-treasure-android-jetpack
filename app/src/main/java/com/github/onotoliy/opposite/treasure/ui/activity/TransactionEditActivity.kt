@@ -16,6 +16,7 @@ import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
+import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.di.model.TransactionEditActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
@@ -67,11 +68,11 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
     Column {
         SelectionField(
             modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
-            value = model.type.observe() ?: Option(),
+            value = model.type.observe() ?: OptionVO(),
             label = stringResource(id = R.string.transaction_edit_type),
             onValueChange = { model.type.postValue(it) },
             textStyle = TextStyleLeft,
-            list = TransactionType.values().map { Option(it.name, it.label) }
+            list = TransactionType.values().map { OptionVO(it.name, it.label) }
         )
         TextField(
             modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp) ,
@@ -91,7 +92,7 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
         )
         AutocompleteField(
             modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
-            value = model.person.observe() ?: Option(),
+            value = model.person.observe() ?: OptionVO(),
             label = stringResource(id = R.string.transaction_edit_person),
             onValueChange = { model.person.postValue(it) },
             textStyle = TextStyleLeft,
@@ -100,7 +101,7 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
         )
         AutocompleteField(
             modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
-            value = model.event.observe() ?: Option(),
+            value = model.event.observe() ?: OptionVO(),
             label = stringResource(id = R.string.transaction_edit_event),
             onValueChange = { model.event.postValue(it) },
             textStyle = TextStyleLeft,

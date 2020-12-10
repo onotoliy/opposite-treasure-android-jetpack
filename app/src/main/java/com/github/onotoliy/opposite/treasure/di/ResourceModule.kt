@@ -1,14 +1,10 @@
 package com.github.onotoliy.opposite.treasure.di
 
-import android.accounts.AccountManager
 import com.github.onotoliy.opposite.treasure.di.resource.*
-import com.github.onotoliy.opposite.treasure.utils.getAuthToken
-import com.github.onotoliy.opposite.treasure.utils.getNewAuthToken
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -37,7 +33,7 @@ class ResourceModule {
         retrofit.create(DebtResource::class.java)
 
     @Provides
-    fun provideRetrofit(manager: AccountManager): Retrofit = Retrofit
+    fun provideRetrofit(): Retrofit = Retrofit
         .Builder()
         .addConverterFactory(
             GsonConverterFactory.create(GsonBuilder().setLenient().create())
@@ -49,13 +45,6 @@ class ResourceModule {
                 .writeTimeout(2, TimeUnit.MINUTES)
                 .connectTimeout(2, TimeUnit.MINUTES)
                 .readTimeout(2, TimeUnit.MINUTES)
-//                .addInterceptor {
-//                    val token = manager.getNewAuthToken()
-//                    val request: Request =
-//                        it.request().newBuilder().addHeader("Authorization", "Bearer $token").build()
-//
-//                    it.proceed(request)
-//                }
                 .build()
         )
         .build()
