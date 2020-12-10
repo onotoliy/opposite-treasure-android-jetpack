@@ -9,6 +9,7 @@ import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.VersionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
+import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.resource.DebtResource
 import com.github.onotoliy.opposite.treasure.utils.getAuthToken
 import retrofit2.Call
@@ -23,12 +24,12 @@ class DebtWorker @Inject constructor(
     private val retrofit: DebtResource,
     private val account: AccountManager
 ) : AbstractPageWorker<Debt, DebtVO>(context, params, dao, version) {
-    override fun Debt.toVO(): DebtVO = toVO()
+    override fun toVO(dto: Debt): DebtVO = dto.toVO()
 
     override fun getVersion(): Int = 1
 
     override fun sync(version: Int, offset: Int, numberOfRows: Int): Call<Page<Debt>> =
-        retrofit.sync("Bearer "+ account.getAuthToken(), version, offset, numberOfRows)
+        retrofit.sync("Bearer " + account.getAuthToken(), version, offset, numberOfRows)
 
     class Factory @Inject constructor(
         private val dao: Provider<DebtDAO>,

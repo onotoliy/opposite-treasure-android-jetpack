@@ -9,7 +9,7 @@ import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.VersionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
-import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
+import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.resource.EventResource
 import com.github.onotoliy.opposite.treasure.utils.getAuthToken
 import retrofit2.Call
@@ -24,12 +24,12 @@ class EventWorker @Inject constructor(
     private val retrofit: EventResource,
     private val account: AccountManager
 ) : AbstractPageWorker<Event, EventVO>(context, params, dao, version) {
-    override fun Event.toVO(): EventVO = toVO()
+    override fun toVO(dto: Event): EventVO = dto.toVO()
 
     override fun getVersion(): Int = 1
 
     override fun sync(version: Int, offset: Int, numberOfRows: Int): Call<Page<Event>> =
-        retrofit.sync("Bearer "+ account.getAuthToken(), version, offset, numberOfRows)
+        retrofit.sync("Bearer " + account.getAuthToken(), version, offset, numberOfRows)
 
     class Factory @Inject constructor(
         private val dao: Provider<EventDAO>,

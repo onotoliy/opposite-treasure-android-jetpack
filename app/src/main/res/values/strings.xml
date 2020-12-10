@@ -47,6 +47,7 @@
     <string name="loading_loading">Выполняется загрузка данных…</string>
     <string name="loading_please_wait">Пожалуйста, подождите.</string>
     <string name="loading_debts">Долги</string>
+    <string name="loading_cashbox">Касса</string>
     <string name="loading_events">События</string>
     <string name="loading_deposits">Депозиты</string>
     <string name="loading_transactions">Операции</string>
@@ -57,7 +58,4 @@
 
     <string name="default_notification_chanel_id">Nilesh_channel</string>
     <string name="default_notification_chanel_name">Notification</string>
-
-
-
 </resources>

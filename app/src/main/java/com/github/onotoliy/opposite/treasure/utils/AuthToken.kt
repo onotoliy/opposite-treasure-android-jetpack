@@ -34,7 +34,9 @@ fun getAuthToken(
         }
     )
 
-fun AccountManager.getAuthToken(): String? {
+fun AccountManager.getAuthToken(): String = this.getAuthTokenOrNull() ?: throw IllegalArgumentException()
+
+fun AccountManager.getAuthTokenOrNull(): String? {
     val account = getAccount()
     val username = account.name
     val password = getPassword(account)

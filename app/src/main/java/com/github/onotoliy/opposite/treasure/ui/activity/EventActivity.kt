@@ -28,8 +28,7 @@ import javax.inject.Inject
 
 class EventActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var model: EventActivityModel
+    @Inject lateinit var model: EventActivityModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

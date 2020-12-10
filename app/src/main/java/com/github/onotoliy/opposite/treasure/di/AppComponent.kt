@@ -8,6 +8,8 @@ import androidx.work.WorkerFactory
 import com.github.onotoliy.opposite.treasure.App
 import com.github.onotoliy.opposite.treasure.di.database.TreasureDatabase
 import com.github.onotoliy.opposite.treasure.di.database.DatabaseModule
+import com.github.onotoliy.opposite.treasure.di.model.ViewModelModule
+import com.github.onotoliy.opposite.treasure.di.resource.ResourceModule
 import com.github.onotoliy.opposite.treasure.di.worker.WorkerModule
 import com.github.onotoliy.opposite.treasure.ui.activity.*
 import dagger.Component
@@ -19,7 +21,7 @@ import java.util.concurrent.Executors
     AndroidInjectionModule::class,
     AppModule::class,
     ResourceModule::class,
-    ViewModelFactoryModule::class,
+    ViewModelModule::class,
     WorkerModule::class,
     DatabaseModule::class
 ])

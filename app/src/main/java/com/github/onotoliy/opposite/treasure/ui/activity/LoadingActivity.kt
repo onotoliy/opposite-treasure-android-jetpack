@@ -29,10 +29,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.worker.DebtWorker
-import com.github.onotoliy.opposite.treasure.di.worker.DepositWorker
-import com.github.onotoliy.opposite.treasure.di.worker.EventWorker
-import com.github.onotoliy.opposite.treasure.di.worker.TransactionWorker
+import com.github.onotoliy.opposite.treasure.di.worker.*
 import com.github.onotoliy.opposite.treasure.ui.IconCheck
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.utils.getUUID
@@ -54,10 +51,12 @@ class LoadingActivity : AppCompatActivity() {
         val debt: OneTimeWorkRequest = OneTimeWorkRequestBuilder<DebtWorker>().build()
         val event: OneTimeWorkRequest = OneTimeWorkRequestBuilder<EventWorker>().build()
         val deposit: OneTimeWorkRequest = OneTimeWorkRequestBuilder<DepositWorker>().build()
+        val cashbox: OneTimeWorkRequest = OneTimeWorkRequestBuilder<CashboxWorker>().build()
         val transaction: OneTimeWorkRequest = OneTimeWorkRequestBuilder<TransactionWorker>().build()
 
         worker
-            .beginWith(event)
+            .beginWith(cashbox)
+            .then(event)
             .then(deposit)
             .then(transaction)
             .then(debt)
@@ -66,6 +65,7 @@ class LoadingActivity : AppCompatActivity() {
         setContent {
             TreasureTheme {
                 LoadingScreen(
+                    cashbox = worker.getWorkInfoByIdLiveData(cashbox.id),
                     debt = worker.getWorkInfoByIdLiveData(debt.id),
                     event = worker.getWorkInfoByIdLiveData(event.id),
                     deposit = worker.getWorkInfoByIdLiveData(deposit.id),
@@ -79,6 +79,7 @@ class LoadingActivity : AppCompatActivity() {
 
 @Composable
 fun LoadingScreen(
+    cashbox: LiveData<WorkInfo>,
     debt: LiveData<WorkInfo>,
     event: LiveData<WorkInfo>,
     deposit: LiveData<WorkInfo>,
@@ -88,10 +89,11 @@ fun LoadingScreen(
     val workFinished = remember(mutableMapOf<String, Boolean>()) {
         mutableStateOf(
             mutableMapOf(
-                "debt" to true,
+                "cashbox" to false,
+                "debt" to false,
                 "event" to false,
-                "deposit" to true,
-                "transaction" to true
+                "deposit" to false,
+                "transaction" to false
             )
         )
     }
@@ -114,6 +116,10 @@ fun LoadingScreen(
         workFinished.value["transaction"] = it.finished
         finished.value = workFinished.value.all { k -> k.value }
     }
+    cashbox.observeForever {
+        workFinished.value["cashbox"] = it.finished
+        finished.value = workFinished.value.all { k -> k.value }
+    }
 
     Box(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
@@ -131,6 +137,7 @@ fun LoadingScreen(
                 Text(text = stringResource(id = R.string.loading_loading))
                 Text(text = stringResource(id = R.string.loading_please_wait))
 
+                WorkInfoProgress(title = stringResource(id = R.string.loading_cashbox), value = cashbox)
                 WorkInfoProgress(title = stringResource(id = R.string.loading_debts), value = debt)
                 WorkInfoProgress(
                     title = stringResource(id = R.string.loading_events),

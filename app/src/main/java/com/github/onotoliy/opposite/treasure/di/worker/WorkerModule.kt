@@ -36,6 +36,11 @@ internal abstract class WorkerModule {
     internal abstract fun bindDepositWorker(factory: DepositWorker.Factory): ChildWorkerFactory
 
     @Binds
+    @IntoMap
+    @WorkerKey(CashboxWorker::class)
+    internal abstract fun bindCashboxWorker(factory: CashboxWorker.Factory): ChildWorkerFactory
+
+    @Binds
     internal abstract fun bindWorkerFactory(factory: DaggerWorkerFactory): WorkerFactory
 }
 

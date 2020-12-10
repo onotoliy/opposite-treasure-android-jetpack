@@ -1,7 +1,6 @@
 package com.github.onotoliy.opposite.treasure.di.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -20,7 +19,7 @@ abstract class AbstractPageWorker<D, E> constructor(
     private val version: VersionDAO
 ) : CoroutineWorker(context, params) {
 
-    protected abstract fun D.toVO(): E
+    protected abstract fun toVO(dto: D): E
     protected abstract fun getVersion(): Int
     protected abstract fun sync(version: Int, offset: Int, numberOfRows: Int): Call<Page<D>>
 
@@ -34,17 +33,16 @@ abstract class AbstractPageWorker<D, E> constructor(
 
         if (localVersion == remoteVersion) {
             return Result.success(
-                builder
-                    .putBoolean("success", true)
-                    .putString("message", "Обновлений по долгам нет.")
-                    .build()
+                builder.putBoolean("success", true).build()
             )
         }
 
         return if (syncPage(builder, localVersion.toInt())) {
-            Result.success(builder.putBoolean("success", true).putBoolean("finished" , true).build())
+            Result.success(builder.putBoolean("success", true).putBoolean("finished", true).build())
         } else {
-            Result.failure(builder.putBoolean("success", false).putBoolean("finished" , true).build())
+            Result.failure(
+                builder.putBoolean("success", false).putBoolean("finished", true).build()
+            )
         }
     }
 
@@ -68,29 +66,19 @@ abstract class AbstractPageWorker<D, E> constructor(
             if (response.code() == 504) {
                 return syncPage(builder, version, offset, numberOfRows)
             }
-
-            builder.putString(
-                "message",
-                "Ошибка получения обновления ${response.code()}:${String(response.errorBody()?.bytes() ?: ByteArray(0))}"
-            )
-
             return false
         }
 
-        Log.i("AbstractPageWorker", "Response is ok $offset, $numberOfRows ${page.meta.total}. ${this.javaClass.simpleName}")
-
         setProgress(
             Data.Builder()
-            .putInt("total", page.meta.total)
-            .putInt("offset", offset + numberOfRows)
-            .build()
+                .putInt("total", page.meta.total)
+                .putInt("offset", offset + numberOfRows)
+                .build()
         )
 
-        page.context.map { it.toVO() }.forEach(dao::replace)
+        page.context.map(this::toVO).forEach(dao::replace)
 
         return if (offset > page.meta.total) {
-            builder.putString("message", "Данные успешно загружены (${page.meta.total})")
-
             return true
         } else {
             syncPage(builder, version, offset + numberOfRows, numberOfRows)

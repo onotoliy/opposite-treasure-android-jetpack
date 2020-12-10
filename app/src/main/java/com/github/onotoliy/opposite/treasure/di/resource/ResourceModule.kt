@@ -1,6 +1,5 @@
-package com.github.onotoliy.opposite.treasure.di
+package com.github.onotoliy.opposite.treasure.di.resource
 
-import com.github.onotoliy.opposite.treasure.di.resource.*
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
