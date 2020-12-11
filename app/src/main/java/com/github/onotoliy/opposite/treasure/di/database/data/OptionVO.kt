@@ -11,3 +11,4 @@ data class OptionVO(
 )
 
 fun Option.toVO(): OptionVO = OptionVO(uuid, name)
+fun OptionVO.toDTO(): Option = Option(uuid, name)

@@ -9,7 +9,11 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkContinuation
+import androidx.work.WorkManager
 import com.github.onotoliy.opposite.treasure.R
+import com.github.onotoliy.opposite.treasure.di.worker.*
 import com.google.firebase.messaging.RemoteMessage
 
 class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessagingService() {
@@ -56,5 +60,14 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
             .setAutoCancel(true)
 
         nm.notify(1000, builder.build())
+
+        WorkManager
+            .getInstance(applicationContext)
+            .beginWith(OneTimeWorkRequestBuilder<CashboxWorker>().build())
+            .then(OneTimeWorkRequestBuilder<EventWorker>().build())
+            .then(OneTimeWorkRequestBuilder<TransactionWorker>().build())
+            .then(OneTimeWorkRequestBuilder<DepositWorker>().build())
+            .then(OneTimeWorkRequestBuilder<DebtWorker>().build())
+            .enqueue()
     }
 }

@@ -22,14 +22,20 @@ class DebtWorker @Inject constructor(
     dao: DebtDAO,
     version: VersionDAO,
     private val retrofit: DebtResource,
-    private val account: AccountManager
-) : AbstractPageWorker<Debt, DebtVO>(context, params, dao, version) {
+    account: AccountManager
+) : AbstractPageWorker<Debt, DebtVO>(context, params, "debt", version, dao, account) {
     override fun toVO(dto: Debt): DebtVO = dto.toVO()
 
-    override fun getVersion(): Int = 1
+    override fun getRemoteVersion(): String = retrofit.version(account.getAuthToken()).name
 
-    override fun sync(version: Int, offset: Int, numberOfRows: Int): Call<Page<Debt>> =
-        retrofit.sync("Bearer " + account.getAuthToken(), version, offset, numberOfRows)
+    override fun getAll(token: String, version: Int, offset: Int, numberOfRows: Int): Call<Page<Debt>> =
+        retrofit.sync(token, version, offset, numberOfRows)
+
+    override suspend fun doWork(): Result {
+        dao.clean()
+
+        return super.doWork()
+    }
 
     class Factory @Inject constructor(
         private val dao: Provider<DebtDAO>,

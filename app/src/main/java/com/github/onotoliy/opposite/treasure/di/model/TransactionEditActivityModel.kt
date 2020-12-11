@@ -66,7 +66,7 @@ class TransactionEditActivityModel @Inject constructor(
                     transactionDate.postValue(transaction.creationDate.fromISO().toShortDate())
                     person.postValue(transaction.person)
                     event.postValue(transaction.event)
-                    type.postValue(TransactionType.valueOf(transaction.type).run { OptionVO(name, label) })
+                    type.postValue(transaction.type.run { OptionVO(name, label) })
                     author.postValue(OptionVO(uuid = manager.getUUID(), name = manager.getName()))
                 }
             }
@@ -81,7 +81,7 @@ class TransactionEditActivityModel @Inject constructor(
                 cash = cash.value ?: "",
                 person = person.value,
                 event = event.value,
-                type = type.value?.uuid ?: "",
+                type = type.value?.let { TransactionType.valueOf(it.uuid) } ?: TransactionType.NONE,
                 creationDate = creationDate.value ?: "",
                 author = author.value ?: OptionVO()
             )

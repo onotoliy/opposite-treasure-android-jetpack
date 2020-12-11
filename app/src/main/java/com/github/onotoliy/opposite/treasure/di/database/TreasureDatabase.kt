@@ -15,6 +15,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.*
     ],
     version = 1
 )
+@TypeConverters(Converters::class)
 abstract class TreasureDatabase : RoomDatabase() {
     abstract fun versionDAO(): VersionDAO
     abstract fun cashboxDAO(): CashboxDAO

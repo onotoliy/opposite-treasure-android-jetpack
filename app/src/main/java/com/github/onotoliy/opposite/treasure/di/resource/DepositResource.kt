@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.resource
 
 import com.github.onotoliy.opposite.data.Deposit
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
@@ -19,5 +20,6 @@ interface DepositResource {
         @Query("numberOfRows") numberOfRows: Int
     ): Call<Page<Deposit>>
 
-    fun version(): Int
+    @GET("/api/treasure/v1/deposit/version")
+    fun version(@Header("Authorization") token: String): Option
 }

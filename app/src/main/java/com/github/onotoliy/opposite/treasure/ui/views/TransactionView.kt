@@ -21,7 +21,7 @@ fun TransactionView(data: TransactionVO, navigateTo: (Screen) -> Unit) {
         Text(text = data.name, style = BODY)
 
         Text(text = stringResource(id = R.string.transaction_type), style = H6_BOLD)
-        Text(text = TransactionType.valueOf(data.type).label, style = BODY)
+        Text(text = data.type.label, style = BODY)
 
         Text(text = stringResource(id = R.string.transaction_cash), style = H6_BOLD)
         Text(text = data.cash, style = BODY)

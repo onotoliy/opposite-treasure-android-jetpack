@@ -1,10 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 
 @Dao
@@ -30,6 +27,12 @@ interface TransactionDAO: WriteDAO<TransactionVO> {
     @Query("SELECT COUNT(*) FROM treasure_transaction WHERE person_uuid = :event")
     fun countByEvent(event: String): LiveData<Long>
 
+    @Query("SELECT * FROM treasure_transaction where local = 1")
+    override fun getAllLocal(): List<TransactionVO>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: TransactionVO)
+
+    @Query("DELETE FROM treasure_transaction")
+    override fun clean()
 }

@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
+import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 
 @Dao
 interface DebtDAO: WriteDAO<DebtVO> {
@@ -21,6 +22,12 @@ interface DebtDAO: WriteDAO<DebtVO> {
     @Query("SELECT COUNT(*) FROM treasure_debt WHERE event_uuid = :event")
     fun countByEvent(event: String): LiveData<Long>
 
+    @Query("SELECT * FROM treasure_debt")
+    override fun getAllLocal(): List<DebtVO>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun replace(vo: DebtVO)
+
+    @Query("DELETE FROM treasure_debt")
+    override fun clean()
 }

@@ -1,13 +1,10 @@
 package com.github.onotoliy.opposite.treasure.di.resource
 
-import com.github.onotoliy.opposite.data.Event
+import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface TransactionResource {
 
@@ -19,5 +16,12 @@ interface TransactionResource {
         @Query("numberOfRows") numberOfRows: Int
     ): Call<Page<Transaction>>
 
-    fun version(): Int
+    @POST("/api/treasure/v1/transaction")
+    fun post(@Header("Authorization") token: String, @Body dto: Transaction): Call<Transaction>
+
+    @PUT("/api/treasure/v1/transaction")
+    fun put(@Header("Authorization") token: String, @Body dto: Transaction): Call<Transaction>
+
+    @GET("/api/treasure/v1/transaction/version")
+    fun version(@Header("Authorization") token: String): Option
 }

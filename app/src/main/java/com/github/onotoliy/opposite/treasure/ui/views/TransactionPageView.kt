@@ -38,7 +38,7 @@ fun TransactionPageViewVO(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(modifier = Modifier.weight(4f)) {
-                    when (TransactionType.valueOf(it.type)) {
+                    when (it.type) {
                         TransactionType.NONE, TransactionType.WRITE_OFF -> IconDown()
                         TransactionType.COST, TransactionType.PAID -> IconDown()
                         TransactionType.CONTRIBUTION, TransactionType.EARNED -> IconUp()

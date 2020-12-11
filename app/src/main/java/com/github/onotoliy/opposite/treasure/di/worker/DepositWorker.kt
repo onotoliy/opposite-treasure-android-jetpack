@@ -22,14 +22,14 @@ class DepositWorker @Inject constructor(
     dao: DepositDAO,
     version: VersionDAO,
     private val retrofit: DepositResource,
-    private val account: AccountManager
-) : AbstractPageWorker<Deposit, DepositVO>(context, params, dao, version) {
+    account: AccountManager
+) : AbstractPageWorker<Deposit, DepositVO>(context, params, "deposit", version, dao, account) {
     override fun toVO(dto: Deposit): DepositVO = dto.toVO()
 
-    override fun getVersion(): Int = 1
+    override fun getRemoteVersion(): String = retrofit.version(account.getAuthToken()).name
 
-    override fun sync(version: Int, offset: Int, numberOfRows: Int): Call<Page<Deposit>> =
-        retrofit.sync("Bearer " + account.getAuthToken(), version, offset, numberOfRows)
+    override fun getAll(token: String, version: Int, offset: Int, numberOfRows: Int): Call<Page<Deposit>> =
+        retrofit.sync(token, version, offset, numberOfRows)
 
     class Factory @Inject constructor(
         private val dao: Provider<DepositDAO>,

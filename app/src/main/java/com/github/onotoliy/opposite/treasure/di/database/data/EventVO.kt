@@ -28,7 +28,11 @@ data class EventVO(
     @ColumnInfo(name = "deletion_date", typeAffinity = ColumnInfo.TEXT)
     override var deletionDate: String? = null,
     @Embedded(prefix = "author_")
-    var author: OptionVO = OptionVO()
+    var author: OptionVO = OptionVO(),
+    @ColumnInfo(name = "local", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
+    var local: Int = 0,
+    @ColumnInfo(name = "updated", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
+    var updated: Int = 0
 ) : HasUUID, HasName, HasCreationDate, HasDeletionDate
 
 fun Event.toVO(): EventVO = EventVO(
@@ -40,4 +44,15 @@ fun Event.toVO(): EventVO = EventVO(
     creationDate = creationDate,
     deletionDate = deletionDate,
     author = author.toVO()
+)
+
+fun EventVO.toDTO(): Event = Event(
+    uuid = uuid,
+    total = total,
+    contribution = contribution,
+    name = name,
+    deadline = deadline,
+    creationDate = creationDate,
+    deletionDate = deletionDate,
+    author = author.toDTO()
 )
