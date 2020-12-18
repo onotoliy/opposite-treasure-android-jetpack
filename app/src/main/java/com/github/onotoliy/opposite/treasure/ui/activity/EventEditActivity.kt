@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,7 @@ import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
-class EventEditActivity : AppCompatActivity()  {
+class EventEditActivity : AppCompatActivity() {
 
     @Inject lateinit var model: EventEditActivityModel
 
@@ -36,7 +37,7 @@ class EventEditActivity : AppCompatActivity()  {
 
         inject()
 
-        model.loading(intent.pk ?: "")
+        model.loading(intent.pk)
 
         setContent {
             TreasureTheme {
@@ -61,16 +62,19 @@ class EventEditActivity : AppCompatActivity()  {
 
 @Composable
 fun EventEditScreen(model: EventEditActivityModel) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.name.observe() ?: "",
             label = stringResource(id = R.string.event_edit_name),
             onValueChange = { model.name.postValue(it) },
             textStyle = TextStyleLeft
         )
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp) ,
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.contribution.observe() ?: "",
             label = stringResource(id = R.string.event_edit_contribution),
             onValueChange = { model.contribution.postValue(it) },
@@ -78,7 +82,7 @@ fun EventEditScreen(model: EventEditActivityModel) {
             textStyle = TextStyleLeft
         )
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.total.observe() ?: "",
             label = stringResource(id = R.string.event_edit_total),
             onValueChange = { model.total.postValue(it) },
@@ -86,7 +90,7 @@ fun EventEditScreen(model: EventEditActivityModel) {
             textStyle = TextStyleLeft
         )
         CalendarField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.deadline.observe() ?: "",
             label = stringResource(id = R.string.event_edit_deadline),
             onValueChange = { model.deadline.postValue(it) },

@@ -25,7 +25,9 @@ import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
 import com.github.onotoliy.opposite.treasure.utils.*
+import com.google.firebase.FirebaseApp
 import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import java.io.IOException
 import javax.inject.Inject
 
@@ -56,6 +58,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun getToken() {
+        FirebaseMessaging.getInstance().subscribeToTopic("channel_id")
+
         Thread {
             try {
                 val newToken = FirebaseInstanceId.getInstance().getToken("827738396697", "FCM")

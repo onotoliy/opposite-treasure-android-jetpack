@@ -23,7 +23,12 @@ fun Menu(
         scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) }
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = { navigateTo(Screen.LoadingScreen) } ) {
+                        IconCached()
+                    }
+                }
             )
         },
         floatingActionButton = floatingActionButton,

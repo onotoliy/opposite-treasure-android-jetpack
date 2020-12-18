@@ -41,9 +41,9 @@ class ResourceModule {
         .client(
             OkHttpClient
                 .Builder()
-                .writeTimeout(2, TimeUnit.MINUTES)
-                .connectTimeout(2, TimeUnit.MINUTES)
-                .readTimeout(2, TimeUnit.MINUTES)
+                .writeTimeout(3, TimeUnit.MINUTES)
+                .connectTimeout(3, TimeUnit.MINUTES)
+                .readTimeout(3, TimeUnit.MINUTES)
                 .build()
         )
         .build()

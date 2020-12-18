@@ -43,7 +43,7 @@ class EventActivity : AppCompatActivity() {
                     floatingActionButton = {
                         FloatingActionButton(
                             icon = { IconEdit() },
-                            onClick = { }
+                            onClick = { navigateTo(Screen.EventEditScreen(intent.pk)) }
                         )
                     },
                     bodyContent = { EventScreen(model, ::navigateTo) },

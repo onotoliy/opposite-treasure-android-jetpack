@@ -4,11 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
 class TransactionPageActivityModel @Inject constructor(
-    private val dao: TransactionDAO
+    private val dao: TransactionRepository
 ): ViewModel() {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(false)

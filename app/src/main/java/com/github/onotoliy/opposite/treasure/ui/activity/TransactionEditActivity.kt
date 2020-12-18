@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
@@ -65,9 +65,12 @@ class TransactionEditActivity : AppCompatActivity()  {
 
 @Composable
 fun TransactionEditScreen(model: TransactionEditActivityModel) {
-    Column {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         SelectionField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.type.observe() ?: OptionVO(),
             label = stringResource(id = R.string.transaction_edit_type),
             onValueChange = { model.type.postValue(it) },
@@ -75,7 +78,7 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             list = TransactionType.values().map { OptionVO(it.name, it.label) }
         )
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp) ,
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp) ,
             value = model.name.observe() ?: "",
             label = stringResource(id = R.string.transaction_edit_name),
             onValueChange = { model.name.postValue(it) },
@@ -83,7 +86,7 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             textStyle = TextStyleLeft
         )
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.cash.observe() ?: "",
             label = stringResource(id = R.string.transaction_edit_cash),
             onValueChange = { model.cash.postValue(it) },
@@ -91,25 +94,25 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             textStyle = TextStyleLeft
         )
         AutocompleteField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.person.observe() ?: OptionVO(),
             label = stringResource(id = R.string.transaction_edit_person),
             onValueChange = { model.person.postValue(it) },
             textStyle = TextStyleLeft,
-            list = model.persons.observe() ?: listOf(),
-            search = { model.getPersons(it) }
+            onSearchValue = {
+                model.getPersons(it)
+            }
         )
         AutocompleteField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.event.observe() ?: OptionVO(),
             label = stringResource(id = R.string.transaction_edit_event),
             onValueChange = { model.event.postValue(it) },
             textStyle = TextStyleLeft,
-            list = model.events.observe() ?: listOf(),
-            search = { model.getEvents(it) }
+            onSearchValue = { model.getEvents(it) }
         )
         CalendarField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.transactionDate.observe() ?: "",
             label = stringResource(id = R.string.transaction_edit_date),
             onValueChange = { model.transactionDate.postValue(it) },

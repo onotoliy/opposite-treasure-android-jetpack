@@ -11,46 +11,6 @@ import java.util.*
 
 const val ACCOUNT_TYPE = "com.github.onotoliy.opposite.treasure"
 
-fun AccountManager.getNewAuthToken(): String {
-    val account = getAccount()
-    val exp: String? = getUserData(account, "exp")
-    val token: String? = getUserData(account, "token")
-
-    if (exp.isNullOrEmpty() || token.isNullOrEmpty()) {
-        Log.i("AccountManager", "exp or token is null $exp/$token")
-
-        return getAuthToken()?.let {
-            val bundle = it.userdata()
-
-            setUserData(account, "exp", bundle.getString("exp"))
-            setUserData(account, "token", it)
-
-            it
-        } ?: throw IllegalArgumentException()
-    } else {
-        val millis: Long = exp.toLong() * 1_000 + 180_000
-
-        Log.i("AccountManager", "Millis $millis. Current ${System.currentTimeMillis()}, Exp $exp")
-
-        return if (millis > System.currentTimeMillis()) {
-            Log.i("AccountManager", "Hashed token")
-
-            token
-        } else {
-            getAuthToken()?.let {
-                Log.i("AccountManager", "Get new token")
-
-                val bundle = it.userdata()
-
-                setUserData(account, "exp", bundle.getString("exp"))
-                setUserData(account, "token", it)
-
-                it
-            } ?: throw IllegalArgumentException()
-        }
-    }
-}
-
 fun AccountManager.addAccount(username: String, password: String, token: String) =
     addAccountExplicitly(Account(username, ACCOUNT_TYPE), password, token.userdata())
 

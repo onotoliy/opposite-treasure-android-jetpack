@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,9 @@ fun EventPageViewVO(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(modifier = Modifier.weight(4f)) {
+                    if (it.local == 1) {
+                        IconSmartphone(tint = Color.Red)
+                    }
                     IconEvents()
                     Text(text = it.name, softWrap = false, style = H6_BOLD)
                 }

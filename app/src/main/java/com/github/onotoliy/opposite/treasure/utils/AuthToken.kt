@@ -52,9 +52,9 @@ private val retrofit: Retrofit
         .Builder()
         .client(OkHttpClient
             .Builder()
-            .writeTimeout(1, TimeUnit.MINUTES)
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(3, TimeUnit.MINUTES)
+            .connectTimeout(3, TimeUnit.MINUTES)
+            .readTimeout(3, TimeUnit.MINUTES)
             .connectionPool(ConnectionPool(15, 5, TimeUnit.MINUTES))
             .build()
         )

@@ -48,7 +48,7 @@ fun SelectionField(
                         val height = size.height
 
                         drawLine(
-                            color = Color.Black,
+                            color = Color.LightGray,
                             start = Offset(0.0f, height),
                             end = Offset(width, height),
                             strokeWidth = Stroke.DefaultMiter

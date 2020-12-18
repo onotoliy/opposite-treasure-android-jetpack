@@ -7,17 +7,24 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
+import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 
 @Dao
 interface DepositDAO: WriteDAO<DepositVO> {
     @Query("SELECT * FROM treasure_deposit WHERE user_uuid = :pk")
-    fun get(pk: String): LiveData<DepositVO?>
+    override fun get(pk: String): LiveData<DepositVO>
+
+    @Query("SELECT * FROM treasure_deposit WHERE lower(user_name) LIKE :name")
+    fun getAll(name: String): LiveData<List<DepositVO>>
+
+    @Query("SELECT * FROM treasure_deposit")
+    fun getAll(): LiveData<List<DepositVO>>
 
     @Query("SELECT * FROM treasure_deposit LIMIT :offset, :numberOfRows")
-    fun getAll(offset: Int, numberOfRows: Int): LiveData<List<DepositVO>>
+    override fun getAll(offset: Int, numberOfRows: Int): LiveData<List<DepositVO>>
 
     @Query("SELECT COUNT(*) FROM treasure_deposit")
-    fun count(): LiveData<Long>
+    override fun count(): LiveData<Long>
 
     @Query("SELECT * FROM treasure_deposit")
     override fun getAllLocal(): List<DepositVO>

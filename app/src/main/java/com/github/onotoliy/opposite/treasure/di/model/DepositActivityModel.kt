@@ -9,6 +9,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class DepositActivityModel @Inject constructor(
     private val depositDAO: DepositDAO,
     private val cashboxDAO: CashboxDAO,
     private val debtDAO: DebtDAO,
-    private val transactionDAO: TransactionDAO,
+    private val transactionDAO: TransactionRepository,
 ) {
     lateinit var pk: String
 

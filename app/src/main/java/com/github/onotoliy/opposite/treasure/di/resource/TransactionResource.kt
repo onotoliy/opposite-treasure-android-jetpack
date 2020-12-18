@@ -11,7 +11,7 @@ interface TransactionResource {
     @GET("/api/treasure/v1/transaction/sync")
     fun sync(
         @Header("Authorization") token: String,
-        @Query("version") version: Int,
+        @Query("version") version: Long,
         @Query("offset") offset: Int,
         @Query("numberOfRows") numberOfRows: Int
     ): Call<Page<Transaction>>
@@ -23,5 +23,5 @@ interface TransactionResource {
     fun put(@Header("Authorization") token: String, @Body dto: Transaction): Call<Transaction>
 
     @GET("/api/treasure/v1/transaction/version")
-    fun version(@Header("Authorization") token: String): Option
+    fun version(@Header("Authorization") token: String): Call<Option>
 }

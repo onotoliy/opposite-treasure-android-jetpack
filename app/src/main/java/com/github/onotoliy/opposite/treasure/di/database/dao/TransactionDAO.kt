@@ -7,13 +7,13 @@ import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 @Dao
 interface TransactionDAO: WriteDAO<TransactionVO> {
     @Query("SELECT * FROM treasure_transaction WHERE uuid = :pk")
-    fun get(pk: String): LiveData<TransactionVO>
+    override fun get(pk: String): LiveData<TransactionVO>
 
     @Query("SELECT * FROM treasure_transaction LIMIT :offset, :numberOfRows")
-    fun getAll(offset: Int, numberOfRows: Int): LiveData<List<TransactionVO>>
+    override fun getAll(offset: Int, numberOfRows: Int): LiveData<List<TransactionVO>>
 
     @Query("SELECT COUNT(*) FROM treasure_transaction")
-    fun count(): LiveData<Long>
+    override fun count(): LiveData<Long>
 
     @Query("SELECT * FROM treasure_transaction WHERE person_uuid = :person LIMIT :offset, :numberOfRows")
     fun getByPersonAll(person: String, offset: Int, numberOfRows: Int): LiveData<List<TransactionVO>>

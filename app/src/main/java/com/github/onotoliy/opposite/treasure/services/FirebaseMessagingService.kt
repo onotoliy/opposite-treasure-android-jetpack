@@ -4,15 +4,13 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.github.onotoliy.opposite.treasure.R
-import com.github.onotoliy.opposite.treasure.di.worker.*
 import com.google.firebase.messaging.RemoteMessage
 
 class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessagingService() {
@@ -51,26 +49,19 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
         val builder = NotificationCompat.Builder(this, channelID)
             .setAutoCancel(true)
             .setColor(ContextCompat.getColor(this, R.color.design_default_color_surface))
-            .setContentTitle(getString(R.string.app_name))
+            .setContentTitle(message.notification?.title)
             .setContentText(message.notification?.body)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .setBigContentTitle(message.notification?.title)
+                .bigText(message.notification?.body))
             .setDefaults(Notification.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setLargeIcon(BitmapFactory
+                .decodeResource(applicationContext.resources, R.drawable.ic_baseline_cached_24))
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
             .setAutoCancel(true)
 
         nm.notify(1000, builder.build())
-
-        WorkManager
-            .getInstance(applicationContext)
-            .cancelAllWork()
-
-        WorkManager
-            .getInstance(applicationContext)
-            .beginWith(OneTimeWorkRequestBuilder<CashboxWorker>().build())
-            .then(OneTimeWorkRequestBuilder<EventWorker>().build())
-            .then(OneTimeWorkRequestBuilder<TransactionWorker>().build())
-            .then(OneTimeWorkRequestBuilder<DepositWorker>().build())
-            .then(OneTimeWorkRequestBuilder<DebtWorker>().build())
-            .enqueue()
     }
 }

@@ -63,7 +63,7 @@ fun CalendarField(
                     val height = size.height
 
                     drawLine(
-                        color = Color.Gray,
+                        color = Color.LightGray,
                         start = Offset(0.0f, height),
                         end = Offset(width, height),
                         strokeWidth = Stroke.DefaultMiter
@@ -90,7 +90,7 @@ fun CalendarField(
             Text(
                 modifier = Modifier.padding(16.dp, 0.dp),
                 text = selected.value,
-                fontSize = TextUnit.Em(4),
+                fontSize = TextUnit.Em(5),
                 textAlign = TextAlign.Left,
                 color = Color.Black
             )

@@ -1,13 +1,13 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
 class EventPageActivityModel @Inject constructor(
-    private val dao: EventDAO
+    private val dao: EventRepository
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)

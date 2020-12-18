@@ -1,23 +1,27 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import android.accounts.AccountManager
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
+import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import javax.inject.Inject
 
 class TransactionEditActivityModel @Inject constructor(
-    private val transactionDAO: TransactionDAO,
-    private val depositDAO: DepositDAO,
-    private val eventDAO: EventDAO,
+    private val transactionDAO: TransactionRepository,
+    private val depositDAO: DepositRepository,
+    private val eventDAO: EventRepository,
     private val debtDAO: DebtDAO,
     private val manager: AccountManager
 ) {
@@ -92,11 +96,11 @@ class TransactionEditActivityModel @Inject constructor(
 
     }
 
-    fun getPersons(name: String? = null): List<OptionVO> {
-        return emptyList()
+    fun getPersons(name: String? = null): LiveData<List<DepositVO>> {
+        return depositDAO.getAll(name)
     }
 
-    fun getEvents(name: String? = null): List<OptionVO> {
-        return emptyList()
+    fun getEvents(name: String? = null): LiveData<List<EventVO>>  {
+        return eventDAO.getAll("$name")
     }
 }
