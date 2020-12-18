@@ -1,15 +1,16 @@
 package com.github.onotoliy.opposite.treasure.di.database
 
 import com.github.onotoliy.opposite.treasure.di.database.dao.*
-import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
-import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
-import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
-import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.*
 import dagger.Module
 import dagger.Provides
 
 @Module
 class DatabaseModule(private val database: TreasureDatabase) {
+
+    @Provides
+    fun providesCashboxRepository(): CashboxRepository =
+        CashboxRepository(providesCashboxDAO())
 
     @Provides
     fun providesDebtRepository(): DebtRepository =

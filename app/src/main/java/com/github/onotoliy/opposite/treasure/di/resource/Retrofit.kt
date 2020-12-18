@@ -1,14 +1,19 @@
 package com.github.onotoliy.opposite.treasure.di.resource
 
 import android.accounts.AccountManager
-import com.github.onotoliy.opposite.data.Debt
-import com.github.onotoliy.opposite.data.Deposit
-import com.github.onotoliy.opposite.data.Event
-import com.github.onotoliy.opposite.data.Transaction
+import com.github.onotoliy.opposite.data.*
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.utils.getAuthToken
 import retrofit2.Response
 import javax.inject.Inject
+
+class CashboxRetrofit @Inject constructor(
+    private val retrofit: CashboxResource,
+    private val account: AccountManager
+) {
+    fun get(): Response<Cashbox> =
+        retrofit.get("Bearer " + account.getAuthToken()).execute()
+}
 
 class DebtRetrofit @Inject constructor(
     private val retrofit: DebtResource,

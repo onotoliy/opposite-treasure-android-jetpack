@@ -1,12 +1,10 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import android.accounts.AccountManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO

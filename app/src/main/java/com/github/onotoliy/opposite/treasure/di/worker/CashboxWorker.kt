@@ -1,15 +1,12 @@
 package com.github.onotoliy.opposite.treasure.di.worker
 
-import android.accounts.AccountManager
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
-import com.github.onotoliy.opposite.treasure.di.database.dao.CashboxDAO
-import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
-import com.github.onotoliy.opposite.treasure.di.resource.CashboxResource
+import com.github.onotoliy.opposite.treasure.di.database.repositories.CashboxRepository
+import com.github.onotoliy.opposite.treasure.di.resource.CashboxRetrofit
 import com.github.onotoliy.opposite.treasure.utils.failure
-import com.github.onotoliy.opposite.treasure.utils.getAuthToken
 import com.github.onotoliy.opposite.treasure.utils.success
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -18,9 +15,8 @@ import javax.inject.Provider
 class CashboxWorker @Inject constructor(
     context: Context,
     params: WorkerParameters,
-    private val dao: CashboxDAO,
-    private val retrofit: CashboxResource,
-    private val account: AccountManager
+    private val repository: CashboxRepository,
+    private val retrofit: CashboxRetrofit
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -35,7 +31,7 @@ class CashboxWorker @Inject constructor(
 
     private fun syncObject(builder: Data.Builder): Boolean {
         try {
-            val response = retrofit.get("Bearer " + account.getAuthToken()).execute()
+            val response = retrofit.get()
             val page = response.body()
 
             if (!response.isSuccessful || page == null) {
@@ -46,7 +42,7 @@ class CashboxWorker @Inject constructor(
                 return false
             }
 
-            dao.replace(CashboxVO(deposit = page.deposit, lastUpdateDate = page.lastUpdateDate))
+            repository.replace(deposit = page.deposit, lastUpdateDate = page.lastUpdateDate)
 
             return true
         } catch (exc: SocketTimeoutException) {
@@ -55,18 +51,10 @@ class CashboxWorker @Inject constructor(
     }
 
     class Factory @Inject constructor(
-        private val dao: Provider<CashboxDAO>,
-        private val retrofit: Provider<CashboxResource>,
-        private val account: Provider<AccountManager>
+        private val dao: Provider<CashboxRepository>,
+        private val retrofit: Provider<CashboxRetrofit>,
     ) : ChildWorkerFactory {
-        override fun create(context: Context, params: WorkerParameters): CoroutineWorker {
-            return CashboxWorker(
-                context,
-                params,
-                dao.get(),
-                retrofit.get(),
-                account.get()
-            )
-        }
+        override fun create(context: Context, params: WorkerParameters): CoroutineWorker =
+            CashboxWorker(context, params, dao.get(), retrofit.get())
     }
 }

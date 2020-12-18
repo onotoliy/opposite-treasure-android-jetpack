@@ -2,7 +2,6 @@ package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage

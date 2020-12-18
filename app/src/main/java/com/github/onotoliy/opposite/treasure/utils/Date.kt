@@ -23,3 +23,7 @@ fun String.fromISO(): Date {
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(v)!!
     }
 }
+
+fun String.milliseconds(): Int = (fromISO().time / 1_000).toInt()
+
+fun milliseconds(): Int = (Date().time / 1_000).toInt()

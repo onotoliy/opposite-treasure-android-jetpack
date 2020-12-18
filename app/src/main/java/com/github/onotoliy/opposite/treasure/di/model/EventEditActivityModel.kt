@@ -61,8 +61,8 @@ class EventEditActivityModel @Inject constructor(
                     creationDate = creationDate.value ?: "",
                     author = author.value ?: OptionVO(),
                     local = 1,
-                    updated = 0,
-                    deletionDate = null
+                    deletionDate = null,
+                    milliseconds = milliseconds()
                 )
             )
         }

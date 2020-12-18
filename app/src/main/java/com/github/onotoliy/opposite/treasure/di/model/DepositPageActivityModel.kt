@@ -1,13 +1,13 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import javax.inject.Inject
 
 class DepositPageActivityModel @Inject constructor(
-    private val dao: DepositDAO
+    private val dao: DepositRepository
 ) {
 
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)

@@ -10,6 +10,7 @@ import com.github.onotoliy.opposite.data.core.HasCreationDate
 import com.github.onotoliy.opposite.data.core.HasDeletionDate
 import com.github.onotoliy.opposite.data.core.HasName
 import com.github.onotoliy.opposite.data.core.HasUUID
+import com.github.onotoliy.opposite.treasure.utils.milliseconds
 
 @Entity(tableName = "treasure_transaction")
 data class TransactionVO(
@@ -36,8 +37,8 @@ data class TransactionVO(
     var person: OptionVO? = null,
     @ColumnInfo(name = "local", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
     var local: Int = 0,
-    @ColumnInfo(name = "updated", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
-    var updated: Int = 0
+    @ColumnInfo(name = "milliseconds", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
+    var milliseconds: Int = 0
 ) : HasUUID, HasName, HasCreationDate, HasDeletionDate
 
 fun Transaction.toVO(): TransactionVO = TransactionVO(
@@ -50,7 +51,8 @@ fun Transaction.toVO(): TransactionVO = TransactionVO(
     person = person?.toVO(),
     cash = cash,
     type = type,
-    transactionDate = transactionDate
+    transactionDate = transactionDate,
+    milliseconds = creationDate.milliseconds()
 )
 
 fun TransactionVO.toDTO(): Transaction = Transaction(

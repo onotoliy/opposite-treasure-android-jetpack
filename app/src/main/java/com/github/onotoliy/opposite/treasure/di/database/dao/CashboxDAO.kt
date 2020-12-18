@@ -12,7 +12,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
 interface CashboxDAO {
 
     @Query("SELECT * FROM treasure_cashbox")
-    fun get(): LiveData<CashboxVO?>
+    fun get(): LiveData<CashboxVO>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun replace(vo: CashboxVO)
