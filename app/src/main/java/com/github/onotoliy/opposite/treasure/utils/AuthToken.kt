@@ -1,7 +1,7 @@
 package com.github.onotoliy.opposite.treasure.utils
 
 import android.accounts.AccountManager
-import com.github.onotoliy.opposite.treasure.di.resource.KeycloakResource
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.KeycloakRetrofit
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.ConnectionPool
@@ -44,8 +44,8 @@ fun AccountManager.getAuthTokenOrNull(): String? {
     return keycloak.auth(username = username, password = password).execute().body()?.access_token
 }
 
-private val keycloak: KeycloakResource
-    get() = retrofit.create(KeycloakResource::class.java)
+private val keycloak: KeycloakRetrofit
+    get() = retrofit.create(KeycloakRetrofit::class.java)
 
 private val retrofit: Retrofit
     get() = Retrofit

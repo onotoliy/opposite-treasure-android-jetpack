@@ -10,7 +10,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.toDTO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
-import com.github.onotoliy.opposite.treasure.di.resource.EventRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.resource.EventResource
 import com.github.onotoliy.opposite.treasure.utils.setFinished
 import javax.inject.Inject
 import javax.inject.Provider
@@ -19,13 +19,13 @@ class EventWorker @Inject constructor(
     context: Context,
     params: WorkerParameters,
     repository: EventRepository,
-    retrofit: EventRetrofit
+    retrofit: EventResource
 ) : AbstractPageWorker<Event, EventVO, EventDAO>(context, params, repository, retrofit) {
     override fun toVO(dto: Event): EventVO = dto.toVO()
 
     override fun sendAllLocal(builder: Data.Builder): Boolean {
         repository.getAllLocal().forEach { vo ->
-            val response = retrofit.saveOrUpdate(vo.toDTO())
+            val response = resource.saveOrUpdate(vo.toDTO())
 
             if (!response.isSuccessful || response.body()?.uuid != vo.uuid) {
                 builder.putString("uuid", vo.uuid)
@@ -41,7 +41,7 @@ class EventWorker @Inject constructor(
 
     class Factory @Inject constructor(
         private val repository: Provider<EventRepository>,
-        private val retrofit: Provider<EventRetrofit>
+        private val retrofit: Provider<EventResource>
     ) : ChildWorkerFactory {
         override fun create(context: Context, params: WorkerParameters): CoroutineWorker =
             EventWorker(context, params, repository.get(), retrofit.get())

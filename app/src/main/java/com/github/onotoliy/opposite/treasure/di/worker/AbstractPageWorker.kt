@@ -8,7 +8,7 @@ import com.github.onotoliy.opposite.data.core.HasUUID
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.dao.WriteDAO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.AbstractRepository
-import com.github.onotoliy.opposite.treasure.di.resource.Retrofit
+import com.github.onotoliy.opposite.treasure.di.restful.resource.Resource
 import com.github.onotoliy.opposite.treasure.utils.*
 import retrofit2.Response
 import java.net.SocketTimeoutException
@@ -17,7 +17,7 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
     context: Context,
     params: WorkerParameters,
     protected val repository: AbstractRepository<E, DAO>,
-    protected val retrofit: Retrofit<D>
+    protected val resource: Resource<D>
 ) : CoroutineWorker(context, params) {
 
     protected abstract fun toVO(dto: D): E
@@ -26,7 +26,7 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
 
     override suspend fun doWork(): Result {
         val localVersion = repository.getVersion()
-        val remoteVersion = retrofit.getVersion()
+        val remoteVersion = resource.getVersion()
 
         val builder: Data.Builder = Data.Builder()
             .setLocalVersion(localVersion)
@@ -54,7 +54,7 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
         builder: Data.Builder, version: Long, offset: Int, numberOfRows: Int
     ): Boolean {
         try {
-            val response: Response<Page<D>> = retrofit.getAll(version, offset, numberOfRows)
+            val response: Response<Page<D>> = resource.getAll(version, offset, numberOfRows)
             val page = response.body()
 
             if (!response.isSuccessful || page == null) {

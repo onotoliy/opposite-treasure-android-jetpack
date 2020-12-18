@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.github.onotoliy.opposite.treasure.di.database.repositories.CashboxRepository
-import com.github.onotoliy.opposite.treasure.di.resource.CashboxRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.resource.CashboxResource
 import com.github.onotoliy.opposite.treasure.utils.failure
 import com.github.onotoliy.opposite.treasure.utils.success
 import java.net.SocketTimeoutException
@@ -16,7 +16,7 @@ class CashboxWorker @Inject constructor(
     context: Context,
     params: WorkerParameters,
     private val repository: CashboxRepository,
-    private val retrofit: CashboxRetrofit
+    private val retrofit: CashboxResource
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
@@ -52,7 +52,7 @@ class CashboxWorker @Inject constructor(
 
     class Factory @Inject constructor(
         private val dao: Provider<CashboxRepository>,
-        private val retrofit: Provider<CashboxRetrofit>,
+        private val retrofit: Provider<CashboxResource>,
     ) : ChildWorkerFactory {
         override fun create(context: Context, params: WorkerParameters): CoroutineWorker =
             CashboxWorker(context, params, dao.get(), retrofit.get())

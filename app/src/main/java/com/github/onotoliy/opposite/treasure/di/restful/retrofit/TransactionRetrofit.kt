@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.di.resource
+package com.github.onotoliy.opposite.treasure.di.restful.retrofit
 
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.Transaction
@@ -6,7 +6,7 @@ import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
 import retrofit2.http.*
 
-interface TransactionResource {
+interface TransactionRetrofit {
 
     @GET("/api/treasure/v1/transaction/sync")
     fun sync(

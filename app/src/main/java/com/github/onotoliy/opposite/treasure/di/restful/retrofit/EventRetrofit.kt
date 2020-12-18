@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.di.resource
+package com.github.onotoliy.opposite.treasure.di.restful.retrofit
 
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
@@ -6,7 +6,7 @@ import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
 import retrofit2.http.*
 
-interface EventResource {
+interface EventRetrofit {
 
     @GET("/api/treasure/v1/event/sync")
     fun sync(

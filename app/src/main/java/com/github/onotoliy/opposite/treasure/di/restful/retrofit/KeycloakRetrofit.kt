@@ -1,4 +1,4 @@
-package com.github.onotoliy.opposite.treasure.di.resource
+package com.github.onotoliy.opposite.treasure.di.restful.retrofit
 
 import com.github.onotoliy.opposite.treasure.utils.AccessToken
 import retrofit2.Call
@@ -6,7 +6,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface KeycloakResource {
+interface KeycloakRetrofit {
 
     @FormUrlEncoded
     @POST("/auth/realms/treasure/protocol/openid-connect/token")

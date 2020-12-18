@@ -12,7 +12,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.toDTO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
-import com.github.onotoliy.opposite.treasure.di.resource.TransactionRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.resource.TransactionResource
 import com.github.onotoliy.opposite.treasure.utils.setFinished
 import javax.inject.Inject
 import javax.inject.Provider
@@ -21,7 +21,7 @@ class TransactionWorker @Inject constructor(
     context: Context,
     params: WorkerParameters,
     repository: TransactionRepository,
-    retrofit: TransactionRetrofit
+    retrofit: TransactionResource
 ) : AbstractPageWorker<Transaction, TransactionVO, TransactionDAO>(context, params, repository, retrofit) {
 
     override fun toVO(dto: Transaction): TransactionVO = dto.toVO()
@@ -40,7 +40,7 @@ class TransactionWorker @Inject constructor(
                 }
             }
             .forEach { vo ->
-                val response = retrofit.saveOrUpdate(vo.toDTO())
+                val response = resource.saveOrUpdate(vo.toDTO())
 
                 if (response.isSuccessful && response.body()?.uuid == vo.uuid) {
                     Log.i("TransactionWorker", "Success upload transaction: $vo")
@@ -58,7 +58,7 @@ class TransactionWorker @Inject constructor(
 
     class Factory @Inject constructor(
         private val repository: Provider<TransactionRepository>,
-        private val retrofit: Provider<TransactionRetrofit>
+        private val retrofit: Provider<TransactionResource>
     ) : ChildWorkerFactory {
         override fun create(context: Context, params: WorkerParameters): CoroutineWorker =
             TransactionWorker(context, params, repository.get(), retrofit.get())
