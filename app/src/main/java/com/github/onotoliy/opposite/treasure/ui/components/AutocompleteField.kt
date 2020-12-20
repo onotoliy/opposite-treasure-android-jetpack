@@ -11,24 +11,81 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.github.onotoliy.opposite.data.core.HasName
-import com.github.onotoliy.opposite.data.core.HasUUID
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import java.util.*
 import kotlin.concurrent.schedule
 
 @Composable
-fun <T> AutocompleteField(
+fun AutocompleteField(
+    label: String,
+    value: OptionVO = OptionVO(),
+    list: List<OptionVO> = listOf(),
+    modifier: Modifier = Modifier,
+    textStyle: TextStyle = TextStyleLeft,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    onValueChange: (OptionVO) -> Unit,
+    onSearchValue: (String?) -> Unit
+) {
+    val timer = remember { mutableStateOf("") }
+    val selected = remember { mutableStateOf(value) }
+    val expanded = remember { mutableStateOf(false) }
+
+    DropdownMenu(
+        toggle = {
+            TextField(
+                label = label,
+                modifier = modifier,
+                textStyle = textStyle,
+                leadingIcon = leadingIcon,
+                value = selected.value.name,
+                onValueChange = {
+                    timer.value = it
+                    selected.value = OptionVO("", it)
+                    expanded.value = false
+
+                    Timer().schedule(2000) {
+                        if (timer.value.isNotEmpty()) {
+                            onSearchValue(timer.value)
+                            timer.value = ""
+                            expanded.value = true
+                        }
+                    }
+                }
+            )
+        },
+        dropdownModifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
+        expanded = expanded.value,
+        onDismissRequest = { expanded.value = false }
+    ) {
+        list.forEach {
+            DropdownMenuItem(
+                modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
+                onClick = {
+                    selected.value = it
+                    expanded.value = false
+                    onValueChange(it)
+                }
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
+                    text = it.name
+                )
+            }
+        }
+    }
+}
+
+/*
+@Composable
+fun AutocompleteField(
     label: String,
     value: OptionVO = OptionVO(),
     modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyleLeft,
     leadingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (OptionVO) -> Unit,
-    onSearchValue: (String?) -> LiveData<List<T>>
-) where T : HasUUID, T : HasName {
+    onSearchValue: (String?) -> List<OptionVO>
+) {
     val state = remember { mutableStateOf(listOf<OptionVO>()) }
     val timer = remember { mutableStateOf("") }
     val selected = remember { mutableStateOf(value) }
@@ -37,12 +94,10 @@ fun <T> AutocompleteField(
 
     reload.observeForever { beep ->
         if (beep) {
-            onSearchValue(timer.value).observeForever { list ->
-                state.value = list.map { OptionVO(it.uuid, it.name) }
-                timer.value = ""
-                expanded.value = true
-                reload.postValue(false)
-            }
+            state.value = onSearchValue(timer.value)
+            timer.value = ""
+            expanded.value = true
+            reload.postValue(false)
         }
     }
 
@@ -149,3 +204,4 @@ fun AutocompleteField(
         }
     }
 }
+*/

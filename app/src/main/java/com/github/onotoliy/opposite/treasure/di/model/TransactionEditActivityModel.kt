@@ -4,11 +4,8 @@ import android.accounts.AccountManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.TransactionType
-import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
-import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
-import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
-import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
-import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.data.*
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
 import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
 import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
@@ -20,7 +17,7 @@ class TransactionEditActivityModel @Inject constructor(
     private val transactionDAO: TransactionRepository,
     private val depositDAO: DepositRepository,
     private val eventDAO: EventRepository,
-    private val debtDAO: DebtDAO,
+    private val debtDAO: DebtRepository,
     private val manager: AccountManager
 ) {
     val pending: MutableLiveData<Boolean> = MutableLiveData(true)
@@ -35,21 +32,54 @@ class TransactionEditActivityModel @Inject constructor(
     private val author: MutableLiveData<OptionVO> = MutableLiveData(OptionVO())
     private val creationDate: MutableLiveData<String> = MutableLiveData("")
 
+    val qPersons: MutableLiveData<String> = MutableLiveData()
     val persons: MutableLiveData<List<OptionVO>> = MutableLiveData(listOf())
+
+    val qEvents: MutableLiveData<String> = MutableLiveData()
     val events: MutableLiveData<List<OptionVO>> = MutableLiveData(listOf())
 
-    init {
-        person.observeForever { person ->
-            postValueEvents(type.value?.uuid , person.uuid)
+    fun postValue() {
+        qPersons.observeForever { q ->
+            depositDAO.getAll(q).observeForever { list ->
+                persons.postValue(list.map { OptionVO(it.uuid, it.name) })
+            }
         }
 
-        type.observeForever { type ->
-            postValueEvents(type.uuid, person.value?.uuid)
+        qEvents.observeForever { q ->
+            postValue(person.value?.uuid, q, type.value?.toTransactionType())
+        }
+
+        person.observeForever {
+            postValue(it.uuid, qEvents.value, type.value?.toTransactionType())
+        }
+
+        type.observeForever {
+            postValue(person.value?.uuid, qEvents.value, it.toTransactionType())
         }
     }
 
-    fun loading(pk: String) {
-        if (pk.isEmpty()) {
+    fun postValue(person: String?, event: String?, type: TransactionType?) {
+        if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)){
+            eventDAO.getAll(event).observeForever { list ->
+                events.postValue(list.map { OptionVO(it.uuid, it.name) })
+            }
+        } else {
+            if (person.isNullOrEmpty()) {
+                eventDAO.getAll(event).observeForever { list ->
+                    events.postValue(list.map { OptionVO(it.uuid, it.name) })
+                }
+            } else {
+                debtDAO.getByPersonAll(person, event).observeForever { list ->
+                    events.postValue(list.map { OptionVO(it.event.uuid, it.event.name) })
+                }
+            }
+        }
+    }
+
+    fun loading(pk: String?) {
+        postValue()
+
+        if (pk.isNullOrEmpty()) {
             uuid.postValue(randomUUID())
             cash.postValue("0.0")
             name.postValue("")
@@ -88,17 +118,5 @@ class TransactionEditActivityModel @Inject constructor(
                 author = author.value ?: OptionVO()
             )
         )
-    }
-
-    private fun postValueEvents(person: String?, type: String?) {
-
-    }
-
-    fun getPersons(name: String? = null): LiveData<List<DepositVO>> {
-        return depositDAO.getAll(name)
-    }
-
-    fun getEvents(name: String? = null): LiveData<List<EventVO>>  {
-        return eventDAO.getAll("$name")
     }
 }

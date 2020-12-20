@@ -33,7 +33,6 @@ fun SelectionField(
     leadingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (OptionVO) -> Unit
 ) {
-    val state = remember { mutableStateOf(list) }
     val selected = remember { mutableStateOf(value) }
     val expanded = remember { mutableStateOf(false) }
 
@@ -75,7 +74,7 @@ fun SelectionField(
                 Text(
                     modifier = Modifier.padding(10.dp, 0.dp),
                     text = selected.value.name,
-                    fontSize = TextUnit.Em(4),
+                    fontSize = TextUnit.Em(5),
                     textAlign = TextAlign.Left,
                     color = Color.Black
                 )
@@ -85,7 +84,7 @@ fun SelectionField(
         expanded = expanded.value,
         onDismissRequest = { expanded.value = false }
     ) {
-        state.value.forEach {
+        list.forEach {
             DropdownMenuItem(
                 modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
                 onClick = {

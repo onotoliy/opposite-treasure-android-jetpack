@@ -9,6 +9,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 @Composable
+fun <T> LiveData<T>.observe(defaultValue: T): T {
+    val data: LiveData<T> = this
+    val result = remember { mutableStateOf(data.value) }
+    val observer = remember { Observer<T> { result.value = it } }
+
+    onCommit(data) {
+        data.observeForever(observer)
+        onDispose { data.removeObserver(observer) }
+    }
+
+    return result.value ?: defaultValue
+}
+
+@Composable
 fun <T> LiveData<T>.observe(): T? {
     val data: LiveData<T> = this
     val result = remember { mutableStateOf(data.value) }

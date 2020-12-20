@@ -22,6 +22,12 @@ interface DebtDAO: WriteDAO<DebtVO> {
     @Query("SELECT * FROM treasure_debt WHERE deposit_user_uuid = :person LIMIT :offset, :numberOfRows")
     fun getByPersonAll(person: String, offset: Int, numberOfRows: Int): LiveData<List<DebtVO>>
 
+    @Query("SELECT * FROM treasure_debt WHERE deposit_user_uuid = :person and lower(event_name) like :name")
+    fun getByPersonAll(person: String, name: String): LiveData<List<DebtVO>>
+
+    @Query("SELECT * FROM treasure_debt WHERE deposit_user_uuid = :person")
+    fun getByPersonAll(person: String): LiveData<List<DebtVO>>
+
     @Query("SELECT COUNT(*) FROM treasure_debt WHERE deposit_user_uuid = :person")
     fun countByPerson(person: String): LiveData<Long>
 

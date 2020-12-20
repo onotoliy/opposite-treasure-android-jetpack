@@ -17,14 +17,12 @@ import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
+import com.github.onotoliy.opposite.treasure.di.database.data.fromTransactionType
 import com.github.onotoliy.opposite.treasure.di.model.TransactionEditActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.components.AutocompleteField
-import com.github.onotoliy.opposite.treasure.ui.components.SelectionField
-import com.github.onotoliy.opposite.treasure.ui.components.TextField
-import com.github.onotoliy.opposite.treasure.ui.components.TextStyleLeft
+import com.github.onotoliy.opposite.treasure.ui.components.*
 import com.github.onotoliy.opposite.treasure.ui.components.calendar.CalendarField
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
@@ -41,7 +39,7 @@ class TransactionEditActivity : AppCompatActivity()  {
 
         inject()
 
-        model.loading(intent.pk ?: "")
+        model.loading(intent.pk)
 
         setContent {
             TreasureTheme {
@@ -65,55 +63,57 @@ class TransactionEditActivity : AppCompatActivity()  {
 
 @Composable
 fun TransactionEditScreen(model: TransactionEditActivityModel) {
+    val modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp)
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SelectionField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.type.observe() ?: OptionVO(),
+            modifier = modifier,
+            value = model.type.observe(OptionVO()),
             label = stringResource(id = R.string.transaction_edit_type),
             onValueChange = { model.type.postValue(it) },
             textStyle = TextStyleLeft,
-            list = TransactionType.values().map { OptionVO(it.name, it.label) }
+            list = TransactionType.values().map(TransactionType::fromTransactionType)
         )
         TextField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp) ,
-            value = model.name.observe() ?: "",
+            modifier = modifier,
+            value = model.name.observe(""),
             label = stringResource(id = R.string.transaction_edit_name),
             onValueChange = { model.name.postValue(it) },
             keyboardType = KeyboardType.Text,
             textStyle = TextStyleLeft
         )
         TextField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.cash.observe() ?: "",
+            modifier = modifier,
+            value = model.cash.observe(""),
             label = stringResource(id = R.string.transaction_edit_cash),
             onValueChange = { model.cash.postValue(it) },
             keyboardType = KeyboardType.Number,
+            visualTransformation = MoneyVisualTransformation(),
             textStyle = TextStyleLeft
         )
         AutocompleteField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.person.observe() ?: OptionVO(),
+            modifier = modifier,
+            value = model.person.observe(OptionVO()),
+            list = model.persons.observe(listOf()),
             label = stringResource(id = R.string.transaction_edit_person),
             onValueChange = { model.person.postValue(it) },
             textStyle = TextStyleLeft,
-            onSearchValue = {
-                model.getPersons(it)
-            }
+            onSearchValue = { model.qPersons.postValue(it) }
         )
         AutocompleteField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.event.observe() ?: OptionVO(),
+            modifier = modifier,
+            value = model.event.observe(OptionVO()),
+            list = model.events.observe(listOf()),
             label = stringResource(id = R.string.transaction_edit_event),
             onValueChange = { model.event.postValue(it) },
             textStyle = TextStyleLeft,
-            onSearchValue = { model.getEvents(it) }
+            onSearchValue = { model.qEvents.postValue(it) }
         )
         CalendarField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.transactionDate.observe() ?: "",
+            modifier = modifier,
+            value = model.transactionDate.observe(""),
             label = stringResource(id = R.string.transaction_edit_date),
             onValueChange = { model.transactionDate.postValue(it) },
         )
