@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.accounts.AccountManager
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Text
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.DepositActivityModel
 import com.github.onotoliy.opposite.treasure.ui.Menu
@@ -53,9 +55,9 @@ class DepositActivity : AppCompatActivity() {
 }
 
 enum class DepositTab(val label: String) {
-    GENERAL("Общее"),
-    DEBT("Долги"),
-    TRANSACTION("Операции")
+    GENERAL(Resources.getSystem().getString(R.string.deposit_tab_general)),
+    DEBT(Resources.getSystem().getString(R.string.deposit_tab_debt)),
+    TRANSACTION(Resources.getSystem().getString(R.string.deposit_tab_transaction))
 }
 
 @Composable

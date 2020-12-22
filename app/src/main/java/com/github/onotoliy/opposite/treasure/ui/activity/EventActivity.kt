@@ -1,5 +1,6 @@
 package com.github.onotoliy.opposite.treasure.ui.activity
 
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Text
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
@@ -58,9 +60,9 @@ class EventActivity : AppCompatActivity() {
 }
 
 enum class EventTab(val label: String) {
-    GENERAL("Общее"),
-    DEBTORS("Должники"),
-    TRANSACTIONS("Операции")
+    GENERAL(Resources.getSystem().getString(R.string.event_tab_general)),
+    DEBTORS(Resources.getSystem().getString(R.string.event_tab_debtor)),
+    TRANSACTIONS(Resources.getSystem().getString(R.string.event_tab_transaction))
 }
 
 @Composable

@@ -77,7 +77,6 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             value = model.type.observe(OptionVO()),
             label = stringResource(id = R.string.transaction_edit_type),
             onValueChange = { model.type.postValue(it) },
-            textStyle = TextStyleLeft,
             list = TransactionType.values().map(TransactionType::fromTransactionType)
         )
         TextField(

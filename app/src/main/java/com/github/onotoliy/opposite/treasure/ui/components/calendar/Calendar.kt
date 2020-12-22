@@ -1,18 +1,20 @@
 package com.github.onotoliy.opposite.treasure.ui.components.calendar
 
+import android.content.res.Resources
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
+import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.utils.fromShortDate
 import java.util.*
 
 enum class DayOfWeek(val label: String, val color: Color) {
-    Monday("Пн", Color.Black),
-    Tuesday("Вт", Color.Black),
-    Wednesday("Ср", Color.Black),
-    Thursday("Чт", Color.Black),
-    Friday("Пт", Color.Black),
-    Saturday("Сб", Color.Red),
-    Sunday("Вc", Color.Red)
+    Monday(Resources.getSystem().getString(R.string.monday), Color.Black),
+    Tuesday(Resources.getSystem().getString(R.string.tuesday), Color.Black),
+    Wednesday(Resources.getSystem().getString(R.string.wednesday), Color.Black),
+    Thursday(Resources.getSystem().getString(R.string.thursday), Color.Black),
+    Friday(Resources.getSystem().getString(R.string.friday), Color.Black),
+    Saturday(Resources.getSystem().getString(R.string.saturday), Color.Red),
+    Sunday(Resources.getSystem().getString(R.string.sunday), Color.Red)
 }
 
 data class Week(
@@ -35,22 +37,24 @@ class CalendarModel(day: String = "") {
     private val selectedDay: MutableLiveData<String> = MutableLiveData()
 
     val headerYear: MutableLiveData<String> = MutableLiveData("2020")
-    val headerMonth: MutableLiveData<String> = MutableLiveData("Январь")
+    val headerMonth: MutableLiveData<String> = MutableLiveData(
+        Resources.getSystem().getString(R.string.january)
+    )
 
     val years: MutableLiveData<List<String>> = MutableLiveData()
     val months: List<String> = listOf(
-        "Январь",
-        "Февраль",
-        "Март",
-        "Апрель",
-        "Май",
-        "Июнь",
-        "Июль",
-        "Август",
-        "Сентябрь",
-        "Октябрь",
-        "Ноябрь",
-        "Декабрь"
+        Resources.getSystem().getString(R.string.january),
+        Resources.getSystem().getString(R.string.february),
+        Resources.getSystem().getString(R.string.march),
+        Resources.getSystem().getString(R.string.april),
+        Resources.getSystem().getString(R.string.may),
+        Resources.getSystem().getString(R.string.june),
+        Resources.getSystem().getString(R.string.july),
+        Resources.getSystem().getString(R.string.august),
+        Resources.getSystem().getString(R.string.september),
+        Resources.getSystem().getString(R.string.october),
+        Resources.getSystem().getString(R.string.november),
+        Resources.getSystem().getString(R.string.december)
     )
 
     val weeks: MutableLiveData<List<Week>> = MutableLiveData()
