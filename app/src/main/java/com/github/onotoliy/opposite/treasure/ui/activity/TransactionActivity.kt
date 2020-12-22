@@ -30,7 +30,7 @@ class TransactionActivity: AppCompatActivity()  {
 
         inject()
 
-        model.loading(intent.pk ?: throw IllegalArgumentException())
+        model.loading(intent.pk ?: throw IllegalArgumentException("Primary key can not be null"))
 
         setContent {
             TreasureTheme {

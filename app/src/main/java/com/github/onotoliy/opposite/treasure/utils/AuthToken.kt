@@ -39,7 +39,7 @@ fun AccountManager.getAuthToken() : String {
     val username = account.name
     val password = getPassword(account)
     val token = keycloak.auth(username = username, password = password).execute().body()?.accessToken
-        ?: throw IllegalArgumentException()
+        ?: throw IllegalArgumentException("AuthToken can not be null")
 
     return "Bearer $token"
 }

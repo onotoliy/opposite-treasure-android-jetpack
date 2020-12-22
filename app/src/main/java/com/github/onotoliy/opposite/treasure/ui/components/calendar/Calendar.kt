@@ -133,7 +133,7 @@ class CalendarModel(day: String = "") {
                 Calendar.FRIDAY -> DayOfWeek.Friday
                 Calendar.SATURDAY -> DayOfWeek.Saturday
                 Calendar.SUNDAY -> DayOfWeek.Sunday
-                else -> throw IllegalArgumentException()
+                else -> throw IllegalArgumentException("Unknown day of week (${calendar.get(Calendar.DAY_OF_WEEK)})")
             }
 
             val isSelected =
@@ -152,6 +152,6 @@ class CalendarModel(day: String = "") {
         this.headerYear.postValue("$year")
         this.headerMonth.postValue(months[month])
         this.weeks.postValue(days.groupBy { it.week }.map { Week(it.value) })
-        this.years.postValue(((year - 5)..(year + 5)).map { "$it" })
+        this.years.postValue((year - 5..year + 5).map { "$it" })
     }
 }

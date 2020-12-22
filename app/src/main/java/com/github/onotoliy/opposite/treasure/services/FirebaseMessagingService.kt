@@ -15,18 +15,13 @@ import com.google.firebase.messaging.RemoteMessage
 
 class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessagingService() {
 
-    companion object{
-        const val DEFAULT_NOTIFICATION_CHANEL_ID = "channel_id"
-        const val DEFAULT_NOTIFICATION_CHANEL_NAME = "channel_name"
-    }
-
     override fun onNewToken(s: String) {
         Log.e("NEW_TOKEN", s)
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val channelID = DEFAULT_NOTIFICATION_CHANEL_ID
-        val channelName = DEFAULT_NOTIFICATION_CHANEL_NAME
+        val channelID = resources.getString(R.string.default_notification_channel_id)
+        val channelName = resources.getString(R.string.default_notification_channel_name)
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
