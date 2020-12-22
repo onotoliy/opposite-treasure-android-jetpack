@@ -12,6 +12,5 @@ class CashboxResource @Inject constructor(
     private val account: AccountManager
 ) {
     fun get(): Response<Cashbox> =
-        retrofit.get("Bearer " + account.getAuthToken()).execute()
+        retrofit.get(account.getAuthToken()).execute()
 }
-

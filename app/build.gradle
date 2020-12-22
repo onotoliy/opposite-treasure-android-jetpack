@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'io.gitlab.arturbosch.detekt'
 }
 
 android {
@@ -51,6 +52,20 @@ repositories {
     maven { url "https://dl.bintray.com/kotlin/kotlinx/" }
     maven { url "https://dl.bintray.com/a-k-pohresniy/onotoliy" }
     maven { url "https://plugins.gradle.org/m2/" }
+}
+
+detekt {
+    toolVersion = "1.15.0"
+    input = files("src/main/java")
+    parallel = true
+    config = files("detekt-config.yml")
+    autoCorrect = true
+    reports {
+        html {
+            enabled = true
+            destination = file("build/reports/detekt.html")
+        }
+    }
 }
 
 dependencies {

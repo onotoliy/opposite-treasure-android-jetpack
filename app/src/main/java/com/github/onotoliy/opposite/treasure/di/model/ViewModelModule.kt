@@ -13,6 +13,7 @@ abstract class ViewModelModule {
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
 
+@Suppress("UNCHECKED_CAST", "TooGenericExceptionCaught")
 class ViewModelFactory @Inject constructor(
     private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
@@ -25,7 +26,9 @@ class ViewModelFactory @Inject constructor(
         try {
             return creator.get() as T
         } catch (e: Exception) {
-            throw RuntimeException(e)
+            throw ViewModelException(e)
         }
     }
 }
+
+class ViewModelException(exception: Exception): RuntimeException(exception)

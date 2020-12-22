@@ -29,26 +29,25 @@ class CashboxWorker @Inject constructor(
         }
     }
 
-    private fun syncObject(builder: Data.Builder): Boolean {
+    private fun syncObject(builder: Data.Builder): Boolean =
         try {
             val response = retrofit.get()
             val page = response.body()
 
             if (!response.isSuccessful || page == null) {
                 if (response.code() == 504) {
-                    return syncObject(builder)
+                    syncObject(builder)
+                } else {
+                    false
                 }
+            } else {
+                repository.replace(deposit = page.deposit, lastUpdateDate = page.lastUpdateDate)
 
-                return false
+                true
             }
-
-            repository.replace(deposit = page.deposit, lastUpdateDate = page.lastUpdateDate)
-
-            return true
         } catch (exc: SocketTimeoutException) {
-            return syncObject(builder)
+            syncObject(builder)
         }
-    }
 
     class Factory @Inject constructor(
         private val dao: Provider<CashboxRepository>,

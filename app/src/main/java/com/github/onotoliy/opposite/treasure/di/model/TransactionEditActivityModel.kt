@@ -1,15 +1,21 @@
 package com.github.onotoliy.opposite.treasure.di.model
 
 import android.accounts.AccountManager
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.TransactionType
-import com.github.onotoliy.opposite.treasure.di.database.data.*
+import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
+import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.data.toTransactionType
 import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
 import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
 import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
-import com.github.onotoliy.opposite.treasure.utils.*
+import com.github.onotoliy.opposite.treasure.utils.fromISO
+import com.github.onotoliy.opposite.treasure.utils.getName
+import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.randomUUID
+import com.github.onotoliy.opposite.treasure.utils.toISO
+import com.github.onotoliy.opposite.treasure.utils.toShortDate
 import java.util.*
 import javax.inject.Inject
 
@@ -38,7 +44,7 @@ class TransactionEditActivityModel @Inject constructor(
     val qEvents: MutableLiveData<String> = MutableLiveData()
     val events: MutableLiveData<List<OptionVO>> = MutableLiveData(listOf())
 
-    fun postValue() {
+    init {
         qPersons.observeForever { q ->
             depositDAO.getAll(q).observeForever { list ->
                 persons.postValue(list.map { OptionVO(it.uuid, it.name) })
@@ -59,7 +65,7 @@ class TransactionEditActivityModel @Inject constructor(
     }
 
     fun postValue(person: String?, event: String?, type: TransactionType?) {
-        if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)){
+        if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)) {
             eventDAO.getAll(event).observeForever { list ->
                 events.postValue(list.map { OptionVO(it.uuid, it.name) })
             }
@@ -77,7 +83,7 @@ class TransactionEditActivityModel @Inject constructor(
     }
 
     fun loading(pk: String?) {
-        postValue()
+        postValue(null, null, null)
 
         if (pk.isNullOrEmpty()) {
             uuid.postValue(randomUUID())
@@ -113,7 +119,7 @@ class TransactionEditActivityModel @Inject constructor(
                 cash = cash.value ?: "",
                 person = person.value,
                 event = event.value,
-                type = type.value?.let { TransactionType.valueOf(it.uuid) } ?: TransactionType.NONE,
+                type = type.value.toTransactionType(),
                 creationDate = creationDate.value ?: "",
                 author = author.value ?: OptionVO()
             )

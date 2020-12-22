@@ -12,4 +12,3 @@ class Converters {
     fun toTransactionType(value: TransactionType?): String? =
         value?.name
 }
-

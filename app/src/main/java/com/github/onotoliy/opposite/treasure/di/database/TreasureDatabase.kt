@@ -1,8 +1,20 @@
 package com.github.onotoliy.opposite.treasure.di.database
 
-import androidx.room.*
-import com.github.onotoliy.opposite.treasure.di.database.dao.*
-import com.github.onotoliy.opposite.treasure.di.database.data.*
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.github.onotoliy.opposite.treasure.di.database.dao.CashboxDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.VersionDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
+import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
+import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
+import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
+import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.data.VersionVO
 
 @Database(
     entities = [

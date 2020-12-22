@@ -4,7 +4,12 @@ import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
 import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
 
 interface EventRetrofit {
 

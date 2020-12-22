@@ -6,7 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
@@ -29,7 +34,11 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.worker.*
+import com.github.onotoliy.opposite.treasure.di.worker.CashboxWorker
+import com.github.onotoliy.opposite.treasure.di.worker.DebtWorker
+import com.github.onotoliy.opposite.treasure.di.worker.DepositWorker
+import com.github.onotoliy.opposite.treasure.di.worker.EventWorker
+import com.github.onotoliy.opposite.treasure.di.worker.TransactionWorker
 import com.github.onotoliy.opposite.treasure.ui.IconCheck
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.utils.getUUID
@@ -139,18 +148,9 @@ fun LoadingScreen(
 
                 WorkInfoProgress(title = stringResource(id = R.string.loading_cashbox), value = cashbox)
                 WorkInfoProgress(title = stringResource(id = R.string.loading_debts), value = debt)
-                WorkInfoProgress(
-                    title = stringResource(id = R.string.loading_events),
-                    value = event
-                )
-                WorkInfoProgress(
-                    title = stringResource(id = R.string.loading_deposits),
-                    value = deposit
-                )
-                WorkInfoProgress(
-                    title = stringResource(id = R.string.loading_transactions),
-                    value = transaction
-                )
+                WorkInfoProgress(title = stringResource(id = R.string.loading_events), value = event)
+                WorkInfoProgress(title = stringResource(id = R.string.loading_deposits), value = deposit)
+                WorkInfoProgress(title = stringResource(id = R.string.loading_transactions), value = transaction)
             }
 
             IconButton(
@@ -183,10 +183,10 @@ fun WorkInfoProgress(title: String, value: LiveData<WorkInfo>) {
 
 private val WorkInfo.indicator: Float
     get() =
-        if (this.finished) {
+        if (finished) {
             1f
         } else {
-            if (this.offset == 0 || this.total == 0) 0f else this.offset.toFloat() / this.total.toFloat()
+            if (offset == 0 || total == 0) 0f else offset.toFloat() / total.toFloat()
         }
 
 private val WorkInfo.total: Int

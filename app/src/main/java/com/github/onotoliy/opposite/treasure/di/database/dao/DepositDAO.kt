@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
-import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
-import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 
 @Dao
 interface DepositDAO: WriteDAO<DepositVO> {

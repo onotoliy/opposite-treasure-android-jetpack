@@ -4,7 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.ui.activity.*
+import com.github.onotoliy.opposite.treasure.ui.activity.DepositActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.DepositPageActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.EventActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.EventEditActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.EventPageActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.LoadingActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.LoginActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.TransactionActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.TransactionEditActivity
+import com.github.onotoliy.opposite.treasure.ui.activity.TransactionPageActivity
 
 fun AppCompatActivity.navigateTo(screen: Screen) =
     when(screen) {
@@ -29,7 +38,6 @@ fun AppCompatActivity.navigateTo(screen: Screen) =
             putExtra("pk", screen.pk)
         }
     }
-
 
 private fun <T: Any> AppCompatActivity.goto(clazz: Class<T>, options: Intent.() -> Unit = {}) {
     val intent = Intent(applicationContext, clazz).apply {

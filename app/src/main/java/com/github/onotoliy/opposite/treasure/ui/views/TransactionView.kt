@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.github.onotoliy.opposite.data.TransactionType
-import com.github.onotoliy.opposite.treasure.*
+import com.github.onotoliy.opposite.treasure.R
+import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.BODY
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD

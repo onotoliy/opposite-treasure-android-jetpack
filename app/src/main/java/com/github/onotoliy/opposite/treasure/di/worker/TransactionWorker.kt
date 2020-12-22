@@ -6,7 +6,12 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.github.onotoliy.opposite.data.Transaction
-import com.github.onotoliy.opposite.data.TransactionType.*
+import com.github.onotoliy.opposite.data.TransactionType.CONTRIBUTION
+import com.github.onotoliy.opposite.data.TransactionType.COST
+import com.github.onotoliy.opposite.data.TransactionType.EARNED
+import com.github.onotoliy.opposite.data.TransactionType.NONE
+import com.github.onotoliy.opposite.data.TransactionType.PAID
+import com.github.onotoliy.opposite.data.TransactionType.WRITE_OFF
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.toDTO

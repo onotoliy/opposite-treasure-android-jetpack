@@ -9,7 +9,11 @@ import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.database.dao.WriteDAO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.AbstractRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.Resource
-import com.github.onotoliy.opposite.treasure.utils.*
+import com.github.onotoliy.opposite.treasure.utils.failure
+import com.github.onotoliy.opposite.treasure.utils.progress
+import com.github.onotoliy.opposite.treasure.utils.setLocalVersion
+import com.github.onotoliy.opposite.treasure.utils.setRemoteVersion
+import com.github.onotoliy.opposite.treasure.utils.success
 import retrofit2.Response
 import java.net.SocketTimeoutException
 
@@ -36,16 +40,17 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
             return builder.failure()
         }
 
-        if (localVersion == remoteVersion) {
-            return builder.success()
-        }
-
-        return if (sync(builder, localVersion.toLong(), 0, 20)) {
-            repository.setVersion(remoteVersion)
-
+        return if (localVersion == remoteVersion) {
             builder.success()
         } else {
-            builder.failure()
+
+            if (sync(builder, localVersion.toLong(), 0, 20)) {
+                repository.setVersion(remoteVersion)
+
+                builder.success()
+            } else {
+                builder.failure()
+            }
         }
     }
 
@@ -53,32 +58,34 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
     private suspend fun sync(
         builder: Data.Builder, version: Long, offset: Int, numberOfRows: Int
     ): Boolean {
-        try {
+        return try {
             val response: Response<Page<D>> = resource.getAll(version, offset, numberOfRows)
             val page = response.body()
 
             if (!response.isSuccessful || page == null) {
                 if (response.code() == 504) {
-                    return sync(builder, version, offset, numberOfRows)
+                    sync(builder, version, offset, numberOfRows)
+                } else {
+                    false
                 }
-
-                return false
-            }
-
-            setProgress(progress(
-                total = page.meta.total,
-                offset = offset + numberOfRows
-            ))
-
-            page.context.map(this::toVO).forEach(repository::replace)
-
-            return if (offset > page.meta.total) {
-                return true
             } else {
-                sync(builder, version, offset + numberOfRows, numberOfRows)
+                setProgress(
+                    progress(
+                        total = page.meta.total,
+                        offset = offset + numberOfRows
+                    )
+                )
+
+                page.context.map(this::toVO).forEach(repository::replace)
+
+                if (offset > page.meta.total) {
+                    true
+                } else {
+                    sync(builder, version, offset + numberOfRows, numberOfRows)
+                }
             }
         } catch (exc: SocketTimeoutException) {
-            return sync(builder, version, offset, numberOfRows)
+            sync(builder, version, offset, numberOfRows)
         }
     }
 }

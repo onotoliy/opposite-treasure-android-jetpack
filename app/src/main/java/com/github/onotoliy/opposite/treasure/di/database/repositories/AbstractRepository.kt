@@ -6,7 +6,7 @@ import com.github.onotoliy.opposite.treasure.di.database.dao.VersionDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.WriteDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.VersionVO
 
-abstract class AbstractRepository<T: HasUUID, DAO: WriteDAO<T>>(
+open class AbstractRepository<T: HasUUID, DAO: WriteDAO<T>>(
     private val type: String,
     private val version: VersionDAO,
     protected val dao: DAO

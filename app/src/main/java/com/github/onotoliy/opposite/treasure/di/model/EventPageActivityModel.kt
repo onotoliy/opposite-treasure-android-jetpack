@@ -35,4 +35,3 @@ class EventPageActivityModel @Inject constructor(
         }
     }
 }
-

@@ -68,14 +68,14 @@ fun EventEditScreen(model: EventEditActivityModel) {
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.name.observe() ?: "",
+            value = model.name.observe("") ,
             label = stringResource(id = R.string.event_edit_name),
             onValueChange = { model.name.postValue(it) },
             textStyle = TextStyleLeft
         )
         TextField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.contribution.observe() ?: "",
+            value = model.contribution.observe("") ,
             label = stringResource(id = R.string.event_edit_contribution),
             onValueChange = { model.contribution.postValue(it) },
             keyboardType = KeyboardType.Number,
@@ -83,7 +83,7 @@ fun EventEditScreen(model: EventEditActivityModel) {
         )
         TextField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.total.observe() ?: "",
+            value = model.total.observe(""),
             label = stringResource(id = R.string.event_edit_total),
             onValueChange = { model.total.postValue(it) },
             keyboardType = KeyboardType.Number,
@@ -91,7 +91,7 @@ fun EventEditScreen(model: EventEditActivityModel) {
         )
         CalendarField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
-            value = model.deadline.observe() ?: "",
+            value = model.deadline.observe(""),
             label = stringResource(id = R.string.event_edit_deadline),
             onValueChange = { model.deadline.postValue(it) },
         )

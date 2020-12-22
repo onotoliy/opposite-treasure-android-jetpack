@@ -24,8 +24,12 @@ fun IconCached(modifier: Modifier = Modifier, tint: Color = Color.White) =
     )
 
 @Composable
-fun IconCheck(modifier: Modifier = Modifier) =
-    Icon(asset = vectorResource(id = R.drawable.ic_baseline_check_24), modifier = modifier)
+fun IconCheck(modifier: Modifier = Modifier, tint: Color = Color.White) =
+    Icon(
+        asset = vectorResource(id = R.drawable.ic_baseline_check_24),
+        modifier = modifier,
+        tint = tint
+    )
 
 @Composable
 fun IconLeftArrow(modifier: Modifier = Modifier) =

@@ -17,7 +17,6 @@ import androidx.compose.ui.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -29,8 +28,6 @@ fun SelectionField(
     list: List<OptionVO>,
     value: OptionVO = OptionVO(),
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = TextStyleLeft,
-    leadingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (OptionVO) -> Unit
 ) {
     val selected = remember { mutableStateOf(value) }

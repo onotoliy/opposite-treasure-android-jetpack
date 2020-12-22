@@ -2,7 +2,11 @@ package com.github.onotoliy.opposite.treasure.ui.views
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,7 +15,12 @@ import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
-import com.github.onotoliy.opposite.treasure.ui.*
+import com.github.onotoliy.opposite.treasure.ui.BODY_GREY
+import com.github.onotoliy.opposite.treasure.ui.H6
+import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
+import com.github.onotoliy.opposite.treasure.ui.IconDown
+import com.github.onotoliy.opposite.treasure.ui.IconUp
+import com.github.onotoliy.opposite.treasure.ui.Scroller
 import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 import com.github.onotoliy.opposite.treasure.utils.fromISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate

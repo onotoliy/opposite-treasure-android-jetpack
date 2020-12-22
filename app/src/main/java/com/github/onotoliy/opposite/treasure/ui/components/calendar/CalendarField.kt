@@ -4,10 +4,22 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.currentTextStyle
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -131,7 +143,7 @@ private fun CalendarHeader(model: CalendarModel) {
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = model.headerMonth.observe() ?: "",
+                            text = model.headerMonth.observe(""),
                             style = H6_BOLD,
                             color = Color.Black
                         )
@@ -164,7 +176,7 @@ private fun CalendarHeader(model: CalendarModel) {
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = model.headerYear.observe() ?: "",
+                            text = model.headerYear.observe(""),
                             style = H6_BOLD,
                             color = Color.Black
                         )

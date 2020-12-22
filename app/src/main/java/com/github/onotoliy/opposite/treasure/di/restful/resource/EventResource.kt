@@ -13,11 +13,11 @@ class EventResource @Inject constructor(
     private val account: AccountManager
 ): Resource<Event> {
     override fun getVersion(): String =
-        retrofit.version("Bearer " + account.getAuthToken()).execute().body()?.name ?: "0"
+        retrofit.version( account.getAuthToken()).execute().body()?.name ?: "0"
 
     override fun getAll(version: Long, offset: Int, numberOfRows: Int): Response<Page<Event>> =
-        retrofit.sync("Bearer " + account.getAuthToken(), version, offset, numberOfRows).execute()
+        retrofit.sync( account.getAuthToken(), version, offset, numberOfRows).execute()
 
     override fun saveOrUpdate(dto: Event): Response<Event> =
-        retrofit.put("Bearer " + account.getAuthToken(), dto).execute()
+        retrofit.put( account.getAuthToken(), dto).execute()
 }

@@ -17,12 +17,13 @@ fun Option.toVO(): OptionVO = OptionVO(uuid, name)
 fun OptionVO.toDTO(): Option = Option(uuid, name)
 
 fun TransactionType.fromTransactionType() = OptionVO(name, label)
-fun OptionVO.toTransactionType(): TransactionType = when(name) {
+fun OptionVO?.toTransactionType(): TransactionType = when(this?.name) {
     "NONE"-> TransactionType.NONE
     "COST"-> TransactionType.COST
     "CONTRIBUTION"-> TransactionType.CONTRIBUTION
     "WRITE_OFF"-> TransactionType.WRITE_OFF
     "PAID"-> TransactionType.PAID
     "EARNED"-> TransactionType.EARNED
+    null -> TransactionType.NONE
     else -> TransactionType.NONE
 }

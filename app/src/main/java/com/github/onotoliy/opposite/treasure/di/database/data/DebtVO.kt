@@ -1,6 +1,10 @@
 package com.github.onotoliy.opposite.treasure.di.database.data
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.RoomWarnings
 import com.github.onotoliy.opposite.data.Debt
 import com.github.onotoliy.opposite.data.core.HasUUID
 

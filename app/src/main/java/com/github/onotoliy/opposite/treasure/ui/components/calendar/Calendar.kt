@@ -2,7 +2,7 @@ package com.github.onotoliy.opposite.treasure.ui.components.calendar
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
-import java.text.SimpleDateFormat
+import com.github.onotoliy.opposite.treasure.utils.fromShortDate
 import java.util.*
 
 enum class DayOfWeek(val label: String, val color: Color) {
@@ -59,7 +59,7 @@ class CalendarModel(day: String = "") {
         if (day.isEmpty()) {
             calendar.time = Date()
         } else {
-            calendar.time = SimpleDateFormat("dd.MM.yyyy").parse(day)!!
+            calendar.time = day.fromShortDate()
         }
 
         selectedDay.postValue(calendar.get(Calendar.DAY_OF_MONTH).toString())

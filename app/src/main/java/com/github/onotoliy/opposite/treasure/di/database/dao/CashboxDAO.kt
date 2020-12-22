@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
-import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
 
 @Dao
 interface CashboxDAO {

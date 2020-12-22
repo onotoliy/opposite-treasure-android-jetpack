@@ -2,8 +2,8 @@ package com.github.onotoliy.opposite.treasure.utils
 
 import android.accounts.AccountManager
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.KeycloakRetrofit
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -34,14 +34,14 @@ fun getAuthToken(
         }
     )
 
-fun AccountManager.getAuthToken(): String = this.getAuthTokenOrNull() ?: throw IllegalArgumentException()
-
-fun AccountManager.getAuthTokenOrNull(): String? {
+fun AccountManager.getAuthToken() : String {
     val account = getAccount()
     val username = account.name
     val password = getPassword(account)
+    val token = keycloak.auth(username = username, password = password).execute().body()?.accessToken
+        ?: throw IllegalArgumentException()
 
-    return keycloak.auth(username = username, password = password).execute().body()?.access_token
+    return "Bearer $token"
 }
 
 private val keycloak: KeycloakRetrofit
@@ -58,18 +58,25 @@ private val retrofit: Retrofit
             .connectionPool(ConnectionPool(15, 5, TimeUnit.MINUTES))
             .build()
         )
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(GsonConverterFactory.create(
+            GsonBuilder().setLenient().create()
+        ))
         .baseUrl("http://185.12.95.242/")
         .build()
 
-private val gson: Gson = GsonBuilder().setLenient().create()
-
 data class AccessToken(
-    val access_token: String?,
-    val token_type: String?,
-    val expires_in: Int?,
-    val refresh_token: String?,
+    @SerializedName("access_token")
+    val accessToken: String?,
+    @SerializedName("token_type")
+    val tokenType: String?,
+    @SerializedName("expires_in")
+    val expiresIn: Int?,
+    @SerializedName("refresh_token")
+    val refreshToken: String?,
+    @SerializedName("scope")
     val scope: String?,
-    val client_id: String?,
-    val client_secret: String?
+    @SerializedName("client_id")
+    val clientID: String?,
+    @SerializedName("client_secret")
+    val clientSecret: String?
 )

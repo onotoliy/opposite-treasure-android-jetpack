@@ -13,8 +13,8 @@ class DepositResource @Inject constructor(
     private val account: AccountManager
 ): Resource<Deposit> {
     override fun getVersion(): String =
-        retrofit.version("Bearer " + account.getAuthToken()).execute().body()?.name ?: "0"
+        retrofit.version(account.getAuthToken()).execute().body()?.name ?: "0"
 
     override fun getAll(version: Long, offset: Int, numberOfRows: Int): Response<Page<Deposit>> =
-        retrofit.sync("Bearer " + account.getAuthToken(), version, offset, numberOfRows).execute()
+        retrofit.sync(account.getAuthToken(), version, offset, numberOfRows).execute()
 }

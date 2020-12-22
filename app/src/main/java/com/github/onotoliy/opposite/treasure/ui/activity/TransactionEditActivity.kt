@@ -22,7 +22,11 @@ import com.github.onotoliy.opposite.treasure.di.model.TransactionEditActivityMod
 import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.components.*
+import com.github.onotoliy.opposite.treasure.ui.components.AutocompleteField
+import com.github.onotoliy.opposite.treasure.ui.components.MoneyVisualTransformation
+import com.github.onotoliy.opposite.treasure.ui.components.SelectionField
+import com.github.onotoliy.opposite.treasure.ui.components.TextField
+import com.github.onotoliy.opposite.treasure.ui.components.TextStyleLeft
 import com.github.onotoliy.opposite.treasure.ui.components.calendar.CalendarField
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo

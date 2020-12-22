@@ -19,7 +19,9 @@ import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.*
+import com.github.onotoliy.opposite.treasure.ui.views.DepositPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.EventView
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.observe

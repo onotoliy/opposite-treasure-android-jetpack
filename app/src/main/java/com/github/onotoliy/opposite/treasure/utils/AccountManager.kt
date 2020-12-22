@@ -4,10 +4,8 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
-import java.util.*
 
 const val ACCOUNT_TYPE = "com.github.onotoliy.opposite.treasure"
 

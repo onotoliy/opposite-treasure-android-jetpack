@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
-import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
-import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 
 @Dao
 interface EventDAO: WriteDAO<EventVO> {
@@ -35,4 +33,3 @@ interface EventDAO: WriteDAO<EventVO> {
     @Query("DELETE FROM treasure_event")
     override fun clean()
 }
-

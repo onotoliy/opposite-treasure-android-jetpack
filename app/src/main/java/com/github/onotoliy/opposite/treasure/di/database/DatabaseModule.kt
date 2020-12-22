@@ -1,7 +1,16 @@
 package com.github.onotoliy.opposite.treasure.di.database
 
-import com.github.onotoliy.opposite.treasure.di.database.dao.*
-import com.github.onotoliy.opposite.treasure.di.database.repositories.*
+import com.github.onotoliy.opposite.treasure.di.database.dao.CashboxDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.VersionDAO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.CashboxRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import dagger.Module
 import dagger.Provides
 

@@ -24,8 +24,11 @@ import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
-import com.github.onotoliy.opposite.treasure.utils.*
-import com.google.firebase.FirebaseApp
+import com.github.onotoliy.opposite.treasure.utils.ACCOUNT_TYPE
+import com.github.onotoliy.opposite.treasure.utils.addAccount
+import com.github.onotoliy.opposite.treasure.utils.getAuthToken
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import java.io.IOException
@@ -122,7 +125,7 @@ fun LoginScreen(
                     username = login.value,
                     password = password.value,
                     onResponse = {
-                        it?.access_token?.let { token ->
+                        it?.accessToken?.let { token ->
                             addAccount(login.value, password.value, token)
                         }
                     },

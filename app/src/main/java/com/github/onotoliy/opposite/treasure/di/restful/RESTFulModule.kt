@@ -1,7 +1,10 @@
 package com.github.onotoliy.opposite.treasure.di.restful
 
-import com.github.onotoliy.opposite.treasure.di.restful.retrofit.*
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.CashboxRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.DebtRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.DepositRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.EventRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.TransactionRetrofit
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
