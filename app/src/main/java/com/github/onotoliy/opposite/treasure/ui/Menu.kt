@@ -12,6 +12,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.emptyContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
@@ -21,14 +22,14 @@ import com.github.onotoliy.opposite.treasure.Screen
 fun Menu(
     bodyContent: @Composable (PaddingValues) -> Unit,
     navigateTo: (Screen) -> Unit = {},
-    floatingActionButton: @Composable (() -> Unit)? = null,
+    floatingActionButton: @Composable () -> Unit = emptyContent(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) },
+                title = { androidx.compose.material.Text(text = stringResource(id = R.string.app_name)) },
                 actions = {
                     IconButton(onClick = { navigateTo(Screen.LoadingScreen) } ) {
                         IconCached()
@@ -45,21 +46,22 @@ fun Menu(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(
-                        onClick = { navigateTo(Screen.DepositScreen()) },
-                        icon = { IconHome() }
-                    )
+                        onClick = { navigateTo(Screen.DepositScreen()) }
+                    ) {
+                         IconHome()
+                    }
                     IconButton(
-                        onClick = { navigateTo(Screen.DepositPageScreen) },
-                        icon = { IconDeposits() }
-                    )
+                        onClick = { navigateTo(Screen.DepositPageScreen) }) {
+                        IconDeposits()
+                    }
                     IconButton(
-                        onClick = { navigateTo(Screen.TransactionPageScreen) },
-                        icon = { IconTransactions() }
-                    )
+                        onClick = { navigateTo(Screen.TransactionPageScreen) }) {
+                        IconTransactions()
+                    }
                     IconButton(
-                        onClick = { navigateTo(Screen.EventPageScreen) },
-                        icon = { IconEvents() }
-                    )
+                        onClick = { navigateTo(Screen.EventPageScreen) }) {
+                        IconEvents()
+                    }
                 }
             }
         }

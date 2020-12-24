@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
+import androidx.ui.tooling.preview.Preview
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
@@ -139,7 +140,7 @@ fun LoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(asset = vectorResource(id = R.drawable.ic_launcher_foreground))
+            Image(asset = vectorResource(id = R.mipmap.ic_launcher))
             if (finished.value) {
                 Text(text = stringResource(id = R.string.loading_finished))
             } else {

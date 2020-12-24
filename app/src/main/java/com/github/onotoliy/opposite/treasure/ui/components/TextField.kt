@@ -32,6 +32,7 @@ fun TextField(
     modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyleCenter,
     label: String = "",
+    disable: Boolean = false,
     leadingIcon: @Composable (() -> Unit)? = null,
     isErrorValue: Boolean = false,
     imeAction: ImeAction = ImeAction.Unspecified,
@@ -41,21 +42,34 @@ fun TextField(
     onTextInputStarted: (SoftwareKeyboardController) -> Unit = {},
     onValueChange: (String) -> Unit
 ) {
-    TextField(
-        label = {
-            Text(text = label, color = MaterialTheme.colors.primary)
-        },
-        modifier = modifier,
-        textStyle = textStyle,
-        value = value,
-        isErrorValue = isErrorValue,
-        leadingIcon = leadingIcon,
-        onValueChange = onValueChange,
-        keyboardType = keyboardType,
-        backgroundColor = Color.White,
-        imeAction = imeAction,
-        visualTransformation = visualTransformation,
-        onImeActionPerformed = onImeActionPerformed,
-        onTextInputStarted = onTextInputStarted
-    )
+    if (disable) {
+        Text(
+            label = label,
+            value = value,
+            modifier = modifier,
+            textStyle = textStyle
+        )
+    } else {
+        TextField(
+            label = {
+                Text(
+                    text = label,
+                    color = MaterialTheme.colors.primary,
+                    fontSize = if (value.isEmpty()) textStyle.fontSize else textStyle.fontSize - TextUnit.Em(1)
+                )
+            },
+            modifier = modifier,
+            textStyle = textStyle,
+            value = value,
+            isErrorValue = isErrorValue,
+            leadingIcon = leadingIcon,
+            onValueChange = onValueChange,
+            keyboardType = keyboardType,
+            backgroundColor = Color.White,
+            imeAction = imeAction,
+            visualTransformation = visualTransformation,
+            onImeActionPerformed = onImeActionPerformed,
+            onTextInputStarted = onTextInputStarted
+        )
+    }
 }

@@ -20,8 +20,10 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.ui.tooling.preview.Preview
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
+import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
 import com.github.onotoliy.opposite.treasure.utils.ACCOUNT_TYPE
@@ -33,6 +35,54 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import java.io.IOException
 import javax.inject.Inject
+
+@Preview
+@Composable
+fun LoP() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TextField(
+            disable = true,
+            label = stringResource(id = R.string.auth_login),
+            value = "login.value",
+            leadingIcon = {
+                IconAdd()
+            },
+            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
+        ) {  }
+
+        TextField(
+            disable = true,
+            label = stringResource(id = R.string.auth_login),
+            value = "",
+            leadingIcon = {
+                IconAdd()
+            },
+            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
+        ) {  }
+
+        TextField(
+            label = stringResource(id = R.string.auth_login),
+            value = "login.value",
+            leadingIcon = {
+                IconAdd()
+            },
+            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
+        ) {  }
+
+        TextField(
+            label = stringResource(id = R.string.auth_login),
+            value = "",
+            leadingIcon = {
+                IconAdd()
+            },
+            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
+        ) {  }
+    }
+}
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -106,6 +156,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
+            disable = true,
             label = stringResource(id = R.string.auth_login),
             value = login.value,
             modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp)
