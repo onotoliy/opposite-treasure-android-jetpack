@@ -1,12 +1,41 @@
 package com.github.onotoliy.opposite.treasure.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+
+@Composable
+fun <T> LiveData<T>.observeAs(): MutableState<T?> {
+    val data: LiveData<T> = this
+    val result = remember { mutableStateOf(data.value) }
+    val observer = remember { Observer<T> { result.value = it } }
+
+    onCommit(data) {
+        data.observeForever(observer)
+        onDispose { data.removeObserver(observer) }
+    }
+
+    return result
+}
+
+@Composable
+fun <T: Any> LiveData<T>.observeAs(defaultValue: T): MutableState<T> {
+    val data: LiveData<T> = this
+    val result = remember { mutableStateOf(data.value ?: defaultValue) }
+    val observer = remember { Observer<T> { result.value = it } }
+
+    onCommit(data) {
+        data.observeForever(observer)
+        onDispose { data.removeObserver(observer) }
+    }
+
+    return result
+}
 
 @Composable
 fun <T> LiveData<T>.observe(defaultValue: T): T {

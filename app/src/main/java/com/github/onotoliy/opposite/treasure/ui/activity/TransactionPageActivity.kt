@@ -36,7 +36,7 @@ class TransactionPageActivity : AppCompatActivity()  {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconAdd() },
+                            content = { IconAdd() },
                             onClick = { navigateTo(Screen.TransactionEditScreen()) }
                         )
                     },
@@ -48,7 +48,6 @@ class TransactionPageActivity : AppCompatActivity()  {
     }
 
 }
-
 
 @Composable
 fun TransactionPageScreen(

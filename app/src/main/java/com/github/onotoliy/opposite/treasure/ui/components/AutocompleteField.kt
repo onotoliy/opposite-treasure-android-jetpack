@@ -1,6 +1,5 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
@@ -18,9 +17,9 @@ import kotlin.concurrent.schedule
 @Composable
 fun AutocompleteField(
     label: String,
+    modifier: Modifier = Modifier,
     value: OptionVO = OptionVO(),
     list: List<OptionVO> = listOf(),
-    modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyleLeft,
     leadingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (OptionVO) -> Unit,
@@ -66,7 +65,7 @@ fun AutocompleteField(
                     onValueChange(it)
                 }
             ) {
-                Text(
+                androidx.compose.material.Text(
                     modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
                     text = it.name
                 )

@@ -1,9 +1,7 @@
 package com.github.onotoliy.opposite.treasure.ui.components.calendar
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.currentTextStyle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +13,13 @@ import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AmbientTextStyle
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.drawBehind
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -45,14 +45,14 @@ import com.github.onotoliy.opposite.treasure.ui.IconRightArrow
 import com.github.onotoliy.opposite.treasure.utils.observe
 
 @Composable
-private fun Modifier.selected(isSelected: Boolean): Modifier =
+fun Modifier.selected(isSelected: Boolean): Modifier =
     if (isSelected) this.clip(CircleShape).background(MaterialTheme.colors.primary, CircleShape) else this
 
 @Composable
 fun CalendarField(
     label: String,
-    value: String = "",
     modifier: Modifier = Modifier,
+    value: String = "",
     onValueChange: (String) -> Unit
 ) {
     val model = remember { mutableStateOf(CalendarModel()) }
@@ -247,7 +247,7 @@ private fun CalendarWeeks(model: CalendarModel) {
 @Composable
 private fun CalendarDay(
     name: String,
-    style: TextStyle = currentTextStyle(),
+    style: TextStyle = AmbientTextStyle.current,
     color: Color = Color.Black,
     isSelected: Boolean = false,
     enabled: Boolean = false,

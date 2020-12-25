@@ -44,7 +44,7 @@ class EventEditActivity : AppCompatActivity() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconSave() },
+                            content = { IconSave() },
                             onClick = {
                                 model.merge()
                                 navigateTo(Screen.EventPageScreen)

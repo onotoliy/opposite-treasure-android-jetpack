@@ -50,7 +50,7 @@ class TransactionEditActivity : AppCompatActivity()  {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconSave() },
+                            content = { IconSave() },
                             onClick = {
                                 model.merge()
                                 navigateTo(Screen.TransactionPageScreen)
@@ -68,6 +68,7 @@ class TransactionEditActivity : AppCompatActivity()  {
 @Composable
 fun TransactionEditScreen(model: TransactionEditActivityModel) {
     val modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp)
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally

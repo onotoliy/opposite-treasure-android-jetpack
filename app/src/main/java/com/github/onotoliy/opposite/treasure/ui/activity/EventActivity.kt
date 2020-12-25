@@ -3,7 +3,6 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.FloatingActionButton
@@ -46,7 +45,7 @@ class EventActivity : AppCompatActivity() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconEdit() },
+                            content = { IconEdit() },
                             onClick = { navigateTo(Screen.EventEditScreen(intent.pk)) }
                         )
                     },
@@ -78,7 +77,7 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
                     Tab(
                         selected = tab == selected.value,
                         onClick = { selected.value = tab },
-                        text = { Text(text = tab.label) }
+                        text = { androidx.compose.material.Text(text = tab.label) }
                     )
                 }
             }

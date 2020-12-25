@@ -4,7 +4,6 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,8 +28,6 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
-import androidx.ui.tooling.preview.Preview
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
@@ -45,7 +44,7 @@ import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
-import com.github.onotoliy.opposite.treasure.utils.observe
+import com.github.onotoliy.opposite.treasure.utils.observeAs
 import javax.inject.Inject
 
 class LoadingActivity : AppCompatActivity() {
@@ -75,11 +74,11 @@ class LoadingActivity : AppCompatActivity() {
         setContent {
             TreasureTheme {
                 LoadingScreen(
-                    cashbox = worker.getWorkInfoByIdLiveData(cashbox.id),
-                    debt = worker.getWorkInfoByIdLiveData(debt.id),
-                    event = worker.getWorkInfoByIdLiveData(event.id),
-                    deposit = worker.getWorkInfoByIdLiveData(deposit.id),
-                    transaction = worker.getWorkInfoByIdLiveData(transaction.id),
+                    cashbox = worker.getWorkInfoByIdLiveData(cashbox.id).observeAs(),
+                    debt = worker.getWorkInfoByIdLiveData(debt.id).observeAs(),
+                    event = worker.getWorkInfoByIdLiveData(event.id).observeAs(),
+                    deposit = worker.getWorkInfoByIdLiveData(deposit.id).observeAs(),
+                    transaction = worker.getWorkInfoByIdLiveData(transaction.id).observeAs(),
                     onClick = { navigateTo(Screen.DepositScreen(account.getUUID())) }
                 )
             }
@@ -89,58 +88,27 @@ class LoadingActivity : AppCompatActivity() {
 
 @Composable
 fun LoadingScreen(
-    cashbox: LiveData<WorkInfo>,
-    debt: LiveData<WorkInfo>,
-    event: LiveData<WorkInfo>,
-    deposit: LiveData<WorkInfo>,
-    transaction: LiveData<WorkInfo>,
+    cashbox: MutableState<WorkInfo?>,
+    debt: MutableState<WorkInfo?>,
+    event: MutableState<WorkInfo?>,
+    deposit: MutableState<WorkInfo?>,
+    transaction: MutableState<WorkInfo?>,
     onClick: () -> Unit
 ) {
-    val workFinished = remember(mutableMapOf<String, Boolean>()) {
-        mutableStateOf(
-            mutableMapOf(
-                "cashbox" to false,
-                "debt" to false,
-                "event" to false,
-                "deposit" to false,
-                "transaction" to false
-            )
-        )
-    }
-    val finished = remember(false) {
-        mutableStateOf(workFinished.value.all { it.value })
-    }
-    debt.observeForever {
-        workFinished.value["debt"] = it.finished
-        finished.value = workFinished.value.all { k -> k.value }
-    }
-    event.observeForever {
-        workFinished.value["event"] = it.finished
-        finished.value = workFinished.value.all { k -> k.value }
-    }
-    deposit.observeForever {
-        workFinished.value["deposit"] = it.finished
-        finished.value = workFinished.value.all { k -> k.value }
-    }
-    transaction.observeForever {
-        workFinished.value["transaction"] = it.finished
-        finished.value = workFinished.value.all { k -> k.value }
-    }
-    cashbox.observeForever {
-        workFinished.value["cashbox"] = it.finished
-        finished.value = workFinished.value.all { k -> k.value }
-    }
+    val finished = remember(false) { mutableStateOf(false) }
+
+    finished.value = cashbox.finished && debt.finished && event.finished && deposit.finished && transaction.finished
 
     Box(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-        alignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(0.8f).fillMaxHeight(0.8f),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(asset = vectorResource(id = R.mipmap.ic_launcher))
+            Image(imageVector = vectorResource(id = R.drawable.ic_launcher_foreground))
             if (finished.value) {
                 Text(text = stringResource(id = R.string.loading_finished))
             } else {
@@ -169,8 +137,8 @@ fun LoadingScreen(
 }
 
 @Composable
-fun WorkInfoProgress(title: String, value: LiveData<WorkInfo>) {
-    value.observe()?.let {
+fun WorkInfoProgress(title: String, value: MutableState<WorkInfo?>) {
+    value.value?.let {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
@@ -189,6 +157,9 @@ private val WorkInfo.indicator: Float
         } else {
             if (offset == 0 || total == 0) 0f else offset.toFloat() / total.toFloat()
         }
+
+private val MutableState<WorkInfo?>.finished: Boolean
+    get() = this.value.finished
 
 private val WorkInfo.total: Int
     get() = this.progress.getInt("total", 0)

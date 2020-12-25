@@ -1,10 +1,8 @@
 package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.accounts.AccountManager
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.LinearProgressIndicator
@@ -15,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.DepositActivityModel
@@ -54,10 +53,14 @@ class DepositActivity : AppCompatActivity() {
     }
 }
 
-enum class DepositTab(val label: String) {
-    GENERAL(Resources.getSystem().getString(R.string.deposit_tab_general)),
-    DEBT(Resources.getSystem().getString(R.string.deposit_tab_debt)),
-    TRANSACTION(Resources.getSystem().getString(R.string.deposit_tab_transaction))
+enum class DepositTab(private val res: Int) {
+    GENERAL(R.string.deposit_tab_general),
+    DEBT(R.string.deposit_tab_debt),
+    TRANSACTION(R.string.deposit_tab_transaction);
+
+    val label: String
+        @Composable
+        get() = stringResource(res)
 }
 
 @Composable
@@ -76,7 +79,7 @@ fun DepositScreen(
                     Tab(
                         selected = tab == selected.value,
                         onClick = { selected.value = tab },
-                        text = { Text(text = tab.label) }
+                        text = { androidx.compose.material.Text(text = tab.label) }
                     )
                 }
             }

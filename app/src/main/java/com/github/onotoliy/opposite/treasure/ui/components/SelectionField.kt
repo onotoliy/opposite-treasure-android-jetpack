@@ -1,6 +1,5 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.drawBehind
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -26,8 +25,8 @@ import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 fun SelectionField(
     label: String,
     list: List<OptionVO>,
-    value: OptionVO = OptionVO(),
     modifier: Modifier = Modifier,
+    value: OptionVO = OptionVO(),
     onValueChange: (OptionVO) -> Unit
 ) {
     val selected = remember { mutableStateOf(value) }
@@ -52,7 +51,7 @@ fun SelectionField(
                     }
             ) {
                 if (selected.value.uuid.isEmpty()) {
-                    Text(
+                    androidx.compose.material.Text(
                         modifier = Modifier.padding(10.dp, 0.dp),
                         text = label,
                         fontSize = TextUnit.Em(4),
@@ -60,7 +59,7 @@ fun SelectionField(
                         color = MaterialTheme.colors.primary
                     )
                 } else {
-                    Text(
+                    androidx.compose.material.Text(
                         modifier = Modifier.padding(10.dp, 0.dp),
                         text = label,
                         fontSize = TextUnit.Em(3),
@@ -68,7 +67,7 @@ fun SelectionField(
                         color = MaterialTheme.colors.primary
                     )
                 }
-                Text(
+                androidx.compose.material.Text(
                     modifier = Modifier.padding(10.dp, 0.dp),
                     text = selected.value.name,
                     fontSize = TextUnit.Em(5),
@@ -90,7 +89,7 @@ fun SelectionField(
                     onValueChange(it)
                 }
             ) {
-                Text(
+                androidx.compose.material.Text(
                     modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
                     text = it.name
                 )

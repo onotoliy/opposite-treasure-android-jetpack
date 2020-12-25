@@ -1,11 +1,11 @@
 package com.github.onotoliy.opposite.treasure.ui
 
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,7 +34,9 @@ fun <D> Scroller(
                     ) {
                         Row {
                             IconRefresh()
-                            Text(text = stringResource(id = R.string.treasure_scroller_next_page))
+                            Text(
+                                text = stringResource(id = R.string.treasure_scroller_next_page)
+                            )
                         }
                     }
                 }

@@ -6,11 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,10 +20,8 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
 import com.github.onotoliy.opposite.treasure.utils.ACCOUNT_TYPE
@@ -35,54 +33,6 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import java.io.IOException
 import javax.inject.Inject
-
-@Preview
-@Composable
-fun LoP() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TextField(
-            disable = true,
-            label = stringResource(id = R.string.auth_login),
-            value = "login.value",
-            leadingIcon = {
-                IconAdd()
-            },
-            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
-        ) {  }
-
-        TextField(
-            disable = true,
-            label = stringResource(id = R.string.auth_login),
-            value = "",
-            leadingIcon = {
-                IconAdd()
-            },
-            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
-        ) {  }
-
-        TextField(
-            label = stringResource(id = R.string.auth_login),
-            value = "login.value",
-            leadingIcon = {
-                IconAdd()
-            },
-            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
-        ) {  }
-
-        TextField(
-            label = stringResource(id = R.string.auth_login),
-            value = "",
-            leadingIcon = {
-                IconAdd()
-            },
-            modifier = Modifier.fillMaxWidth(0.8f).padding(bottom = 4.dp)
-        ) {  }
-    }
-}
-
 
 class LoginActivity : AppCompatActivity() {
 
@@ -156,18 +106,19 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            disable = true,
             label = stringResource(id = R.string.auth_login),
             value = login.value,
-            modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp)
-        ) { login.value = it }
+            modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp),
+            onValueChange = { login.value = it }
+        )
 
         TextField(
             label = stringResource(id = R.string.auth_password),
             value = password.value,
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(0.8f)
-        ) { password.value = it }
+            modifier = Modifier.fillMaxWidth(0.8f),
+            onValueChange = { password.value = it }
+        )
 
         Button(
             modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp),

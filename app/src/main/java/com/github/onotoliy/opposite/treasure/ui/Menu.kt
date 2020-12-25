@@ -1,6 +1,5 @@
 package com.github.onotoliy.opposite.treasure.ui
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row

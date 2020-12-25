@@ -1,8 +1,8 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
-import androidx.compose.foundation.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AmbientTextStyle
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,34 +28,24 @@ val TextStyleLeft = TextStyle(
 
 @Composable
 fun TextField(
-    value: String = "",
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = TextStyleCenter,
-    label: String = "",
-    disable: Boolean = false,
+    textStyle: TextStyle = AmbientTextStyle.current,
+    label: String,
     leadingIcon: @Composable (() -> Unit)? = null,
     isErrorValue: Boolean = false,
-    imeAction: ImeAction = ImeAction.Unspecified,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardType: KeyboardType = KeyboardType.Text,
     onImeActionPerformed: (ImeAction, SoftwareKeyboardController?) -> Unit = { _, _ -> },
-    onTextInputStarted: (SoftwareKeyboardController) -> Unit = {},
-    onValueChange: (String) -> Unit
+    onTextInputStarted: (SoftwareKeyboardController) -> Unit = {}
 ) {
-    if (disable) {
-        Text(
-            label = label,
-            value = value,
-            modifier = modifier,
-            textStyle = textStyle
-        )
-    } else {
-        TextField(
+        androidx.compose.material.TextField(
             label = {
-                Text(
+                androidx.compose.material.Text(
                     text = label,
                     color = MaterialTheme.colors.primary,
-                    fontSize = if (value.isEmpty()) textStyle.fontSize else textStyle.fontSize - TextUnit.Em(1)
+                    fontSize = textStyle.fontSize,
                 )
             },
             modifier = modifier,
@@ -64,12 +54,10 @@ fun TextField(
             isErrorValue = isErrorValue,
             leadingIcon = leadingIcon,
             onValueChange = onValueChange,
-            keyboardType = keyboardType,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             backgroundColor = Color.White,
-            imeAction = imeAction,
             visualTransformation = visualTransformation,
             onImeActionPerformed = onImeActionPerformed,
             onTextInputStarted = onTextInputStarted
         )
-    }
 }

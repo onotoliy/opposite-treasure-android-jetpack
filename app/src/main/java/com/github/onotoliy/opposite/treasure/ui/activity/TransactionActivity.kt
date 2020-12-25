@@ -37,7 +37,7 @@ class TransactionActivity: AppCompatActivity()  {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconEdit() },
+                            content = { IconEdit() },
                             onClick = { }
                         )
                     },

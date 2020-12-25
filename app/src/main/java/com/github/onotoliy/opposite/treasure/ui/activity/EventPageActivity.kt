@@ -36,7 +36,7 @@ class EventPageActivity : AppCompatActivity()  {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
-                            icon = { IconAdd() },
+                            content = { IconAdd() },
                             onClick = { navigateTo(Screen.EventEditScreen()) }
                         )
                     },
@@ -46,9 +46,7 @@ class EventPageActivity : AppCompatActivity()  {
             }
         }
     }
-
 }
-
 
 @Composable
 fun EventPageScreen(
