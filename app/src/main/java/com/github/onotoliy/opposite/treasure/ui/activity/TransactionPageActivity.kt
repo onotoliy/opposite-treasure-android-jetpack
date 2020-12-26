@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
@@ -15,9 +13,9 @@ import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
 import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
 import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.loading
+import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
-import com.github.onotoliy.opposite.treasure.utils.navigateToNextPage
-import com.github.onotoliy.opposite.treasure.utils.v3Loading
 import javax.inject.Inject
 
 class TransactionPageActivity : AppCompatActivity() {
@@ -31,16 +29,8 @@ class TransactionPageActivity : AppCompatActivity() {
         inject()
 
         setContent {
-            val total = remember(0L) {
-                mutableStateOf(0L).apply {
-                    v3Loading(dao::count)
-                }
-            }
-            val context = remember(defaultTransactions) {
-                mutableStateOf(defaultTransactions).apply {
-                    navigateToNextPage(this, dao::getAll)
-                }
-            }
+            val total = mutableStateOf(0L, dao::count)
+            val context = mutableStateOf(defaultTransactions) { o, n -> dao.getAll(o, n) }
 
             TreasureTheme {
                 Menu(
@@ -56,7 +46,7 @@ class TransactionPageActivity : AppCompatActivity() {
                                 list = context.value,
                                 total = total.value,
                                 navigateTo = ::navigateTo,
-                                navigateToNextPageScreen = { navigateToNextPage(context, dao::getAll) }
+                                navigateToNextPageScreen = { loading(context) { o, n -> dao.getAll(o, n)} }
                             )
                         }
                     },

@@ -9,51 +9,46 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-fun <T> navigateToNextPage(
-    context: MutableState<List<T>>,
-    getAll: (Int, Int) -> LiveData<List<T>>
-) {
-    context.v3LoadingAdd(
-        get = { getAll(context.value.size, 20) },
-        finished = { }
-    )
-}
-
-
-fun <T> MutableState<List<T>>.v3LoadingAdd(get: () -> LiveData<List<T>>, finished: () -> Unit) {
-    get().observeForever {
-        val list = mutableListOf<T>()
-
-        list.addAll(value)
-        list.addAll(it)
-
-        value = list
-        finished()
+@Composable
+fun <T> mutableStateOf(default: T, loading: () -> LiveData<T>): MutableState<T> {
+    return remember(default) {
+        mutableStateOf(default).apply {
+            loading().observeForever { value = it }
+        }
     }
 }
 
-fun <T> MutableState<T>.v3Loading(get: () -> LiveData<T>) {
-    get().observeForever { value = it }
+@Composable
+fun <T> mutableStateOf(default: List<T>, loading: (Int, Int) -> LiveData<List<T>>): MutableState<List<T>> {
+    return mutableStateOf(default, loading) { it }
+}
+
+@Composable
+fun <T, C> mutableStateOf(default: List<T>, loading: (Int, Int) -> LiveData<List<C>>, convert: (C) -> T): MutableState<List<T>> {
+    return remember(default) {
+        mutableStateOf(default).apply {
+            loading(this, convert, loading)
+        }
+    }
+}
+
+fun <T> loading(context: MutableState<List<T>>, loading: (Int, Int) -> LiveData<List<T>>) {
+    loading(context, { it }, loading)
+}
+
+fun <T, C> loading(context: MutableState<List<T>>, convert: (C) -> T, loading: (Int, Int) -> LiveData<List<C>>) {
+    loading(context.value.size, 2).observeForever { list ->
+        context.value = mutableListOf<T>().apply {
+            addAll(context.value)
+            addAll(list.map { convert(it) })
+        }
+    }
 }
 
 @Composable
 fun <T> LiveData<T>.observeAs(): MutableState<T?> {
     val data: LiveData<T> = this
     val result = remember { mutableStateOf(data.value) }
-    val observer = remember { Observer<T> { result.value = it } }
-
-    onCommit(data) {
-        data.observeForever(observer)
-        onDispose { data.removeObserver(observer) }
-    }
-
-    return result
-}
-
-@Composable
-fun <T: Any> LiveData<T>.observeAs(defaultValue: T): MutableState<T> {
-    val data: LiveData<T> = this
-    val result = remember { mutableStateOf(data.value ?: defaultValue) }
     val observer = remember { Observer<T> { result.value = it } }
 
     onCommit(data) {
