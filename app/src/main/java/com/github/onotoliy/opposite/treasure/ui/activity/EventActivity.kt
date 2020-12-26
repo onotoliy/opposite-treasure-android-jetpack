@@ -7,6 +7,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,6 @@ import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
-import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -39,9 +39,6 @@ import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
 class EventActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var model: EventActivityModel
 
     @Inject
     lateinit var event: EventDAO
@@ -106,7 +103,6 @@ class EventActivity : AppCompatActivity() {
             }
         }
     }
-
 }
 
 enum class EventTab(private val res: Int) {
@@ -141,7 +137,7 @@ fun EventScreen(
                 Tab(
                     selected = tab == selected.value,
                     onClick = { selected.value = tab },
-                    text = { androidx.compose.material.Text(text = tab.label) }
+                    text = { Text(text = tab.label) }
                 )
             }
         }

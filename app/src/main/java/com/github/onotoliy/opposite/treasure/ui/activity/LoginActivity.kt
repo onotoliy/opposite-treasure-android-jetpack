@@ -38,7 +38,8 @@ import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
 
-    @Inject lateinit var manager: AccountManager
+    @Inject
+    lateinit var manager: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

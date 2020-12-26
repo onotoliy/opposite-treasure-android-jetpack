@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
+import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class TransactionPageActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var dao: TransactionRepository
+    lateinit var dao: TransactionDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

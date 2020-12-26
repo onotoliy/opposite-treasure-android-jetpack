@@ -4,49 +4,105 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.model.DepositActivityModel
+import com.github.onotoliy.opposite.treasure.di.database.dao.CashboxDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
+import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
+import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
+import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
+import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
+import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositView
 import com.github.onotoliy.opposite.treasure.ui.views.EventPageViewVO
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
+import com.github.onotoliy.opposite.treasure.utils.defaultCashbox
+import com.github.onotoliy.opposite.treasure.utils.defaultDeposit
+import com.github.onotoliy.opposite.treasure.utils.defaultEvents
+import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
 import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.loading
+import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
-import com.github.onotoliy.opposite.treasure.utils.observe
 import com.github.onotoliy.opposite.treasure.utils.pk
 import javax.inject.Inject
 
 class DepositActivity : AppCompatActivity() {
 
-    @Inject lateinit var model: DepositActivityModel
+    @Inject
+    lateinit var deposit: DepositDAO
 
-    @Inject lateinit var account: AccountManager
+    @Inject
+    lateinit var cashbox: CashboxDAO
+
+    @Inject
+    lateinit var debts: DebtDAO
+
+    @Inject
+    lateinit var transactions: TransactionDAO
+
+    @Inject
+    lateinit var account: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val pk = intent.pk ?: account.getUUID()
+
         inject()
 
-        model.loading(intent.pk ?: account.getUUID())
-
         setContent {
-            TreasureTheme() {
+            val deposit = mutableStateOf(defaultDeposit) { deposit.get(pk) }
+            val cashbox = mutableStateOf(defaultCashbox) { cashbox.get() }
+            val totalDebts = mutableStateOf(0L) { debts.countByPerson(pk) }
+            val contextDebts = mutableStateOf(
+                default = defaultEvents,
+                loading = { o, n -> debts.getByPersonAll(pk, o, n) },
+                convert = { it.event }
+            )
+            val totalTransactions = mutableStateOf(0L) { transactions.countByEvent(pk) }
+            val contextTransactions = mutableStateOf(
+                default = defaultTransactions,
+                loading = { o, n -> transactions.getByEventAll(pk, o, n) },
+            )
+
+            TreasureTheme {
                 Menu(
-                    bodyContent = { DepositScreen(model, ::navigateTo) },
+                    bodyContent = {
+                        DepositScreen(
+                            deposit = deposit,
+                            cashbox = cashbox,
+                            totalDebts = totalDebts,
+                            contextDebts = contextDebts,
+                            nextPageDebts = {
+                                loading(contextDebts, DebtVO::event) { o, n ->
+                                    debts.getByPersonAll(pk, o, n)
+                                }
+                            },
+                            totalTransactions = totalTransactions,
+                            contextTransactions = contextTransactions,
+                            nextPageTransactions = {
+                                loading(contextTransactions) { o, n ->
+                                    transactions.getByPersonAll(pk, o, n)
+                                }
+                            },
+                            navigateTo = ::navigateTo
+                        )
+                    },
                     navigateTo = ::navigateTo
                 )
             }
@@ -66,52 +122,49 @@ enum class DepositTab(private val res: Int) {
 
 @Composable
 fun DepositScreen(
-    model: DepositActivityModel,
+    deposit: MutableState<DepositVO> = mutableStateOf(defaultDeposit),
+    cashbox: MutableState<CashboxVO> = mutableStateOf(defaultCashbox),
+    totalDebts: MutableState<Long>,
+    contextDebts: MutableState<List<EventVO>>,
+    nextPageDebts: () -> Unit,
+    totalTransactions: MutableState<Long>,
+    contextTransactions: MutableState<List<TransactionVO>>,
+    nextPageTransactions: () -> Unit,
     navigateTo: (Screen) -> Unit
 ) {
     val selected = remember { mutableStateOf(DepositTab.GENERAL) }
 
-    model.pending.observe()?.let { pending ->
-        Column {
-            TabRow(
-                backgroundColor = MaterialTheme.colors.surface,
-                selectedTabIndex = selected.value.ordinal
-            ) {
-                DepositTab.values().forEach { tab ->
-                    Tab(
-                        selected = tab == selected.value,
-                        onClick = { selected.value = tab },
-                        text = { androidx.compose.material.Text(text = tab.label) }
-                    )
-                }
-            }
-
-            if (pending) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            }
-
-            when (selected.value) {
-                DepositTab.GENERAL -> DepositView(
-                    deposit = model.deposit.observe(),
-                    cashbox = model.cashbox.observe()
+    Column {
+        TabRow(
+            backgroundColor = MaterialTheme.colors.surface,
+            selectedTabIndex = selected.value.ordinal
+        ) {
+            DepositTab.values().forEach { tab ->
+                Tab(
+                    selected = tab == selected.value,
+                    onClick = { selected.value = tab },
+                    text = { androidx.compose.material.Text(text = tab.label) }
                 )
-                DepositTab.DEBT ->
-                    EventPageViewVO(
-                        view = model.debts,
-                        navigateTo = navigateTo,
-                        navigateToNextPageScreen = { offset, numberOfRows, _ ->
-                            model.nextEventPageLoading(offset, numberOfRows)
-                        }
-                    )
-                DepositTab.TRANSACTION ->
-                    TransactionPageViewVO(
-                        view = model.transactions,
-                        navigateTo = navigateTo,
-                        navigateToNextPageScreen = { offset, numberOfRows, _ ->
-                            model.nextTransactionPageLoading(offset, numberOfRows)
-                        }
-                    )
             }
+        }
+
+        when (selected.value) {
+            DepositTab.GENERAL -> DepositView(
+                deposit = deposit.value,
+                cashbox = cashbox.value
+            )
+            DepositTab.DEBT -> EventPageViewVO(
+                list = contextDebts.value,
+                total = totalDebts.value,
+                navigateTo = navigateTo,
+                navigateToNextPageScreen = nextPageDebts
+            )
+            DepositTab.TRANSACTION -> TransactionPageViewVO(
+                list = contextTransactions.value,
+                total = totalTransactions.value,
+                navigateTo = navigateTo,
+                navigateToNextPageScreen = nextPageTransactions
+            )
         }
     }
 }
