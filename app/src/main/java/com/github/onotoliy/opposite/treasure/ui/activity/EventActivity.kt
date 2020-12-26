@@ -1,12 +1,12 @@
 package com.github.onotoliy.opposite.treasure.ui.activity
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
@@ -42,7 +42,7 @@ class EventActivity : AppCompatActivity() {
         model.loading(intent.pk ?: throw IllegalArgumentException("Primary key can not be null"))
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
@@ -76,6 +76,7 @@ fun EventScreen(model: EventActivityModel, navigateTo: (Screen) -> Unit) {
     model.pending.observe()?.let { pending ->
         Column {
             TabRow(
+                backgroundColor = MaterialTheme.colors.surface,
                 selectedTabIndex = selected.value.ordinal
             ) {
                 EventTab.values().forEach { tab ->

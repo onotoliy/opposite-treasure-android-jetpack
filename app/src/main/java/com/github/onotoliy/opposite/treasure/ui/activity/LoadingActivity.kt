@@ -72,7 +72,7 @@ class LoadingActivity : AppCompatActivity() {
             .enqueue()
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 LoadingScreen(
                     cashbox = worker.getWorkInfoByIdLiveData(cashbox.id).observeAs(),
                     debt = worker.getWorkInfoByIdLiveData(debt.id).observeAs(),

@@ -26,7 +26,6 @@ import com.github.onotoliy.opposite.treasure.ui.components.AutocompleteField
 import com.github.onotoliy.opposite.treasure.ui.components.MoneyVisualTransformation
 import com.github.onotoliy.opposite.treasure.ui.components.SelectionField
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
-import com.github.onotoliy.opposite.treasure.ui.components.TextStyleLeft
 import com.github.onotoliy.opposite.treasure.ui.components.calendar.CalendarField
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
@@ -46,7 +45,7 @@ class TransactionEditActivity : AppCompatActivity()  {
         model.loading(intent.pk)
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(

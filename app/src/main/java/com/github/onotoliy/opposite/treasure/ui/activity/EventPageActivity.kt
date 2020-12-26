@@ -32,7 +32,7 @@ class EventPageActivity : AppCompatActivity()  {
         model.loading()
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(

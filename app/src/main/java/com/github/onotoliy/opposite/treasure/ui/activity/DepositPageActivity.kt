@@ -30,7 +30,7 @@ class DepositPageActivity : AppCompatActivity()  {
         model.loading()
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     bodyContent = { DepositPageScreen(model, ::navigateTo) },
                     navigateTo = ::navigateTo

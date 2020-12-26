@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.primarySurface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.emptyContent
@@ -29,6 +31,7 @@ fun Menu(
         topBar = {
             TopAppBar(
                 title = { androidx.compose.material.Text(text = stringResource(id = R.string.app_name)) },
+                backgroundColor = MaterialTheme.colors.surface,
                 actions = {
                     IconButton(onClick = { navigateTo(Screen.LoadingScreen) } ) {
                         IconCached()
@@ -39,7 +42,7 @@ fun Menu(
         floatingActionButton = floatingActionButton,
         bodyContent = bodyContent,
         bottomBar = {
-            BottomAppBar {
+            BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween

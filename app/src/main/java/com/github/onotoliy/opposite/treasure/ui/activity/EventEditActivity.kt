@@ -39,7 +39,7 @@ class EventEditActivity : AppCompatActivity() {
         model.loading(intent.pk)
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(

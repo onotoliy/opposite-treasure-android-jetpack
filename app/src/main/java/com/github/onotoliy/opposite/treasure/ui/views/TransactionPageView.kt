@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,49 +30,66 @@ fun TransactionPageViewVO(
     view: LiveDataPage<TransactionVO>,
     navigateTo: (Screen) -> Unit,
     navigateToNextPageScreen: (Int, Int, LiveDataPage<TransactionVO>?) -> Unit
-)  {
+) {
     Scroller(
         page = view,
         navigateToNextPageScreen = {
             navigateToNextPageScreen(view.offset, view.numberOfRows, view)
         }
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(6.dp, 3.dp).clickable(onClick = {
-                navigateTo(Screen.TransactionScreen(it.uuid))
-            })
-        ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(6.dp, 10.dp)) {
+            TransactionItemView(dto = it, navigateTo = navigateTo)
+        }
+    }
+}
+
+@Composable
+fun TransactionItemView(dto: TransactionVO, navigateTo: (Screen) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { navigateTo(Screen.TransactionScreen(dto.uuid)) },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        when (dto.type) {
+            TransactionType.NONE, TransactionType.WRITE_OFF -> IconDown()
+            TransactionType.COST, TransactionType.PAID -> IconDown()
+            TransactionType.CONTRIBUTION, TransactionType.EARNED -> IconUp()
+        }
+
+        Column(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(modifier = Modifier.weight(4f)) {
-                    when (it.type) {
-                        TransactionType.NONE, TransactionType.WRITE_OFF -> IconDown()
-                        TransactionType.COST, TransactionType.PAID -> IconDown()
-                        TransactionType.CONTRIBUTION, TransactionType.EARNED -> IconUp()
-                    }
-                    Text(
-                        text = it.name,
-                        softWrap = false,
-                        style = H6_BOLD
-                    )
-                }
                 Text(
-                    modifier = Modifier.padding(6.dp, 0.dp, 0.dp, 0.dp),
-                    text = it.cash,
-                    style = H6,
+                    modifier = Modifier.fillMaxWidth(0.80f),
+                    text = dto.name,
+                    softWrap = false,
+                    style = H6_BOLD
+                )
+                Text(
+                    text = dto.cash,
+                    softWrap = false,
+                    style = H6
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = dto.person?.name ?: "",
+                    style = BODY_GREY,
+                    textAlign = TextAlign.Right
+                )
+                Text(
+                    text = dto.transactionDate.fromISO().toShortDate(),
+                    style = BODY_GREY,
                     textAlign = TextAlign.Right
                 )
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = it.person?.name ?: "", style = BODY_GREY)
-                Text(text = it.creationDate.fromISO().toShortDate(), style = BODY_GREY)
-            }
-            Divider()
         }
     }
 }

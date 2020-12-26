@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 LoginScreen { account, password, token ->
                     manager.addAccount(account, password, token)
 

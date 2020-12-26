@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.runtime.Composable
@@ -43,7 +44,7 @@ class DepositActivity : AppCompatActivity() {
         model.loading(intent.pk ?: account.getUUID())
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     bodyContent = { DepositScreen(model, ::navigateTo) },
                     navigateTo = ::navigateTo
@@ -73,6 +74,7 @@ fun DepositScreen(
     model.pending.observe()?.let { pending ->
         Column {
             TabRow(
+                backgroundColor = MaterialTheme.colors.surface,
                 selectedTabIndex = selected.value.ordinal
             ) {
                 DepositTab.values().forEach { tab ->

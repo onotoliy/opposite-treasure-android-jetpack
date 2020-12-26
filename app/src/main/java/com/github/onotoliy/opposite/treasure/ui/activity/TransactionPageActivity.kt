@@ -32,7 +32,7 @@ class TransactionPageActivity : AppCompatActivity()  {
         model.loading()
 
         setContent {
-            TreasureTheme {
+            TreasureTheme() {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
