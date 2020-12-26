@@ -17,6 +17,8 @@ val defaultDeposit = DepositVO(
     deposit = "0.0"
 )
 
+val defaultTransactions: List<TransactionVO> = listOf()
+
 val defaultTransaction = TransactionVO (
     transactionDate = Date().toISO(),
     creationDate = Date().toISO()

@@ -3,36 +3,46 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.model.TransactionPageActivityModel
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
+import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
-import com.github.onotoliy.opposite.treasure.utils.observe
+import com.github.onotoliy.opposite.treasure.utils.navigateToNextPage
+import com.github.onotoliy.opposite.treasure.utils.v3Loading
 import javax.inject.Inject
 
-class TransactionPageActivity : AppCompatActivity()  {
+class TransactionPageActivity : AppCompatActivity() {
 
-    @Inject lateinit var model: TransactionPageActivityModel
+    @Inject
+    lateinit var dao: TransactionRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         inject()
 
-        model.loading()
-
         setContent {
-            TreasureTheme() {
+            val total = remember(0L) {
+                mutableStateOf(0L).apply {
+                    v3Loading(dao::count)
+                }
+            }
+            val context = remember(defaultTransactions) {
+                mutableStateOf(defaultTransactions).apply {
+                    navigateToNextPage(this, dao::getAll)
+                }
+            }
+
+            TreasureTheme {
                 Menu(
                     floatingActionButton = {
                         FloatingActionButton(
@@ -40,32 +50,19 @@ class TransactionPageActivity : AppCompatActivity()  {
                             onClick = { navigateTo(Screen.TransactionEditScreen()) }
                         )
                     },
-                    bodyContent = { TransactionPageScreen(model, ::navigateTo) },
+                    bodyContent = {
+                        Column {
+                            TransactionPageViewVO(
+                                list = context.value,
+                                total = total.value,
+                                navigateTo = ::navigateTo,
+                                navigateToNextPageScreen = { navigateToNextPage(context, dao::getAll) }
+                            )
+                        }
+                    },
                     navigateTo = ::navigateTo
                 )
             }
-        }
-    }
-
-}
-
-@Composable
-fun TransactionPageScreen(
-    model: TransactionPageActivityModel,
-    navigateTo: (Screen) -> Unit
-) {
-    model.pending.observe()?.let { pending ->
-        Column {
-            if (pending) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            }
-                TransactionPageViewVO(
-                    view = model.page,
-                    navigateTo = navigateTo,
-                    navigateToNextPageScreen = { offset, numberOfRows, _ ->
-                        model.nextTransactionPageLoading(offset, numberOfRows)
-                    }
-                )
         }
     }
 }

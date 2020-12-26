@@ -9,35 +9,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-@Composable
-fun <T> MutableState<T>.v1Loading(get: () -> LiveData<T>, finished: () -> Unit) {
-    val observer = remember {
-        Observer<T> {
-            this.value = it
-            finished()
-        }
-    }
+fun <T> navigateToNextPage(
+    context: MutableState<List<T>>,
+    getAll: (Int, Int) -> LiveData<List<T>>
+) {
+    context.v3LoadingAdd(
+        get = { getAll(context.value.size, 20) },
+        finished = { }
+    )
+}
 
-    val data = get()
 
-    onCommit(data) {
-        data.observeForever(observer)
-        onDispose { data.removeObserver(observer) }
+fun <T> MutableState<List<T>>.v3LoadingAdd(get: () -> LiveData<List<T>>, finished: () -> Unit) {
+    get().observeForever {
+        val list = mutableListOf<T>()
+
+        list.addAll(value)
+        list.addAll(it)
+
+        value = list
+        finished()
     }
 }
 
-@Composable
-fun <T> LiveData<T>.observeFor(state: MutableState<T>, defaultValue: T) {
-    val data: LiveData<T> = this
-
-    state.value = data.value ?: defaultValue
-
-    val observer = remember { Observer<T> { state.value = it } }
-
-    onCommit(data) {
-        data.observeForever(observer)
-        onDispose { data.removeObserver(observer) }
-    }
+fun <T> MutableState<T>.v3Loading(get: () -> LiveData<T>) {
+    get().observeForever { value = it }
 }
 
 @Composable
