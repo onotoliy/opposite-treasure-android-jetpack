@@ -85,8 +85,7 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             value = model.name.observe(""),
             label = stringResource(id = R.string.transaction_edit_name),
             onValueChange = { model.name.postValue(it) },
-            keyboardType = KeyboardType.Text,
-            textStyle = TextStyleLeft
+            keyboardType = KeyboardType.Text
         )
         TextField(
             modifier = modifier,
@@ -94,8 +93,7 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             label = stringResource(id = R.string.transaction_edit_cash),
             onValueChange = { model.cash.postValue(it) },
             keyboardType = KeyboardType.Number,
-            visualTransformation = MoneyVisualTransformation(),
-            textStyle = TextStyleLeft
+            visualTransformation = MoneyVisualTransformation()
         )
         AutocompleteField(
             modifier = modifier,
@@ -103,7 +101,6 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             list = model.persons.observe(listOf()),
             label = stringResource(id = R.string.transaction_edit_person),
             onValueChange = { model.person.postValue(it) },
-            textStyle = TextStyleLeft,
             onSearchValue = { model.qPersons.postValue(it) }
         )
         AutocompleteField(
@@ -112,7 +109,6 @@ fun TransactionEditScreen(model: TransactionEditActivityModel) {
             list = model.events.observe(listOf()),
             label = stringResource(id = R.string.transaction_edit_event),
             onValueChange = { model.event.postValue(it) },
-            textStyle = TextStyleLeft,
             onSearchValue = { model.qEvents.postValue(it) }
         )
         CalendarField(

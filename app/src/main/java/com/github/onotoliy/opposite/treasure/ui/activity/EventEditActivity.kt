@@ -20,7 +20,6 @@ import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
-import com.github.onotoliy.opposite.treasure.ui.components.TextStyleLeft
 import com.github.onotoliy.opposite.treasure.ui.components.calendar.CalendarField
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
@@ -70,30 +69,27 @@ fun EventEditScreen(model: EventEditActivityModel) {
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.name.observe("") ,
             label = stringResource(id = R.string.event_edit_name),
-            onValueChange = { model.name.postValue(it) },
-            textStyle = TextStyleLeft
+            onValueChange = { model.name.postValue(it) }
         )
         TextField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.contribution.observe("") ,
             label = stringResource(id = R.string.event_edit_contribution),
             onValueChange = { model.contribution.postValue(it) },
-            keyboardType = KeyboardType.Number,
-            textStyle = TextStyleLeft
+            keyboardType = KeyboardType.Number
         )
         TextField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.total.observe(""),
             label = stringResource(id = R.string.event_edit_total),
             onValueChange = { model.total.postValue(it) },
-            keyboardType = KeyboardType.Number,
-            textStyle = TextStyleLeft
+            keyboardType = KeyboardType.Number
         )
         CalendarField(
             modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
             value = model.deadline.observe(""),
             label = stringResource(id = R.string.event_edit_deadline),
-            onValueChange = { model.deadline.postValue(it) },
+            onValueChange = { model.deadline.postValue(it) }
         )
     }
 }

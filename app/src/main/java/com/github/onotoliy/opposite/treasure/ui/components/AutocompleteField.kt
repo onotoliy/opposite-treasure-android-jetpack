@@ -1,15 +1,12 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import java.util.*
 import kotlin.concurrent.schedule
@@ -20,7 +17,6 @@ fun AutocompleteField(
     modifier: Modifier = Modifier,
     value: OptionVO = OptionVO(),
     list: List<OptionVO> = listOf(),
-    textStyle: TextStyle = TextStyleLeft,
     leadingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (OptionVO) -> Unit,
     onSearchValue: (String?) -> Unit
@@ -34,7 +30,6 @@ fun AutocompleteField(
             TextField(
                 label = label,
                 modifier = modifier,
-                textStyle = textStyle,
                 leadingIcon = leadingIcon,
                 value = selected.value.name,
                 onValueChange = {
@@ -52,13 +47,13 @@ fun AutocompleteField(
                 }
             )
         },
-        dropdownModifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
+        dropdownModifier = Modifier.fillMaxWidth(1.0f),
         expanded = expanded.value,
         onDismissRequest = { expanded.value = false }
     ) {
         list.forEach {
             DropdownMenuItem(
-                modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
+                modifier = Modifier.fillMaxWidth(1.0f),
                 onClick = {
                     selected.value = it
                     expanded.value = false
@@ -66,7 +61,7 @@ fun AutocompleteField(
                 }
             ) {
                 androidx.compose.material.Text(
-                    modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
+                    modifier = Modifier.fillMaxWidth(1.0f),
                     text = it.name
                 )
             }

@@ -1,18 +1,18 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.AmbientTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 
 val TextStyleCenter = TextStyle(
     fontSize = TextUnit.Em(5),
@@ -28,36 +28,59 @@ val TextStyleLeft = TextStyle(
 
 @Composable
 fun TextField(
+    label: String,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = AmbientTextStyle.current,
-    label: String,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    isErrorValue: Boolean = false,
+    editable: Boolean = true,
+    labelColor: Color = MaterialTheme.colors.primary,
+    labelFontSize: Int = 16,
+    valueColor: Color = Color.Black,
+    valueFontSize: Int = 20,
+    background: Color = Color.White,
+    leadingIcon: @Composable() (() -> Unit)? = null,
+    textAlign: TextAlign = TextAlign.Left,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardType: KeyboardType = KeyboardType.Text,
-    onImeActionPerformed: (ImeAction, SoftwareKeyboardController?) -> Unit = { _, _ -> },
-    onTextInputStarted: (SoftwareKeyboardController) -> Unit = {}
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
+    if (editable) {
         androidx.compose.material.TextField(
             label = {
                 androidx.compose.material.Text(
                     text = label,
-                    color = MaterialTheme.colors.primary,
-                    fontSize = textStyle.fontSize,
+                    color = labelColor,
+                    fontSize = if (value.isNotBlank()) labelFontSize.sp else valueFontSize.sp,
                 )
             },
             modifier = modifier,
-            textStyle = textStyle,
             value = value,
-            isErrorValue = isErrorValue,
             leadingIcon = leadingIcon,
             onValueChange = onValueChange,
+            textStyle = TextStyle(color = valueColor, fontSize = valueFontSize.sp, textAlign = textAlign),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            backgroundColor = Color.White,
+            backgroundColor = background,
             visualTransformation = visualTransformation,
-            onImeActionPerformed = onImeActionPerformed,
-            onTextInputStarted = onTextInputStarted
         )
+    } else {
+        LabeledText(
+            label = label,
+            value = value,
+            modifier = modifier.drawBehind {
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 4f,
+                    alpha = 0.54f
+                )
+            },
+            labelColor = labelColor,
+            labelFontSize = labelFontSize,
+            valueColor = valueColor,
+            valueFontSize = valueFontSize,
+            background = background,
+            leadingIcon = leadingIcon,
+            textAlign = textAlign
+        )
+    }
 }

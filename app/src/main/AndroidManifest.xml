@@ -34,7 +34,8 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -44,7 +45,8 @@
         <activity
             android:name=".ui.activity.LoadingActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -53,7 +55,8 @@
         <activity
             android:name=".ui.activity.DepositActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -62,7 +65,8 @@
         <activity
             android:name=".ui.activity.DepositPageActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -71,7 +75,8 @@
         <activity
             android:name=".ui.activity.EventActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -80,7 +85,8 @@
         <activity
             android:name=".ui.activity.EventEditActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -89,7 +95,8 @@
         <activity
             android:name=".ui.activity.EventPageActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -98,7 +105,8 @@
         <activity
             android:name=".ui.activity.TransactionActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -107,7 +115,8 @@
         <activity
             android:name=".ui.activity.TransactionEditActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -116,7 +125,8 @@
         <activity
             android:name=".ui.activity.TransactionPageActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Treasure.NoActionBar">
+            android:theme="@style/Theme.Treasure.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

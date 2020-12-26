@@ -1,63 +1,70 @@
 package com.github.onotoliy.opposite.treasure.ui.views
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
-import com.github.onotoliy.opposite.treasure.ui.BODY
-import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
+import com.github.onotoliy.opposite.treasure.ui.components.LabeledText
 import com.github.onotoliy.opposite.treasure.utils.fromISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 
 @Composable
 fun TransactionView(data: TransactionVO, navigateTo: (Screen) -> Unit) {
-    Column {
-        Text(text = stringResource(id = R.string.transaction_name), style = H6_BOLD)
-        Text(text = data.name, style = BODY)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LabeledText(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            label = stringResource(id = R.string.transaction_name),
+            value = data.name
+        )
 
-        Text(text = stringResource(id = R.string.transaction_type), style = H6_BOLD)
-        Text(text = data.type.label, style = BODY)
+        LabeledText(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            label = stringResource(id = R.string.transaction_type),
+            value = data.type.label
+        )
 
-        Text(text = stringResource(id = R.string.transaction_cash), style = H6_BOLD)
-        Text(text = data.cash, style = BODY)
+        LabeledText(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            label = stringResource(id = R.string.transaction_cash),
+            value = data.cash
+        )
 
         data.event?.let {
-            Text(text = stringResource(id = R.string.transaction_event), style = H6_BOLD)
-            Text(
-                modifier = Modifier.clickable(onClick = {
-                    navigateTo(Screen.EventScreen(it.uuid))
-                }),
-                text = it.name,
-                style = H6_BOLD
+            LabeledText(
+                modifier = Modifier.fillMaxWidth(0.8f),
+                label = stringResource(id = R.string.transaction_event),
+                value = it.name,
+                onClick = { navigateTo(Screen.EventScreen(it.uuid)) }
             )
         }
 
         data.person?.let {
-            Text(text = stringResource(id = R.string.transaction_person), style = H6_BOLD)
-            Text(
-                modifier = Modifier.clickable(onClick = {
-                    navigateTo(Screen.DepositScreen(it.uuid))
-                }),
-                text = it.name,
-                style = BODY
+            LabeledText(
+                modifier = Modifier.fillMaxWidth(0.8f),
+                label = stringResource(id = R.string.transaction_person),
+                value = it.name,
+                onClick = { navigateTo(Screen.DepositScreen(it.uuid)) }
             )
         }
 
-        Text(text = stringResource(id = R.string.event_creation_date), style = H6_BOLD)
-        Text(text = data.creationDate.fromISO().toShortDate(), style = BODY)
+        LabeledText(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            label = stringResource(id = R.string.event_creation_date),
+            value = data.creationDate.fromISO().toShortDate()
+        )
 
-        Text(text = stringResource(id = R.string.event_author), style = H6_BOLD)
-        Text(
-            modifier = Modifier.clickable(onClick = {
-                navigateTo(Screen.DepositScreen(data.author.uuid))
-            }),
-            text = data.author.name,
-            style = BODY
+        LabeledText(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            label = stringResource(id = R.string.event_author),
+            value = data.author.name,
+            onClick = { navigateTo(Screen.DepositScreen(data.author.uuid)) }
         )
     }
 }

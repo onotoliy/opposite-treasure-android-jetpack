@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.model.EventActivityModel
@@ -58,10 +59,14 @@ class EventActivity : AppCompatActivity() {
 
 }
 
-enum class EventTab(val label: String) {
-    GENERAL(Resources.getSystem().getString(R.string.event_tab_general)),
-    DEBTORS(Resources.getSystem().getString(R.string.event_tab_debtor)),
-    TRANSACTIONS(Resources.getSystem().getString(R.string.event_tab_transaction))
+enum class EventTab(private val res: Int) {
+    GENERAL(R.string.event_tab_general),
+    DEBTORS(R.string.event_tab_debtor),
+    TRANSACTIONS(R.string.event_tab_transaction);
+
+    @Composable
+    val label: String
+        get() = stringResource(res)
 }
 
 @Composable

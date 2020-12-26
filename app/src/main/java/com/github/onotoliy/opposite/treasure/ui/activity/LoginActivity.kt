@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -19,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
@@ -94,6 +97,14 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
+@Preview
+@Composable
+fun LoginScreenP() {
+    LoginScreen { _, _, _ ->
+
+    }
+}
+
 @Composable
 fun LoginScreen(
     addAccount: (username: String, password: String, token: String) -> Unit
@@ -108,9 +119,12 @@ fun LoginScreen(
         TextField(
             label = stringResource(id = R.string.auth_login),
             value = login.value,
-            modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp),
-            onValueChange = { login.value = it }
+            modifier = Modifier.fillMaxWidth(0.8f),
+            onValueChange = { login.value = it },
+            textAlign = TextAlign.Center
         )
+
+        Spacer(Modifier.padding(10.dp))
 
         TextField(
             label = stringResource(id = R.string.auth_password),
@@ -120,8 +134,10 @@ fun LoginScreen(
             onValueChange = { password.value = it }
         )
 
+        Spacer(Modifier.padding(10.dp))
+
         Button(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(0.dp, 15.dp),
+            modifier = Modifier.fillMaxWidth(0.8f),
             onClick = {
                 getAuthToken(
                     username = login.value,

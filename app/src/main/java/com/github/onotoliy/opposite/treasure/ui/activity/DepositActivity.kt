@@ -58,8 +58,8 @@ enum class DepositTab(private val res: Int) {
     DEBT(R.string.deposit_tab_debt),
     TRANSACTION(R.string.deposit_tab_transaction);
 
+    @Composable
     val label: String
-        @Composable
         get() = stringResource(res)
 }
 
