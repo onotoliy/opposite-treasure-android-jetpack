@@ -19,12 +19,6 @@ val H6_BOLD = TextStyle(
     letterSpacing = 0.15.sp
 )
 
-val BODY = TextStyle(
-    fontWeight = FontWeight.Medium,
-    fontSize = 16.sp,
-    letterSpacing = 0.15.sp
-)
-
 val BODY_GREY = TextStyle(
     fontWeight = FontWeight.Medium,
     color = Color.Gray,

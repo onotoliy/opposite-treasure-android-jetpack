@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -27,7 +28,15 @@ class EventWorker @Inject constructor(
         repository.getAllLocal().forEach { vo ->
             val response = resource.saveOrUpdate(vo.toDTO())
 
+            Log.i("EventWorker", "VO $vo")
+            Log.i("EventWorker", "Code ${response.code()}")
+            Log.i("EventWorker", "Message ${response.message()}")
+            Log.i("EventWorker", "Error \"${String(response.errorBody()?.bytes() ?: ByteArray(0))}\"")
+
             if (!response.isSuccessful || response.body()?.uuid != vo.uuid) {
+
+
+
                 builder.putString("uuid", vo.uuid)
                        .putString("message", response.message())
                        .setFinished(false)

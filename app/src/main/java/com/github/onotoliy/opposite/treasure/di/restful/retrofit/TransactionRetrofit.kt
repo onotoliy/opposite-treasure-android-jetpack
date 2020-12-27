@@ -7,7 +7,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
@@ -21,10 +20,7 @@ interface TransactionRetrofit {
         @Query("numberOfRows") numberOfRows: Int
     ): Call<Page<Transaction>>
 
-    @POST("/api/treasure/v1/transaction")
-    fun post(@Header("Authorization") token: String, @Body dto: Transaction): Call<Transaction>
-
-    @PUT("/api/treasure/v1/transaction")
+    @PUT("/api/treasure/v1/transaction/sync")
     fun put(@Header("Authorization") token: String, @Body dto: Transaction): Call<Transaction>
 
     @GET("/api/treasure/v1/transaction/version")

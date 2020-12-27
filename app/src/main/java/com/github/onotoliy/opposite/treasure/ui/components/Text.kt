@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,6 +36,7 @@ fun LabeledText(
     background: Color = Color.White,
     textAlign: TextAlign = TextAlign.Left,
     leadingIcon: @Composable() (() -> Unit)? = null,
+    divider: @Composable() (() -> Unit)? = null,
     onClick: (() -> Unit)? = null
 ) {
     Box(
@@ -52,14 +56,14 @@ fun LabeledText(
             Column(
                 modifier = Modifier.padding(18.dp, if (value.isBlank()) 18.dp else 5.dp)
             ) {
-                androidx.compose.material.Text(
+                Text(
                     text = label,
                     fontSize = if (value.isBlank()) valueFontSize.em else labelFontSize.em,
                     color = labelColor
                 )
 
                 if (value.isNotBlank()) {
-                    androidx.compose.material.Text(
+                    Text(
                         text = value,
                         modifier = Modifier.fillMaxWidth(),
                         color = valueColor,
@@ -83,7 +87,7 @@ fun LabeledText(
                     leadingIcon()
                 }
                 Column {
-                    androidx.compose.material.Text(
+                    Text(
                         modifier = Modifier.defaultMinSizeConstraints(212.dp),
                         text = label,
                         fontSize = if (value.isBlank()) valueFontSize.em else labelFontSize.em,
@@ -91,7 +95,7 @@ fun LabeledText(
                     )
 
                     if (value.isNotBlank()) {
-                        androidx.compose.material.Text(
+                        Text(
                             modifier = Modifier.defaultMinSizeConstraints(212.dp),
                             text = value,
                             fontSize = valueFontSize.em,
@@ -101,6 +105,10 @@ fun LabeledText(
                     }
                 }
             }
+        }
+
+        divider?.let {
+            it()
         }
     }
 }

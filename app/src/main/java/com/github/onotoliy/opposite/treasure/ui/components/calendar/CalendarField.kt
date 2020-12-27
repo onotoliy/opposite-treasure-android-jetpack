@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.github.onotoliy.opposite.treasure.R
@@ -42,9 +43,18 @@ import com.github.onotoliy.opposite.treasure.utils.toISO
 @Composable
 fun CalendarField(
     label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    value: String = "",
-    onValueChange: (String) -> Unit
+    editable: Boolean = true,
+    labelColor: Color = MaterialTheme.colors.primary,
+    labelFontSize: Int = 4,
+    valueColor: Color = Color.Black,
+    valueFontSize: Int = 5,
+    background: Color = Color.White,
+    textAlign: TextAlign = TextAlign.Left,
+    leadingIcon: @Composable() (() -> Unit)? = null,
+    divider: @Composable() (() -> Unit)? = null
 ) {
     val model = remember { mutableStateOf(CalendarModel(value), neverEqualPolicy()) }
     val selected = remember { mutableStateOf(value) }
@@ -54,11 +64,19 @@ fun CalendarField(
         modifier = modifier,
         label = label,
         value = selected.value,
-        onClick = { expanded.value = true }
+        labelColor = labelColor,
+        labelFontSize = labelFontSize,
+        valueColor = valueColor,
+        valueFontSize = valueFontSize,
+        background = background,
+        textAlign = textAlign,
+        leadingIcon = leadingIcon,
+        divider = divider,
+        onClick = if (editable) { { expanded.value = true } } else null
     )
 
     if (expanded.value) {
-        Dialog(onDismissRequest = {}) {
+        Dialog(onDismissRequest = { expanded.value = false }) {
             Column {
                 CalendarHeader(model = model.value)
                 CalendarWeeks(model = model.value, set = { selected.value = it})

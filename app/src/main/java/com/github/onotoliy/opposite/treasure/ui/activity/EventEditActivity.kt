@@ -5,17 +5,18 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
@@ -111,35 +112,39 @@ fun EventEditScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            editable = editable,
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
+            modifier = Modifier.fillMaxWidth(0.8f),
             value = context.value.name,
             label = stringResource(id = R.string.event_edit_name),
-            onValueChange = { context.value.name = it }
+            onValueChange = { context.value = context.value.copy(name = it) }
         )
         TextField(
             editable = editable,
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
+            valueColor = if (editable) Color.Black else Color.Gray,
+            modifier = Modifier.fillMaxWidth(0.8f),
             value = context.value.contribution,
             label = stringResource(id = R.string.event_edit_contribution),
-            onValueChange = { context.value.contribution = it },
+            onValueChange = { context.value = context.value.copy(contribution = it) },
             keyboardType = KeyboardType.Number,
             visualTransformation = MoneyVisualTransformation()
         )
         TextField(
             editable = editable,
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
+            valueColor = if (editable) Color.Black else Color.Gray,
+            modifier = Modifier.fillMaxWidth(0.8f),
             value = context.value.total,
             label = stringResource(id = R.string.event_edit_total),
-            onValueChange = { context.value.total = it },
+            onValueChange = { context.value = context.value.copy(total = it) },
             keyboardType = KeyboardType.Number,
             visualTransformation = MoneyVisualTransformation()
         )
         CalendarField(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp),
+            editable = editable,
+            valueColor = if (editable) Color.Black else Color.Gray,
+            modifier = Modifier.fillMaxWidth(0.8f),
             value = context.value.deadline.fromISO().toShortDate(),
             label = stringResource(id = R.string.event_edit_deadline),
-            onValueChange = { context.value.deadline }
+            onValueChange = { context.value = context.value.copy(deadline = it) },
+            divider = { Divider(color = Color.Gray) }
         )
     }
 }

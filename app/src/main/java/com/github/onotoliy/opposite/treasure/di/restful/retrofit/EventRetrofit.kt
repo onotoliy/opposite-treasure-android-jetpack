@@ -7,7 +7,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
@@ -21,10 +20,7 @@ interface EventRetrofit {
         @Query("numberOfRows") numberOfRows: Int
     ): Call<Page<Event>>
 
-    @POST("/api/treasure/v1/event")
-    fun post(@Header("Authorization") token: String, @Body dto: Event): Call<Event>
-
-    @PUT("/api/treasure/v1/event")
+    @PUT("/api/treasure/v1/event/sync")
     fun put(@Header("Authorization") token: String, @Body dto: Event): Call<Event>
 
     @GET("/api/treasure/v1/event/version")
