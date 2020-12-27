@@ -34,9 +34,6 @@ class EventWorker @Inject constructor(
             Log.i("EventWorker", "Error \"${String(response.errorBody()?.bytes() ?: ByteArray(0))}\"")
 
             if (!response.isSuccessful || response.body()?.uuid != vo.uuid) {
-
-
-
                 builder.putString("uuid", vo.uuid)
                        .putString("message", response.message())
                        .setFinished(false)

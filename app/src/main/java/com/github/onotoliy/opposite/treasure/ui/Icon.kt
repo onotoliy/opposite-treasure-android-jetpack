@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.ui
 
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -8,15 +9,7 @@ import androidx.compose.ui.res.vectorResource
 import com.github.onotoliy.opposite.treasure.R
 
 @Composable
-fun IconSmartphone(modifier: Modifier = Modifier, tint: Color = Color.White) =
-    Icon(
-        imageVector = vectorResource(id = R.drawable.ic_baseline_smartphone_24),
-        modifier = modifier,
-        tint = tint
-    )
-
-@Composable
-fun IconCached(modifier: Modifier = Modifier, tint: Color = Color.White) =
+fun IconCached(modifier: Modifier = Modifier, tint: Color = Color.Black) =
     Icon(
         imageVector = vectorResource(id = R.drawable.ic_baseline_cached_24),
         modifier = modifier,
@@ -24,9 +17,17 @@ fun IconCached(modifier: Modifier = Modifier, tint: Color = Color.White) =
     )
 
 @Composable
-fun IconCheck(modifier: Modifier = Modifier, tint: Color = Color.White) =
+fun IconCheck(modifier: Modifier = Modifier, tint: Color = Color.Black) =
     Icon(
         imageVector = vectorResource(id = R.drawable.ic_baseline_check_24),
+        modifier = modifier,
+        tint = tint
+    )
+
+@Composable
+fun IconClose(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(
+        imageVector = vectorResource(id = R.drawable.ic_baseline_close_24),
         modifier = modifier,
         tint = tint
     )

@@ -4,17 +4,17 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -22,9 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import com.github.onotoliy.opposite.treasure.di.worker.DepositWorker
 import com.github.onotoliy.opposite.treasure.di.worker.EventWorker
 import com.github.onotoliy.opposite.treasure.di.worker.TransactionWorker
 import com.github.onotoliy.opposite.treasure.ui.IconCheck
+import com.github.onotoliy.opposite.treasure.ui.IconClose
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.utils.defaultWorkInfo
 import com.github.onotoliy.opposite.treasure.utils.getUUID
@@ -89,7 +91,7 @@ class LoadingActivity : AppCompatActivity() {
                 worker.getWorkInfoByIdLiveData(debt.id)
             }
 
-            TreasureTheme() {
+            TreasureTheme {
                 LoadingScreen(
                     cashbox = sCashbox,
                     debt = sDebt,
@@ -112,9 +114,10 @@ fun LoadingScreen(
     transaction: MutableState<WorkInfo>,
     onClick: () -> Unit
 ) {
-    val finished = remember(false) { mutableStateOf(false) }
-
-    finished.value = cashbox.finished && debt.finished && event.finished && deposit.finished && transaction.finished
+    val failed = remember(false) { mutableStateOf(false) }
+    val success = remember(false) { mutableStateOf(false) }
+    failed.value = cashbox.failed || debt.failed || event.failed || deposit.failed || transaction.failed
+    success.value = cashbox.finished && debt.finished && event.finished && deposit.finished && transaction.finished
 
     Box(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
@@ -125,9 +128,17 @@ fun LoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(imageVector = vectorResource(id = R.drawable.ic_launcher_foreground))
-            if (finished.value) {
-                Text(text = stringResource(id = R.string.loading_finished))
+            Image(
+                bitmap = imageResource(id = R.mipmap.ic_launcher),
+                contentScale = ContentScale.None
+            )
+
+            if (success.value || failed.value) {
+                if (success.value) {
+                    Text(text = stringResource(id = R.string.loading_finished))
+                } else {
+                    Text(text = "Ошибка")
+                }
             } else {
                 Text(text = stringResource(id = R.string.loading_loading))
                 Text(text = stringResource(id = R.string.loading_please_wait))
@@ -139,15 +150,19 @@ fun LoadingScreen(
                 WorkInfoProgress(title = stringResource(id = R.string.loading_transactions), value = transaction)
             }
 
-            IconButton(
-                modifier = Modifier.padding(vertical = 5.dp).clip(CircleShape).background(
-                    if (finished.value) MaterialTheme.colors.primary else Color.Gray,
-                    CircleShape
-                ),
-                enabled = finished.value,
-                onClick = onClick
-            ) {
-                IconCheck()
+            Spacer(Modifier.padding(5.dp))
+
+            if (success.value || failed.value) {
+                IconButton(
+                    modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
+                    onClick = onClick
+                ) {
+                    if (success.value) {
+                        IconCheck(tint = Color.Green)
+                    } else {
+                        IconClose(tint = Color.Red)
+                    }
+                }
             }
         }
     }
@@ -178,11 +193,18 @@ private val WorkInfo.indicator: Float
 private val MutableState<WorkInfo>.finished: Boolean
     get() = this.value.finished
 
+
+private val MutableState<WorkInfo>.failed: Boolean
+    get() = this.value.failed
+
 private val WorkInfo.total: Int
     get() = this.progress.getInt("total", 0)
 
 private val WorkInfo.offset: Int
     get() = this.progress.getInt("offset", 0)
+
+private val WorkInfo?.failed: Boolean
+    get() = this?.state == WorkInfo.State.FAILED
 
 private val WorkInfo?.finished: Boolean
     get() = this?.outputData?.getBoolean("finished", false) ?: false
