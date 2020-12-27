@@ -3,9 +3,11 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 import android.accounts.AccountManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
@@ -94,8 +96,11 @@ class TransactionEditActivity : AppCompatActivity() {
 
             TreasureTheme {
                 Menu(
+                    screen = Screen.TransactionEditScreen(intent.pk),
                     floatingActionButton = {
                         FloatingActionButton(
+                            modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
+                            backgroundColor = Color.White,
                             content = { IconSave() },
                             onClick = {
                                 replace(context.value)

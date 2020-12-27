@@ -36,6 +36,7 @@ class DepositPageActivity : AppCompatActivity() {
 
             TreasureTheme {
                 Menu(
+                    screen = Screen.DepositPageScreen,
                     bodyContent = {
                         DepositPageScreen(
                             context = context,

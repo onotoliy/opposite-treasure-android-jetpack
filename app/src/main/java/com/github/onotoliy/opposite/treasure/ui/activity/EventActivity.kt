@@ -2,7 +2,9 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
@@ -12,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
@@ -70,8 +75,11 @@ class EventActivity : AppCompatActivity() {
 
             TreasureTheme {
                 Menu(
+                    screen = Screen.EventScreen(pk),
                     floatingActionButton = {
                         FloatingActionButton(
+                            modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
+                            backgroundColor = Color.White,
                             content = { IconEdit() },
                             onClick = { navigateTo(Screen.EventEditScreen(pk)) }
                         )

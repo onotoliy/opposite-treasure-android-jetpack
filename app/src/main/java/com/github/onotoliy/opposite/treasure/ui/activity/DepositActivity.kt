@@ -80,6 +80,7 @@ class DepositActivity : AppCompatActivity() {
 
             TreasureTheme {
                 Menu(
+                    screen = Screen.DepositScreen(pk),
                     bodyContent = {
                         DepositScreen(
                             deposit = deposit,

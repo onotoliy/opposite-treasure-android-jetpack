@@ -47,5 +47,4 @@ fun DepositItemView(dto: DepositVO, navigateTo: (Screen) -> Unit) {
         }
         Text(text = dto.deposit, style = H6, textAlign = TextAlign.Right)
     }
-    Divider()
 }

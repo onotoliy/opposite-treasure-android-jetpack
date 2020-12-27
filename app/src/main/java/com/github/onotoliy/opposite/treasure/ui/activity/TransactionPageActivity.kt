@@ -2,9 +2,14 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
@@ -34,8 +39,11 @@ class TransactionPageActivity : AppCompatActivity() {
 
             TreasureTheme {
                 Menu(
+                    screen = Screen.TransactionPageScreen,
                     floatingActionButton = {
                         FloatingActionButton(
+                            modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
+                            backgroundColor = Color.White,
                             content = { IconAdd() },
                             onClick = { navigateTo(Screen.TransactionEditScreen()) }
                         )
