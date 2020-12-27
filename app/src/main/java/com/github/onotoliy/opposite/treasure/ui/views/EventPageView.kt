@@ -25,7 +25,7 @@ import com.github.onotoliy.opposite.treasure.utils.fromISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 
 @Composable
-fun EventPageViewVO(
+fun EventPageView(
     list: List<EventVO>,
     total: Long,
     navigateTo: (Screen) -> Unit,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +28,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositView
-import com.github.onotoliy.opposite.treasure.ui.views.EventPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.EventPageView
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import com.github.onotoliy.opposite.treasure.utils.defaultCashbox
 import com.github.onotoliy.opposite.treasure.utils.defaultDeposit
@@ -140,7 +141,7 @@ fun DepositScreen(
                 Tab(
                     selected = tab == selected.value,
                     onClick = { selected.value = tab },
-                    text = { androidx.compose.material.Text(text = tab.label) }
+                    text = { Text(text = tab.label) }
                 )
             }
         }
@@ -150,7 +151,7 @@ fun DepositScreen(
                 deposit = deposit.value,
                 cashbox = cashbox.value
             )
-            DepositTab.DEBT -> EventPageViewVO(
+            DepositTab.DEBT -> EventPageView(
                 list = contextDebts.value,
                 total = totalDebts.value,
                 navigateTo = navigateTo,

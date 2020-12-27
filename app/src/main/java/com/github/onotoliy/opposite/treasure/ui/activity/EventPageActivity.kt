@@ -14,7 +14,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.EventPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.EventPageView
 import com.github.onotoliy.opposite.treasure.utils.defaultEvents
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.loading
@@ -67,7 +67,7 @@ fun EventPageScreen(
     navigateToNextPageScreen: () -> Unit
 ) {
     Column {
-        EventPageViewVO(
+        EventPageView(
             list = context.value,
             total = total.value,
             navigateTo = navigateTo,
