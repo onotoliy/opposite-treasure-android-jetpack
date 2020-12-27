@@ -40,57 +40,49 @@ fun IconRightArrow(modifier: Modifier = Modifier) =
     Icon(imageVector = vectorResource(id = R.drawable.ic_right_arrow), modifier = modifier)
 
 @Composable
-fun IconAccountCircle(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_account_circle), modifier = modifier)
+fun IconAccountCircle(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_account_circle), tint = tint, modifier = modifier)
 
 @Composable
-fun IconAdd(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_add), modifier = modifier)
+fun IconAdd(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_add), tint = tint, modifier = modifier)
 
 @Composable
-fun IconHome(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_home), modifier = modifier)
+fun IconHome(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_home), tint = tint, modifier = modifier)
 
 @Composable
-fun IconDeposits(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_people), modifier = modifier)
+fun IconDeposits(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_people), tint = tint, modifier = modifier)
 
 @Composable
-fun IconTransactions(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_payments), modifier = modifier)
+fun IconTransactions(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_payments), tint = tint, modifier = modifier)
 
 @Composable
-fun IconEvents(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_event), modifier = modifier)
+fun IconEvents(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_event), tint = tint, modifier = modifier)
 
 @Composable
-fun IconRefresh(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_refresh), modifier = modifier)
+fun IconRefresh(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_refresh), tint = tint, modifier = modifier)
 
 @Composable
-fun IconSave(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_save), modifier = modifier)
+fun IconSave(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_save), tint = tint, modifier = modifier)
 
 @Composable
-fun IconEdit(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_edit), modifier = modifier)
+fun IconEdit(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_edit), tint = tint, modifier = modifier)
 
 @Composable
-fun IconRemove(modifier: Modifier = Modifier) =
-    Icon(imageVector = vectorResource(id = R.drawable.ic_delete), modifier = modifier)
+fun IconRemove(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_delete), tint = tint, modifier = modifier)
 
 @Composable
-fun IconUp(modifier: Modifier = Modifier) =
-    Icon(
-        imageVector = vectorResource(id = R.drawable.ic_trending_up),
-        tint = Color.Green,
-        modifier = modifier
-    )
+fun IconUp(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_trending_up), tint = tint, modifier = modifier)
 
 @Composable
-fun IconDown(modifier: Modifier = Modifier) =
-    Icon(
-        imageVector = vectorResource(id = R.drawable.ic_trending_down),
-        tint = Color.Red,
-        modifier = modifier
-    )
+fun IconDown(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_trending_down), tint = tint, modifier = modifier)
