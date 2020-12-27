@@ -26,9 +26,9 @@ import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.DepositPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
 import com.github.onotoliy.opposite.treasure.ui.views.EventView
-import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import com.github.onotoliy.opposite.treasure.utils.defaultDeposits
 import com.github.onotoliy.opposite.treasure.utils.defaultEvent
 import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
@@ -142,16 +142,16 @@ fun EventScreen(
 
         when (selected.value) {
             EventTab.GENERAL -> EventView(
-                data = event.value,
+                dto = event.value,
                 navigateTo = navigateTo
             )
-            EventTab.DEBTORS -> DepositPageViewVO(
+            EventTab.DEBTORS -> DepositPageView(
                 list = contextDebtors.value,
                 total = totalDebtors.value,
                 navigateTo = navigateTo,
                 navigateToNextPageScreen = nextPageDebtors
             )
-            EventTab.TRANSACTIONS -> TransactionPageViewVO(
+            EventTab.TRANSACTIONS -> TransactionPageView(
                 list = contextTransactions.value,
                 total = totalTransactions.value,
                 navigateTo = navigateTo,

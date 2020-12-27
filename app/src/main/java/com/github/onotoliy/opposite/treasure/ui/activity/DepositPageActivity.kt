@@ -12,7 +12,7 @@ import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.DepositPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
 import com.github.onotoliy.opposite.treasure.utils.defaultDeposits
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.loading
@@ -59,7 +59,7 @@ fun DepositPageScreen(
     navigateToNextPageScreen: () -> Unit
 ) {
     Column {
-        DepositPageViewVO(
+        DepositPageView(
             list = context.value,
             total = total.value,
             navigateTo = navigateTo,

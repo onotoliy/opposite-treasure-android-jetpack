@@ -10,7 +10,7 @@ import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.ui.IconAdd
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
-import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.loading
@@ -42,7 +42,7 @@ class TransactionPageActivity : AppCompatActivity() {
                     },
                     bodyContent = {
                         Column {
-                            TransactionPageViewVO(
+                            TransactionPageView(
                                 list = context.value,
                                 total = total.value,
                                 navigateTo = ::navigateTo,

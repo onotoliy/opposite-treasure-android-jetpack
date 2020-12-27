@@ -42,7 +42,7 @@ class TransactionActivity : AppCompatActivity() {
                     },
                     bodyContent = {
                         Column {
-                            TransactionView(data = context.value, navigateTo = ::navigateTo)
+                            TransactionView(dto = context.value, navigateTo = ::navigateTo)
                         }
                     },
                     navigateTo = ::navigateTo

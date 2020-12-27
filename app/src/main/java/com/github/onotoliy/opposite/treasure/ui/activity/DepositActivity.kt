@@ -28,7 +28,7 @@ import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositView
 import com.github.onotoliy.opposite.treasure.ui.views.EventPageViewVO
-import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageViewVO
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
 import com.github.onotoliy.opposite.treasure.utils.defaultCashbox
 import com.github.onotoliy.opposite.treasure.utils.defaultDeposit
 import com.github.onotoliy.opposite.treasure.utils.defaultEvents
@@ -156,7 +156,7 @@ fun DepositScreen(
                 navigateTo = navigateTo,
                 navigateToNextPageScreen = nextPageDebts
             )
-            DepositTab.TRANSACTION -> TransactionPageViewVO(
+            DepositTab.TRANSACTION -> TransactionPageView(
                 list = contextTransactions.value,
                 total = totalTransactions.value,
                 navigateTo = navigateTo,
