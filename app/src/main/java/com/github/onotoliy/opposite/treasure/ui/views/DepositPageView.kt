@@ -18,12 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
-import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.ui.H6
 import com.github.onotoliy.opposite.treasure.ui.IconAccountCircle
 import com.github.onotoliy.opposite.treasure.ui.IconRefresh
-import com.github.onotoliy.opposite.treasure.ui.Scroller
-import com.github.onotoliy.opposite.treasure.utils.LiveDataPage
 
 @Composable
 fun DepositPageViewVO(
@@ -72,32 +69,4 @@ fun DepositItemView(it: DepositVO, navigateTo: (Screen) -> Unit) {
         Text(text = it.deposit, style = H6, textAlign = TextAlign.Right)
     }
     Divider()
-}
-
-@Composable
-fun DepositPageViewVO(
-    view: LiveDataPage<DepositVO>,
-    navigateTo: (Screen) -> Unit,
-    navigateToNextPageScreen: (Int, Int, LiveDataPage<DepositVO>?) -> Unit
-) {
-    Scroller(
-        page = view,
-        navigateToNextPageScreen = {
-            navigateToNextPageScreen(view.offset, view.numberOfRows, view)
-        }
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(6.dp, 3.dp).clickable(onClick = {
-                navigateTo(Screen.DepositScreen(it.uuid))
-            }),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row {
-                IconAccountCircle()
-                Text(text = it.name, style = H6)
-            }
-            Text(text = it.deposit, style = H6, textAlign = TextAlign.Right)
-        }
-        Divider()
-    }
 }

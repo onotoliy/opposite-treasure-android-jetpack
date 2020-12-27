@@ -67,18 +67,15 @@ class DepositActivity : AppCompatActivity() {
 
         setContent {
             val deposit = mutableStateOf(defaultDeposit) { deposit.get(pk) }
-            val cashbox = mutableStateOf(defaultCashbox) { cashbox.get() }
+            val cashbox = mutableStateOf(defaultCashbox, cashbox::get)
             val totalDebts = mutableStateOf(0L) { debts.countByPerson(pk) }
-            val contextDebts = mutableStateOf(
-                default = defaultEvents,
-                loading = { o, n -> debts.getByPersonAll(pk, o, n) },
-                convert = { it.event }
-            )
+            val contextDebts = mutableStateOf(defaultEvents, DebtVO::event) { o, n ->
+                debts.getByPersonAll(pk, o, n)
+            }
             val totalTransactions = mutableStateOf(0L) { transactions.countByEvent(pk) }
-            val contextTransactions = mutableStateOf(
-                default = defaultTransactions,
-                loading = { o, n -> transactions.getByEventAll(pk, o, n) },
-            )
+            val contextTransactions = mutableStateOf(defaultTransactions) { o, n ->
+                transactions.getByPersonAll(pk, o, n)
+            }
 
             TreasureTheme {
                 Menu(

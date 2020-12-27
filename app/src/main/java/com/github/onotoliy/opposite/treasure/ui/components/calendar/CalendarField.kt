@@ -2,17 +2,14 @@ package com.github.onotoliy.opposite.treasure.ui.components.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AmbientTextStyle
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenu
@@ -23,30 +20,24 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 import com.github.onotoliy.opposite.treasure.ui.IconLeftArrow
 import com.github.onotoliy.opposite.treasure.ui.IconRightArrow
-import com.github.onotoliy.opposite.treasure.utils.observe
-
-@Composable
-fun Modifier.selected(isSelected: Boolean): Modifier =
-    if (isSelected) this.clip(CircleShape).background(MaterialTheme.colors.primary, CircleShape) else this
+import com.github.onotoliy.opposite.treasure.ui.components.LabeledText
+import com.github.onotoliy.opposite.treasure.utils.fromShortDate
+import com.github.onotoliy.opposite.treasure.utils.toISO
 
 @Composable
 fun CalendarField(
@@ -55,67 +46,23 @@ fun CalendarField(
     value: String = "",
     onValueChange: (String) -> Unit
 ) {
-    val model = remember { mutableStateOf(CalendarModel()) }
+    val model = remember { mutableStateOf(CalendarModel(value), neverEqualPolicy()) }
     val selected = remember { mutableStateOf(value) }
     val expanded = remember { mutableStateOf(false) }
 
-    model.value.selected.observeForever {
-        selected.value = it
-        onValueChange(it)
-    }
+    LabeledText(
+        modifier = modifier,
+        label = label,
+        value = selected.value,
+        onClick = { expanded.value = true }
+    )
 
-    Surface(modifier = modifier.clip(RoundedCornerShape(topLeft = 4.dp, topRight = 4.dp))) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .height(60.dp)
-                .padding(vertical = 3.dp)
-                .clickable(onClick = { expanded.value = true })
-                .drawBehind {
-                    val width = size.width
-                    val height = size.height
-
-                    drawLine(
-                        color = Color.LightGray,
-                        start = Offset(0.0f, height),
-                        end = Offset(width, height),
-                        strokeWidth = Stroke.DefaultMiter
-                    )
-                }
-        ) {
-            if (selected.value.isEmpty()) {
-                Text(
-                    modifier = Modifier.padding(16.dp, 0.dp),
-                    text = label,
-                    fontSize = TextUnit.Em(4),
-                    textAlign = TextAlign.Left,
-                    color = MaterialTheme.colors.primary
-                )
-            } else {
-                Text(
-                    modifier = Modifier.padding(16.dp, 0.dp),
-                    text = label,
-                    fontSize = TextUnit.Em(3),
-                    textAlign = TextAlign.Left,
-                    color = MaterialTheme.colors.primary
-                )
-            }
-            Text(
-                modifier = Modifier.padding(16.dp, 0.dp),
-                text = selected.value,
-                fontSize = TextUnit.Em(5),
-                textAlign = TextAlign.Left,
-                color = Color.Black
-            )
-        }
-    }
     if (expanded.value) {
         Dialog(onDismissRequest = {}) {
             Column {
                 CalendarHeader(model = model.value)
-                CalendarWeeks(model = model.value)
-                CalendarActions(model = model.value, expanded = expanded)
+                CalendarWeeks(model = model.value, set = { selected.value = it})
+                CalendarActions(model = model, selected = selected, expanded = expanded, onValueChange = onValueChange)
             }
         }
     }
@@ -145,7 +92,7 @@ private fun CalendarHeader(model: CalendarModel) {
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = model.headerMonth.observe(""),
+                            text = model.headerMonth.label,
                             style = H6_BOLD,
                             color = Color.Black
                         )
@@ -154,7 +101,7 @@ private fun CalendarHeader(model: CalendarModel) {
                 expanded = month.value,
                 onDismissRequest = { month.value = false }
             ) {
-                model.months.forEach {
+                Month.values().forEach {
                     DropdownMenuItem(
                         modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
                         onClick = {
@@ -164,7 +111,7 @@ private fun CalendarHeader(model: CalendarModel) {
                     ) {
                         Text(
                             modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
-                            text = it
+                            text = it.label
                         )
                     }
                 }
@@ -178,7 +125,7 @@ private fun CalendarHeader(model: CalendarModel) {
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = model.headerYear.observe(""),
+                            text = model.headerYear,
                             style = H6_BOLD,
                             color = Color.Black
                         )
@@ -187,7 +134,7 @@ private fun CalendarHeader(model: CalendarModel) {
                 expanded = year.value,
                 onDismissRequest = { year.value = false }
             ) {
-                model.years.observe()?.forEach {
+                model.years.forEach {
                     DropdownMenuItem(
                         modifier = Modifier.fillMaxWidth(1.0f).padding(0.dp),
                         onClick = {
@@ -215,7 +162,7 @@ private fun CalendarHeader(model: CalendarModel) {
 }
 
 @Composable
-private fun CalendarWeeks(model: CalendarModel) {
+private fun CalendarWeeks(model: CalendarModel, set: (String) -> Unit) {
     Column {
         Row {
             for (day in DayOfWeek.values()) {
@@ -226,7 +173,7 @@ private fun CalendarWeeks(model: CalendarModel) {
                 )
             }
         }
-        model.weeks.observe()?.forEach { week ->
+        model.weeks.forEach { week ->
             Row {
                 DayOfWeek.values().forEach { dayOfWeek ->
                     val day = week.dates.firstOrNull { it.dayOfWeek == dayOfWeek }
@@ -236,7 +183,7 @@ private fun CalendarWeeks(model: CalendarModel) {
                         color = day?.dayOfWeek?.color ?: Color.Black,
                         isSelected = day?.selected ?: false,
                         enabled = day != null,
-                        onClick = { day?.let { model.onSelectedDay(it) } }
+                        onClick = { day?.let { model.onSelectedDay(it, set) } }
                     )
                 }
             }
@@ -256,8 +203,14 @@ private fun CalendarDay(
     Surface(
         modifier = Modifier.preferredSize(48.dp).clickable(enabled = enabled, onClick = onClick),
     ) {
+        val modifier = if (isSelected) {
+            Modifier.clip(CircleShape).background(MaterialTheme.colors.primary, CircleShape)
+        } else {
+            Modifier
+        }
+
         Text(
-            modifier = Modifier.selected(isSelected).wrapContentSize(Alignment.Center),
+            modifier = modifier.wrapContentSize(Alignment.Center),
             text = name,
             style = style,
             color = if (isSelected) Color.White else color
@@ -266,21 +219,27 @@ private fun CalendarDay(
 }
 
 @Composable
-private fun CalendarActions(model: CalendarModel, expanded: MutableState<Boolean>) {
+private fun CalendarActions(
+    model: MutableState<CalendarModel>,
+    selected: MutableState<String>,
+    expanded: MutableState<Boolean>,
+    onValueChange: (String) -> Unit
+) {
     Surface {
         Row {
             Box(modifier = Modifier.preferredSize(height = 48.dp, width = 192.dp)) {
-                model.selected.observe()?.let {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = it
-                    )
-                }
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = selected.value
+                )
             }
             Box(modifier = Modifier.preferredSize(height = 48.dp, width = 144.dp)) {
                 Button(
                     modifier = Modifier.align(Alignment.Center),
-                    onClick = { expanded.value = false }
+                    onClick = {
+                        expanded.value = false
+                        onValueChange(model.value.selected.fromShortDate().toISO())
+                    }
                 ) {
                     Text(text = stringResource(R.string.choose))
                 }

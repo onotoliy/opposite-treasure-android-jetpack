@@ -20,11 +20,11 @@ fun <T> mutableStateOf(default: T, loading: () -> LiveData<T>): MutableState<T> 
 
 @Composable
 fun <T> mutableStateOf(default: List<T>, loading: (Int, Int) -> LiveData<List<T>>): MutableState<List<T>> {
-    return mutableStateOf(default, loading) { it }
+    return mutableStateOf(default, { it }, loading)
 }
 
 @Composable
-fun <T, C> mutableStateOf(default: List<T>, loading: (Int, Int) -> LiveData<List<C>>, convert: (C) -> T): MutableState<List<T>> {
+fun <T, C> mutableStateOf(default: List<T>, convert: (C) -> T, loading: (Int, Int) -> LiveData<List<C>>): MutableState<List<T>> {
     return remember(default) {
         mutableStateOf(default).apply {
             loading(this, convert, loading)

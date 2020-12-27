@@ -19,6 +19,7 @@ import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
+import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
@@ -59,16 +60,13 @@ class EventActivity : AppCompatActivity() {
         setContent {
             val event = mutableStateOf(defaultEvent) { event.get(pk) }
             val totalDebtors = mutableStateOf(0L) { debtors.countByEvent(pk) }
-            val contextDebtors = mutableStateOf(
-                default = defaultDeposits,
-                loading = { o, n -> debtors.getByEventAll(pk, o, n) },
-                convert = { it.deposit }
-            )
+            val contextDebtors = mutableStateOf(defaultDeposits, DebtVO::deposit) { o, n ->
+                debtors.getByEventAll(pk, o, n)
+            }
             val totalTransactions = mutableStateOf(0L) { transactions.countByEvent(pk) }
-            val contextTransactions = mutableStateOf(
-                default = defaultTransactions,
-                loading = { o, n -> transactions.getByEventAll(pk, o, n) },
-            )
+            val contextTransactions = mutableStateOf(defaultTransactions) { o, n ->
+                transactions.getByEventAll(pk, o, n)
+            }
 
             TreasureTheme {
                 Menu(
@@ -84,7 +82,7 @@ class EventActivity : AppCompatActivity() {
                             totalDebtors = totalDebtors,
                             contextDebtors = contextDebtors,
                             nextPageDebtors = {
-                                loading(contextDebtors, { it.deposit }) { o, n ->
+                                loading(contextDebtors, DebtVO::deposit) { o, n ->
                                     debtors.getByEventAll(pk, o, n)
                                 }
                             },

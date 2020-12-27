@@ -1,20 +1,43 @@
 package com.github.onotoliy.opposite.treasure.ui.components.calendar
 
-import android.content.res.Resources
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.utils.fromShortDate
 import java.util.*
 
-enum class DayOfWeek(val label: String, val color: Color) {
-    Monday(Resources.getSystem().getString(R.string.monday), Color.Black),
-    Tuesday(Resources.getSystem().getString(R.string.tuesday), Color.Black),
-    Wednesday(Resources.getSystem().getString(R.string.wednesday), Color.Black),
-    Thursday(Resources.getSystem().getString(R.string.thursday), Color.Black),
-    Friday(Resources.getSystem().getString(R.string.friday), Color.Black),
-    Saturday(Resources.getSystem().getString(R.string.saturday), Color.Red),
-    Sunday(Resources.getSystem().getString(R.string.sunday), Color.Red)
+enum class DayOfWeek(private val res: Int, val color: Color) {
+    Monday(R.string.monday, Color.Black),
+    Tuesday(R.string.tuesday, Color.Black),
+    Wednesday(R.string.wednesday, Color.Black),
+    Thursday(R.string.thursday, Color.Black),
+    Friday(R.string.friday, Color.Black),
+    Saturday(R.string.saturday, Color.Red),
+    Sunday(R.string.sunday, Color.Red);
+
+    @Composable
+    val label: String
+        get() = stringResource(res)
+}
+
+enum class Month(private val res: Int, val code: String) {
+    January(R.string.january, "01"),
+    February(R.string.february, "02"),
+    March(R.string.march, "03"),
+    April(R.string.april, "04"),
+    May(R.string.may, "05"),
+    June(R.string.june, "06"),
+    July(R.string.july, "07"),
+    August(R.string.august, "08"),
+    September(R.string.september, "09"),
+    October(R.string.october, "10"),
+    November(R.string.november, "11"),
+    December(R.string.december, "12");
+
+    @Composable
+    val label: String
+        get() = stringResource(res)
 }
 
 data class Week(
@@ -29,35 +52,18 @@ data class Day(
 )
 
 class CalendarModel(day: String = "") {
-    private val calendar: Calendar = Calendar.getInstance()
+    private var calendar: Calendar = Calendar.getInstance()
 
-    val selected: MutableLiveData<String> = MutableLiveData()
-    private val selectedMonth: MutableLiveData<String> = MutableLiveData()
-    private val selectedYear: MutableLiveData<String> = MutableLiveData()
-    private val selectedDay: MutableLiveData<String> = MutableLiveData()
+    var selected: String = ""
+    var selectedMonth: Month = Month.January
+    var selectedYear: String = ""
+    var selectedDay: String = ""
 
-    val headerYear: MutableLiveData<String> = MutableLiveData("2020")
-    val headerMonth: MutableLiveData<String> = MutableLiveData(
-        Resources.getSystem().getString(R.string.january)
-    )
+    var headerYear: String = "2020"
+    var headerMonth: Month = Month.January
 
-    val years: MutableLiveData<List<String>> = MutableLiveData()
-    val months: List<String> = listOf(
-        Resources.getSystem().getString(R.string.january),
-        Resources.getSystem().getString(R.string.february),
-        Resources.getSystem().getString(R.string.march),
-        Resources.getSystem().getString(R.string.april),
-        Resources.getSystem().getString(R.string.may),
-        Resources.getSystem().getString(R.string.june),
-        Resources.getSystem().getString(R.string.july),
-        Resources.getSystem().getString(R.string.august),
-        Resources.getSystem().getString(R.string.september),
-        Resources.getSystem().getString(R.string.october),
-        Resources.getSystem().getString(R.string.november),
-        Resources.getSystem().getString(R.string.december)
-    )
-
-    val weeks: MutableLiveData<List<Week>> = MutableLiveData()
+    var years: List<String> = listOf()
+    var weeks: List<Week> = listOf()
 
     init {
         if (day.isEmpty()) {
@@ -66,19 +72,15 @@ class CalendarModel(day: String = "") {
             calendar.time = day.fromShortDate()
         }
 
-        selectedDay.postValue(calendar.get(Calendar.DAY_OF_MONTH).toString())
-        selectedMonth.postValue(months[calendar.get(Calendar.MONTH)])
-        selectedYear.postValue(calendar.get(Calendar.YEAR).toString())
+        selectedDay = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        selectedMonth = Month.values()[calendar.get(Calendar.MONTH)]
+        selectedYear = calendar.get(Calendar.YEAR).toString()
 
         calendar.set(Calendar.HOUR, 1)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         calendar.set(Calendar.DAY_OF_MONTH, 1)
-
-        selectedMonth.observeForever { init(calendar) }
-        selectedYear.observeForever { init(calendar) }
-        selectedDay.observeForever { init(calendar) }
 
         init(calendar = calendar)
     }
@@ -95,8 +97,8 @@ class CalendarModel(day: String = "") {
         init(calendar)
     }
 
-    fun onSelectedMonth(month: String) {
-        calendar.set(Calendar.MONTH, months.indexOf(month))
+    fun onSelectedMonth(month: Month) {
+        calendar.set(Calendar.MONTH, month.ordinal)
 
         init(calendar)
     }
@@ -107,12 +109,14 @@ class CalendarModel(day: String = "") {
         init(calendar)
     }
 
-    fun onSelectedDay(day: Day) {
-        this.selectedDay.postValue(day.date)
-        this.selectedMonth.postValue(headerMonth.value)
-        this.selectedYear.postValue(headerYear.value)
+    fun onSelectedDay(day: Day, set: (String) -> Unit) {
+        this.selectedDay = day.date
+        this.selectedMonth = headerMonth
+        this.selectedYear = headerYear
 
         init(calendar)
+
+        set(this.selected)
     }
 
     private fun init(calendar: Calendar) {
@@ -136,8 +140,7 @@ class CalendarModel(day: String = "") {
                 else -> throw IllegalArgumentException("Unknown day of week (${calendar.get(Calendar.DAY_OF_WEEK)})")
             }
 
-            val isSelected =
-                selectedDay.value == "$day" && selectedMonth.value == months[month] && selectedYear.value == "$year"
+            val isSelected = selectedDay == "$day" && selectedMonth == Month.values()[month] && selectedYear == "$year"
 
             days.add(Day(dayOfWeek, "$day", week, isSelected))
 
@@ -146,12 +149,10 @@ class CalendarModel(day: String = "") {
 
         calendar.add(Calendar.DAY_OF_MONTH, -1)
 
-        this.selected.postValue(
-            "${selectedDay.value ?: ""}.${months.indexOf(selectedMonth.value ?: "") + 1}.${selectedYear.value ?: ""}"
-        )
-        this.headerYear.postValue("$year")
-        this.headerMonth.postValue(months[month])
-        this.weeks.postValue(days.groupBy { it.week }.map { Week(it.value) })
-        this.years.postValue((year - 5..year + 5).map { "$it" })
+        this.selected = "${selectedDay}.${selectedMonth.code}.${selectedYear}"
+        this.headerYear = "$year"
+        this.headerMonth = Month.values()[month]
+        this.weeks = days.groupBy { it.week }.map { Week(it.value) }
+        this.years = (year - 5..year + 5).map { "$it" }
     }
 }

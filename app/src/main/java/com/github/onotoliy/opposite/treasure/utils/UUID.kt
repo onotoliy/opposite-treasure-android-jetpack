@@ -10,7 +10,7 @@ fun randomUUID(): String = UUID.randomUUID().toString()
 
 val defaultCashbox = CashboxVO(
     deposit = "0.0",
-    lastUpdateDate = Date().toShortDate()
+    lastUpdateDate = Date().toISO()
 )
 
 val defaultDeposit = DepositVO(
@@ -25,7 +25,8 @@ val defaultEvents: List<EventVO> = listOf()
 val defaultDeposits: List<DepositVO> = listOf()
 
 val defaultEvent = EventVO(
-    creationDate = Date().toISO()
+    creationDate = Date().toISO(),
+    deadline = Date().toISO()
 )
 
 val defaultTransaction = TransactionVO (
