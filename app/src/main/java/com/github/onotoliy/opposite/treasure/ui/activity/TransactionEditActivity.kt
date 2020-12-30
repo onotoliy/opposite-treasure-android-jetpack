@@ -2,6 +2,8 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 
 import android.accounts.AccountManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -28,7 +30,6 @@ import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
-import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.fromTransactionType
@@ -77,7 +78,7 @@ class TransactionEditActivity : AppCompatActivity() {
                         creationDate = Date().toISO(),
                         deletionDate = null,
                         author = OptionVO(manager.getUUID(), manager.getName()),
-                        local = 1,
+                        local = INSERT,
                         milliseconds = milliseconds(),
                         cash = "0.0",
                         transactionDate = Date().toISO(),
@@ -88,10 +89,10 @@ class TransactionEditActivity : AppCompatActivity() {
                 )
             }
             val events = mutableStateOf(defaultOptions, { OptionVO(it.uuid, it.name) }) { _, _ ->
-                events.getAll(0, 20)
+                events.getAll()
             }
             val persons = mutableStateOf(defaultOptions, { OptionVO(it.uuid, it.name) }) { _, _ ->
-                deposits.getAll(0, 20)
+                deposits.getAll()
             }
 
             TreasureTheme {
@@ -110,7 +111,7 @@ class TransactionEditActivity : AppCompatActivity() {
                     },
                     bodyContent = {
                         TransactionEditScreen(
-                            editable = intent.pk == null,
+                            editable = context.value.local == INSERT,
                             context = context,
                             events = events,
                             persons = persons,
@@ -133,6 +134,10 @@ class TransactionEditActivity : AppCompatActivity() {
 
     private fun replace(context: TransactionVO) {
         Executors.newSingleThreadExecutor().execute {
+            if (context.local == GLOBAL) {
+                context.local = UPDATE
+            }
+
             transactions.replace(context)
         }
     }
@@ -141,13 +146,15 @@ class TransactionEditActivity : AppCompatActivity() {
         q: String?,
         persons: MutableState<List<OptionVO>>
     ) {
-        if (q == null) {
-            deposits.getAll().observeForever { list ->
-                persons.value = list.map { OptionVO(it.uuid, it.name) }
-            }
-        } else {
-            deposits.getAll(q).observeForever { list ->
-                persons.value = list.map { OptionVO(it.uuid, it.name) }
+        Handler(Looper.getMainLooper()).post {
+            if (q == null) {
+                deposits.getAll().observeForever { list ->
+                    persons.value = list.map { OptionVO(it.uuid, it.name) }
+                }
+            } else {
+                deposits.getAll("%" + q.toLowerCase(Locale.getDefault()) + "%").observeForever { list ->
+                    persons.value = list.map { OptionVO(it.uuid, it.name) }
+                }
             }
         }
     }
@@ -158,19 +165,22 @@ class TransactionEditActivity : AppCompatActivity() {
         type: TransactionType,
         events: MutableState<List<OptionVO>>
     ) {
-        if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)) {
-            loadingOnlyEvents(q, events)
-        } else {
-            if (person.isNullOrEmpty()) {
+        Handler(Looper.getMainLooper()).post {
+            if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)) {
                 loadingOnlyEvents(q, events)
             } else {
-                if (q.isNullOrEmpty()) {
-                    this.debts.getByPersonAll(person).observeForever { list ->
-                        events.value = (list.map { OptionVO(it.event.uuid, it.event.name) })
-                    }
+                if (person.isNullOrEmpty()) {
+                    loadingOnlyEvents(q, events)
                 } else {
-                    this.debts.getByPersonAll(person, q).observeForever { list ->
-                        events.value = (list.map { OptionVO(it.event.uuid, it.event.name) })
+                    if (q.isNullOrEmpty()) {
+                        debts.getByPersonAll(person).observeForever { list ->
+                            events.value = (list.map { OptionVO(it.event.uuid, it.event.name) })
+                        }
+                    } else {
+                        debts.getByPersonAll(person, "%" + q.toLowerCase(Locale.getDefault()) + "%")
+                            .observeForever { list ->
+                                events.value = (list.map { OptionVO(it.event.uuid, it.event.name) })
+                            }
                     }
                 }
             }
@@ -183,7 +193,7 @@ class TransactionEditActivity : AppCompatActivity() {
                 events.value = (list.map { OptionVO(it.uuid, it.name) })
             }
         } else {
-            this.events.getAll(q).observeForever { list ->
+            this.events.getAll("%" + q.toLowerCase(Locale.getDefault()) + "%").observeForever { list ->
                 events.value = (list.map { OptionVO(it.uuid, it.name) })
             }
         }
@@ -206,6 +216,8 @@ fun TransactionEditScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SelectionField(
+            editable = editable,
+            valueColor = if (editable) Color.Black else Color.Gray,
             modifier = modifier,
             value = context.value.type.fromTransactionType(),
             label = stringResource(id = R.string.transaction_edit_type),
@@ -213,8 +225,6 @@ fun TransactionEditScreen(
             list = TransactionType.values().map(TransactionType::fromTransactionType)
         )
         TextField(
-            editable = editable,
-            valueColor = if (editable) Color.Black else Color.Gray,
             modifier = modifier,
             value = context.value.name,
             label = stringResource(id = R.string.transaction_edit_name),
@@ -232,6 +242,8 @@ fun TransactionEditScreen(
             visualTransformation = MoneyVisualTransformation()
         )
         AutocompleteField(
+            editable = editable,
+            valueColor = if (editable) Color.Black else Color.Gray,
             modifier = modifier,
             value = context.value.person ?: OptionVO(),
             list = persons.value,
@@ -240,6 +252,8 @@ fun TransactionEditScreen(
             onSearchValue = qPersons
         )
         AutocompleteField(
+            editable = editable,
+            valueColor = if (editable) Color.Black else Color.Gray,
             modifier = modifier,
             value = context.value.event ?: OptionVO(),
             list = events.value,

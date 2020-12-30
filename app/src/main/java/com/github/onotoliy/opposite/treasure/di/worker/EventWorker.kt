@@ -1,7 +1,6 @@
 package com.github.onotoliy.opposite.treasure.di.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -12,6 +11,8 @@ import com.github.onotoliy.opposite.treasure.di.database.data.toDTO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.EventResource
+import com.github.onotoliy.opposite.treasure.utils.progress
+import com.github.onotoliy.opposite.treasure.utils.setEvent
 import com.github.onotoliy.opposite.treasure.utils.setFinished
 import javax.inject.Inject
 import javax.inject.Provider
@@ -24,19 +25,34 @@ class EventWorker @Inject constructor(
 ) : AbstractPageWorker<Event, EventVO, EventDAO>(context, params, repository, retrofit) {
     override fun toVO(dto: Event): EventVO = dto.toVO()
 
+    override suspend fun doWork(): Result {
+        setProgress(progress(worker = this.javaClass.simpleName))
+
+        return super.doWork()
+    }
+
     override fun sendAllLocal(builder: Data.Builder): Boolean {
         repository.getAllLocal().forEach { vo ->
             val response = resource.saveOrUpdate(vo.toDTO())
 
-            Log.i("EventWorker", "VO $vo")
-            Log.i("EventWorker", "Code ${response.code()}")
-            Log.i("EventWorker", "Message ${response.message()}")
-            Log.i("EventWorker", "Error \"${String(response.errorBody()?.bytes() ?: ByteArray(0))}\"")
+            if (response.isSuccessful) {
+                if (response.body()?.status != 200) {
+                    builder.putString("uuid", vo.uuid)
+                        .putString("message", response.body()?.exception ?: "")
+                        .setEvent(vo)
+                        .setFinished(false)
 
-            if (!response.isSuccessful || response.body()?.uuid != vo.uuid) {
-                builder.putString("uuid", vo.uuid)
-                       .putString("message", response.message())
-                       .setFinished(false)
+                    vo.exceptions = response.body()?.exception ?: ""
+
+                    repository.replace(vo)
+
+                    return false
+                }
+            } else {
+                 builder.putString("uuid", vo.uuid)
+                     .putString("message", "При выполнении синхронизации произошла ошибка")
+                     .setEvent(vo)
+                     .setFinished(false)
 
                 return false
             }

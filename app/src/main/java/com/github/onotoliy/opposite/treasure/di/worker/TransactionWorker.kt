@@ -18,7 +18,9 @@ import com.github.onotoliy.opposite.treasure.di.database.data.toDTO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.TransactionResource
+import com.github.onotoliy.opposite.treasure.utils.progress
 import com.github.onotoliy.opposite.treasure.utils.setFinished
+import com.github.onotoliy.opposite.treasure.utils.setTransaction
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -30,6 +32,12 @@ class TransactionWorker @Inject constructor(
 ) : AbstractPageWorker<Transaction, TransactionVO, TransactionDAO>(context, params, repository, retrofit) {
 
     override fun toVO(dto: Transaction): TransactionVO = dto.toVO()
+
+    override suspend fun doWork(): Result {
+        setProgress(progress(this.javaClass.simpleName))
+
+        return super.doWork()
+    }
 
     override fun sendAllLocal(builder: Data.Builder): Boolean {
         repository
@@ -47,11 +55,23 @@ class TransactionWorker @Inject constructor(
             .forEach { vo ->
                 val response = resource.saveOrUpdate(vo.toDTO())
 
-                if (response.isSuccessful && response.body()?.uuid == vo.uuid) {
-                    Log.i("TransactionWorker", "Success upload transaction: $vo")
+                if (response.isSuccessful) {
+                    if (response.body()?.status != 200) {
+                        builder.putString("uuid", vo.uuid)
+                            .putString("message", response.body()?.exception ?: "")
+                            .setTransaction(vo)
+                            .setFinished(false)
+
+                        vo.exceptions = response.body()?.exception ?: ""
+
+                        repository.replace(vo)
+
+                        return false
+                    }
                 } else {
                     builder.putString("uuid", vo.uuid)
-                        .putString("message", response.message())
+                        .putString("message", "При выполнении синхронизации произошла ошибка")
+                        .setTransaction(vo)
                         .setFinished(false)
 
                     return false

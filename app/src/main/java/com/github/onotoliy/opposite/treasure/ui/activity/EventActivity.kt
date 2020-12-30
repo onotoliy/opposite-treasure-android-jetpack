@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -29,11 +30,14 @@ import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
+import com.github.onotoliy.opposite.treasure.ui.IconRemove
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
 import com.github.onotoliy.opposite.treasure.ui.views.EventView
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionPageView
+import com.github.onotoliy.opposite.treasure.utils.DELETE
+import com.github.onotoliy.opposite.treasure.utils.INSERT
 import com.github.onotoliy.opposite.treasure.utils.defaultDeposits
 import com.github.onotoliy.opposite.treasure.utils.defaultEvent
 import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
@@ -42,6 +46,7 @@ import com.github.onotoliy.opposite.treasure.utils.loading
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class EventActivity : AppCompatActivity() {
@@ -76,6 +81,15 @@ class EventActivity : AppCompatActivity() {
             TreasureTheme {
                 Menu(
                     screen = Screen.EventScreen(pk),
+                    actions = {
+                        if (event.value.local == INSERT) {
+                            IconButton(onClick = {
+                                delete(event.value)
+                            } ) {
+                                IconRemove()
+                            }
+                        }
+                    },
                     floatingActionButton = {
                         FloatingActionButton(
                             modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
@@ -108,6 +122,15 @@ class EventActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    private fun delete(context: EventVO) {
+        Executors.newSingleThreadExecutor().execute {
+            context.local = DELETE
+
+            event.replace(context)
+        }
+        navigateTo(Screen.EventPageScreen)
     }
 }
 

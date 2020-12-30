@@ -25,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -61,7 +63,15 @@ fun CalendarField(
     val expanded = remember { mutableStateOf(false) }
 
     LabeledText(
-        modifier = modifier,
+        modifier = modifier.drawBehind {
+            drawLine(
+                color = Color.Black,
+                start = Offset(0f, size.height),
+                end = Offset(size.width, size.height),
+                strokeWidth = 4f,
+                alpha = 0.54f
+            )
+        },
         label = label,
         value = selected.value,
         labelColor = labelColor,
@@ -71,7 +81,6 @@ fun CalendarField(
         background = background,
         textAlign = textAlign,
         leadingIcon = leadingIcon,
-        divider = divider,
         onClick = if (editable) { { expanded.value = true } } else null
     )
 

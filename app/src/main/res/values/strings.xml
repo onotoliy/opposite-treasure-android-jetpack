@@ -49,6 +49,7 @@
     <string name="event_deadline">Сдать до</string>
     <string name="event_creation_date">Дата создания</string>
     <string name="event_author">Автор</string>
+    <string name="event_exceptions">Ошибка</string>
 
     <string name="event_edit_name">Название</string>
     <string name="event_edit_contribution">Взнос с одного человека</string>

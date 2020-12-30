@@ -22,6 +22,7 @@ import com.github.onotoliy.opposite.treasure.ui.H6
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 import com.github.onotoliy.opposite.treasure.ui.IconEvents
 import com.github.onotoliy.opposite.treasure.ui.Scroller
+import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.fromISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 
@@ -47,7 +48,7 @@ fun EventItemView(dto: EventVO, navigateTo: (Screen) -> Unit) {
         modifier = Modifier.fillMaxWidth().clickable { navigateTo(Screen.EventScreen(dto.uuid)) },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconEvents(tint = if (dto.local == 1) Color.Blue else Color.Black)
+        IconEvents(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -78,7 +79,7 @@ fun EventItemView(dto: EventVO, navigateTo: (Screen) -> Unit) {
                         style = BODY_GREY
                     )
                     Text(
-                        text = dto.deadline.fromISO().toShortDate(),
+                        text = dto.creationDate.fromISO().toShortDate(),
                         style = BODY_GREY,
                         textAlign = TextAlign.Right
                     )

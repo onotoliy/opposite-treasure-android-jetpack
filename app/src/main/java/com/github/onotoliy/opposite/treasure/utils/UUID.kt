@@ -10,6 +10,11 @@ import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import java.util.*
 
+const val GLOBAL = 0
+const val INSERT = 1
+const val UPDATE = 2
+const val DELETE = 3
+
 fun randomUUID(): String = UUID.randomUUID().toString()
 
 val defaultCashbox = CashboxVO(

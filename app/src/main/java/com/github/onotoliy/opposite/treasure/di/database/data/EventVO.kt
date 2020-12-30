@@ -9,6 +9,7 @@ import com.github.onotoliy.opposite.data.core.HasCreationDate
 import com.github.onotoliy.opposite.data.core.HasDeletionDate
 import com.github.onotoliy.opposite.data.core.HasName
 import com.github.onotoliy.opposite.data.core.HasUUID
+import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.milliseconds
 
 @Entity(tableName = "treasure_event")
@@ -30,6 +31,8 @@ data class EventVO(
     override var deletionDate: String? = null,
     @Embedded(prefix = "author_")
     var author: OptionVO = OptionVO(),
+    @ColumnInfo(name = "exceptions", typeAffinity = ColumnInfo.TEXT, defaultValue = "")
+    var exceptions: String = "",
     @ColumnInfo(name = "local", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
     var local: Int = 0,
     @ColumnInfo(name = "milliseconds", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
@@ -45,7 +48,9 @@ fun Event.toVO(): EventVO = EventVO(
     creationDate = creationDate,
     deletionDate = deletionDate,
     author = author.toVO(),
-    milliseconds = creationDate.milliseconds()
+    milliseconds = creationDate.milliseconds(),
+    local = GLOBAL,
+    exceptions = ""
 )
 
 fun EventVO.toDTO(): Event = Event(

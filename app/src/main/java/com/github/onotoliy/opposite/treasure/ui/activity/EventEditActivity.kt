@@ -5,14 +5,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,25 +27,13 @@ import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
-import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.components.MoneyVisualTransformation
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
 import com.github.onotoliy.opposite.treasure.ui.components.calendar.CalendarField
-import com.github.onotoliy.opposite.treasure.utils.defaultEvent
-import com.github.onotoliy.opposite.treasure.utils.fromISO
-import com.github.onotoliy.opposite.treasure.utils.getName
-import com.github.onotoliy.opposite.treasure.utils.getUUID
-import com.github.onotoliy.opposite.treasure.utils.inject
-import com.github.onotoliy.opposite.treasure.utils.milliseconds
-import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
-import com.github.onotoliy.opposite.treasure.utils.navigateTo
-import com.github.onotoliy.opposite.treasure.utils.pk
-import com.github.onotoliy.opposite.treasure.utils.randomUUID
-import com.github.onotoliy.opposite.treasure.utils.toISO
-import com.github.onotoliy.opposite.treasure.utils.toShortDate
+import com.github.onotoliy.opposite.treasure.utils.*
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -74,7 +63,7 @@ class EventEditActivity : AppCompatActivity() {
                         creationDate = Date().toISO(),
                         deletionDate = null,
                         author = OptionVO(manager.getUUID(), manager.getName()),
-                        local = 1,
+                        local = INSERT,
                         milliseconds = milliseconds()
                     )
                 )
@@ -94,7 +83,7 @@ class EventEditActivity : AppCompatActivity() {
                             }
                         )
                     },
-                    bodyContent = { EventEditScreen(intent.pk == null, context) },
+                    bodyContent = { EventEditScreen(context.value.local == INSERT, context) },
                     navigateTo = ::navigateTo
                 )
             }
@@ -103,6 +92,10 @@ class EventEditActivity : AppCompatActivity() {
 
     private fun replace(context: EventVO) {
         Executors.newSingleThreadExecutor().execute {
+            if (context.local == GLOBAL) {
+                context.local = UPDATE
+            }
+
             dao.replace(context)
         }
     }
@@ -124,6 +117,9 @@ fun EventEditScreen(
             label = stringResource(id = R.string.event_edit_name),
             onValueChange = { context.value = context.value.copy(name = it) }
         )
+
+        Spacer(Modifier.padding(5.dp))
+
         TextField(
             editable = editable,
             valueColor = if (editable) Color.Black else Color.Gray,
@@ -134,6 +130,9 @@ fun EventEditScreen(
             keyboardType = KeyboardType.Number,
             visualTransformation = MoneyVisualTransformation()
         )
+
+        Spacer(Modifier.padding(5.dp))
+
         TextField(
             editable = editable,
             valueColor = if (editable) Color.Black else Color.Gray,
@@ -144,6 +143,9 @@ fun EventEditScreen(
             keyboardType = KeyboardType.Number,
             visualTransformation = MoneyVisualTransformation()
         )
+
+        Spacer(Modifier.padding(5.dp))
+
         CalendarField(
             editable = editable,
             valueColor = if (editable) Color.Black else Color.Gray,

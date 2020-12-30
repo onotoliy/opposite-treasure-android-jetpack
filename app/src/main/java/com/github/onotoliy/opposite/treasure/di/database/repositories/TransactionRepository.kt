@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class TransactionRepository @Inject constructor(
     version: VersionDAO,
-    dao: TransactionDAO
-) : AbstractRepository<TransactionVO, TransactionDAO>("transaction", version, dao) {
+    dao: TransactionDAO,
+) : AbstractRepository<TransactionVO, TransactionDAO>("transaction", version, dao, dao::clean) {
     fun getByPersonAll(person: String, offset: Int, numberOfRows: Int): LiveData<List<TransactionVO>> =
         dao.getByPersonAll(person, offset, numberOfRows)
 

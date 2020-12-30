@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.github.onotoliy.opposite.treasure.di.database.repositories.CashboxRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.CashboxResource
 import com.github.onotoliy.opposite.treasure.utils.failure
+import com.github.onotoliy.opposite.treasure.utils.progress
 import com.github.onotoliy.opposite.treasure.utils.success
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -20,6 +21,8 @@ class CashboxWorker @Inject constructor(
 ): CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        setProgress(progress(this.javaClass.simpleName))
+
         val builder: Data.Builder = Data.Builder()
 
         return if (syncObject(builder)) {

@@ -4,6 +4,7 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
@@ -25,6 +26,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.ui.IconCached
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositView
@@ -62,9 +64,9 @@ class DepositActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val pk = intent.pk ?: account.getUUID()
-
         inject()
+
+        val pk = intent.pk ?: account.getUUID()
 
         setContent {
             val deposit = mutableStateOf(defaultDeposit) { deposit.get(pk) }
@@ -81,6 +83,11 @@ class DepositActivity : AppCompatActivity() {
             TreasureTheme {
                 Menu(
                     screen = Screen.DepositScreen(pk),
+                    actions = {
+                        IconButton(onClick = { navigateTo(Screen.LoadingScreen) } ) {
+                            IconCached()
+                        }
+                    },
                     bodyContent = {
                         DepositScreen(
                             deposit = deposit,

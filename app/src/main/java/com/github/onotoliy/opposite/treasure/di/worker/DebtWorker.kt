@@ -9,6 +9,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.DebtResource
+import com.github.onotoliy.opposite.treasure.utils.progress
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -20,6 +21,12 @@ class DebtWorker @Inject constructor(
 ) : AbstractPageWorker<Debt, DebtVO, DebtDAO>(context, params, repository, retrofit) {
 
     override fun toVO(dto: Debt): DebtVO = dto.toVO()
+
+    override suspend fun doWork(): Result {
+        setProgress(progress(this.javaClass.simpleName))
+
+        return super.doWork()
+    }
 
     class Factory @Inject constructor(
         private val repository: Provider<DebtRepository>,

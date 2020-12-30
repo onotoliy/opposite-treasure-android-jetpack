@@ -55,5 +55,13 @@ fun EventView(dto: EventVO, navigateTo: (Screen) -> Unit) {
             value = dto.author.name,
             onClick = { navigateTo(Screen.DepositScreen(dto.author.uuid)) }
         )
+
+        if (dto.exceptions.isNotBlank()) {
+            LabeledText(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(id = R.string.event_exceptions),
+                value = dto.exceptions
+            )
+        }
     }
 }

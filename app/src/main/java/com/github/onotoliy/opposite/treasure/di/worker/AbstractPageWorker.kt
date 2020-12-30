@@ -12,6 +12,7 @@ import com.github.onotoliy.opposite.treasure.di.restful.resource.Resource
 import com.github.onotoliy.opposite.treasure.utils.failure
 import com.github.onotoliy.opposite.treasure.utils.progress
 import com.github.onotoliy.opposite.treasure.utils.setLocalVersion
+import com.github.onotoliy.opposite.treasure.utils.setWorker
 import com.github.onotoliy.opposite.treasure.utils.setRemoteVersion
 import com.github.onotoliy.opposite.treasure.utils.success
 import retrofit2.Response
@@ -33,6 +34,7 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
         val remoteVersion = resource.getVersion()
 
         val builder: Data.Builder = Data.Builder()
+            .setWorker(this.javaClass.simpleName)
             .setLocalVersion(localVersion)
             .setRemoteVersion(remoteVersion)
 
@@ -71,6 +73,7 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
             } else {
                 setProgress(
                     progress(
+                        worker = this.javaClass.simpleName,
                         total = page.meta.total,
                         offset = offset + numberOfRows
                     )

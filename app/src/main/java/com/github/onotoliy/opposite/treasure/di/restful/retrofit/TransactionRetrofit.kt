@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.restful.retrofit
 
 import com.github.onotoliy.opposite.data.Option
+import com.github.onotoliy.opposite.data.SyncResponse
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
@@ -21,7 +22,7 @@ interface TransactionRetrofit {
     ): Call<Page<Transaction>>
 
     @PUT("/api/treasure/v1/transaction/sync")
-    fun put(@Header("Authorization") token: String, @Body dto: Transaction): Call<Transaction>
+    fun put(@Header("Authorization") token: String, @Body dto: Transaction): Call<SyncResponse>
 
     @GET("/api/treasure/v1/transaction/version")
     fun version(@Header("Authorization") token: String): Call<Option>

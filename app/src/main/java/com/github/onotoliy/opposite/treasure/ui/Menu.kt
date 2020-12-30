@@ -3,6 +3,7 @@ package com.github.onotoliy.opposite.treasure.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.IconButton
@@ -27,6 +28,7 @@ import com.github.onotoliy.opposite.treasure.Screen.TransactionPageScreen
 @Composable
 fun Menu(
     screen: Screen,
+    actions: @Composable RowScope.() -> Unit = {},
     bodyContent: @Composable (PaddingValues) -> Unit,
     navigateTo: (Screen) -> Unit = {},
     floatingActionButton: @Composable () -> Unit = emptyContent(),
@@ -38,11 +40,7 @@ fun Menu(
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.app_name)) },
                 backgroundColor = MaterialTheme.colors.surface,
-                actions = {
-                    IconButton(onClick = { navigateTo(Screen.LoadingScreen) } ) {
-                        IconCached()
-                    }
-                }
+                actions = actions
             )
         },
         floatingActionButton = floatingActionButton,

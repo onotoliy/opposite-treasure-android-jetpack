@@ -9,7 +9,8 @@ import com.github.onotoliy.opposite.treasure.di.database.data.VersionVO
 open class AbstractRepository<T: HasUUID, DAO: WriteDAO<T>>(
     private val type: String,
     private val version: VersionDAO,
-    protected val dao: DAO
+    protected val dao: DAO,
+    protected val clear: (Int) -> Unit = { _ -> }
 ) {
     fun getVersion(): String = version.get(type)?.version ?: "0"
 
@@ -18,6 +19,10 @@ open class AbstractRepository<T: HasUUID, DAO: WriteDAO<T>>(
     fun clean() {
         setVersion("0")
         dao.clean()
+    }
+
+    fun clean(local: Int) {
+        clear(local)
     }
 
     fun replace(vo: T) = dao.replace(vo)

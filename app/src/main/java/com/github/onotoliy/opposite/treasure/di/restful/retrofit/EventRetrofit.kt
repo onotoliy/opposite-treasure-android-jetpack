@@ -2,6 +2,7 @@ package com.github.onotoliy.opposite.treasure.di.restful.retrofit
 
 import com.github.onotoliy.opposite.data.Event
 import com.github.onotoliy.opposite.data.Option
+import com.github.onotoliy.opposite.data.SyncResponse
 import com.github.onotoliy.opposite.data.page.Page
 import retrofit2.Call
 import retrofit2.http.Body
@@ -21,7 +22,7 @@ interface EventRetrofit {
     ): Call<Page<Event>>
 
     @PUT("/api/treasure/v1/event/sync")
-    fun put(@Header("Authorization") token: String, @Body dto: Event): Call<Event>
+    fun put(@Header("Authorization") token: String, @Body dto: Event): Call<SyncResponse>
 
     @GET("/api/treasure/v1/event/version")
     fun version(@Header("Authorization") token: String): Call<Option>

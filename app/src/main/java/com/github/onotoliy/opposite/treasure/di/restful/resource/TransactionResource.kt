@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.restful.resource
 
 import android.accounts.AccountManager
+import com.github.onotoliy.opposite.data.SyncResponse
 import com.github.onotoliy.opposite.data.Transaction
 import com.github.onotoliy.opposite.data.page.Page
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.TransactionRetrofit
@@ -18,6 +19,6 @@ class TransactionResource @Inject constructor(
     override fun getAll(version: Long, offset: Int, numberOfRows: Int): Response<Page<Transaction>> =
         retrofit.sync( account.getAuthToken(), version, offset, numberOfRows).execute()
 
-    override fun saveOrUpdate(dto: Transaction): Response<Transaction> =
+    override fun saveOrUpdate(dto: Transaction): Response<SyncResponse> =
         retrofit.put( account.getAuthToken(), dto).execute()
 }

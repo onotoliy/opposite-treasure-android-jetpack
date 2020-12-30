@@ -1,8 +1,6 @@
 package com.github.onotoliy.opposite.treasure.ui.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,7 +12,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 
 @Composable
@@ -56,7 +53,15 @@ fun TextField(
         LabeledText(
             label = label,
             value = value,
-            modifier = modifier,
+            modifier = modifier.drawBehind {
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 4f,
+                    alpha = 0.54f
+                )
+            },
             labelColor = labelColor,
             labelFontSize = labelFontSize,
             valueColor = valueColor,
@@ -64,7 +69,7 @@ fun TextField(
             background = background,
             leadingIcon = leadingIcon,
             textAlign = textAlign,
-            divider = { Divider(color = Color.Gray) }
+            divider = null
         )
     }
 }

@@ -17,9 +17,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.emptyContent
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +25,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
@@ -41,19 +38,28 @@ import com.github.onotoliy.opposite.treasure.di.worker.DepositWorker
 import com.github.onotoliy.opposite.treasure.di.worker.EventWorker
 import com.github.onotoliy.opposite.treasure.di.worker.TransactionWorker
 import com.github.onotoliy.opposite.treasure.ui.IconCheck
-import com.github.onotoliy.opposite.treasure.ui.IconClose
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
+import com.github.onotoliy.opposite.treasure.ui.views.EventItemView
+import com.github.onotoliy.opposite.treasure.ui.views.TransactionItemView
 import com.github.onotoliy.opposite.treasure.utils.defaultWorkInfo
+import com.github.onotoliy.opposite.treasure.utils.event
+import com.github.onotoliy.opposite.treasure.utils.failed
+import com.github.onotoliy.opposite.treasure.utils.finished
 import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.indicator
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
+import com.github.onotoliy.opposite.treasure.utils.worker
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.transaction
 import javax.inject.Inject
 
 class LoadingActivity : AppCompatActivity() {
 
-    @Inject lateinit var worker: WorkManager
-    @Inject lateinit var account: AccountManager
+    @Inject
+    lateinit var worker: WorkManager
+    @Inject
+    lateinit var account: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,12 +99,8 @@ class LoadingActivity : AppCompatActivity() {
 
             TreasureTheme {
                 LoadingScreen(
-                    cashbox = sCashbox,
-                    debt = sDebt,
-                    event = sEvent,
-                    deposit = sDeposit,
-                    transaction = sTransaction,
-                    onClick = { navigateTo(Screen.DepositScreen(account.getUUID())) }
+                    works = listOf(sDebt.value, sEvent.value, sDeposit.value, sCashbox.value, sTransaction.value),
+                    navigateTo = ::navigateTo
                 )
             }
         }
@@ -107,18 +109,9 @@ class LoadingActivity : AppCompatActivity() {
 
 @Composable
 fun LoadingScreen(
-    cashbox: MutableState<WorkInfo>,
-    debt: MutableState<WorkInfo>,
-    event: MutableState<WorkInfo>,
-    deposit: MutableState<WorkInfo>,
-    transaction: MutableState<WorkInfo>,
-    onClick: () -> Unit
+    works: List<WorkInfo>,
+    navigateTo: (Screen) -> Unit
 ) {
-    val failed = remember(false) { mutableStateOf(false) }
-    val success = remember(false) { mutableStateOf(false) }
-    failed.value = cashbox.failed || debt.failed || event.failed || deposit.failed || transaction.failed
-    success.value = cashbox.finished && debt.finished && event.finished && deposit.finished && transaction.finished
-
     Box(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(),
         contentAlignment = Alignment.Center
@@ -133,78 +126,62 @@ fun LoadingScreen(
                 contentScale = ContentScale.None
             )
 
-            if (success.value || failed.value) {
-                if (success.value) {
-                    Text(text = stringResource(id = R.string.loading_finished))
-                } else {
-                    Text(text = "Ошибка")
-                }
-            } else {
-                Text(text = stringResource(id = R.string.loading_loading))
-                Text(text = stringResource(id = R.string.loading_please_wait))
+            Spacer(Modifier.padding(10.dp))
 
-                WorkInfoProgress(title = stringResource(id = R.string.loading_cashbox), value = cashbox)
-                WorkInfoProgress(title = stringResource(id = R.string.loading_debts), value = debt)
-                WorkInfoProgress(title = stringResource(id = R.string.loading_events), value = event)
-                WorkInfoProgress(title = stringResource(id = R.string.loading_deposits), value = deposit)
-                WorkInfoProgress(title = stringResource(id = R.string.loading_transactions), value = transaction)
-            }
+            LinearProgressIndicators(works)
 
-            Spacer(Modifier.padding(5.dp))
-
-            if (success.value || failed.value) {
+            if (works.all { it.state == WorkInfo.State.SUCCEEDED }) {
                 IconButton(
                     modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
-                    onClick = onClick
+                    onClick = { navigateTo(Screen.DepositScreen()) }
                 ) {
-                    if (success.value) {
-                        IconCheck(tint = Color.Green)
-                    } else {
-                        IconClose(tint = Color.Red)
-                    }
+                    IconCheck(tint = Color.Green)
                 }
             }
+
+            works
+                .filter { it.state == WorkInfo.State.FAILED }
+                .firstOrNull { it.event.uuid.isNotEmpty() || it.transaction.uuid.isNotEmpty() }
+                ?.let {
+                    if (it.event.uuid.isNotEmpty()) {
+                        EventItemView(it.event, navigateTo)
+                    }
+                    if (it.transaction.uuid.isNotEmpty()) {
+                        TransactionItemView(it.transaction, navigateTo)
+                    }
+                }
         }
     }
 }
 
 @Composable
-fun WorkInfoProgress(title: String, value: MutableState<WorkInfo>) {
-    value.value.let {
+fun LinearProgressIndicators(works: List<WorkInfo>) {
+    works.findLast { it.state == WorkInfo.State.RUNNING }?.let { info ->
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = title)
-            LinearProgressIndicator(progress = it.indicator)
+            Text(
+                text = stringResource(
+                    when (info.worker) {
+                        "DebtWorker" -> R.string.loading_debts
+                        "CashboxWorker" -> R.string.loading_cashbox
+                        "EventWorker" -> R.string.loading_events
+                        "DepositWorker" -> R.string.loading_deposits
+                        "TransactionWorker" -> R.string.loading_transactions
+                        else -> R.string.loading_loading
+                    }
+                )
+            )
+
+            LinearProgressIndicator(
+                progress = (works.count { it.finished || it.failed } * 0.2).toFloat()
+            )
+
+            Spacer(Modifier.padding(5.dp))
+
+            LinearProgressIndicator(progress = info.indicator)
         }
     }
 }
-
-private val WorkInfo.indicator: Float
-    get() =
-        if (finished) {
-            1f
-        } else {
-            if (offset == 0 || total == 0) 0f else offset.toFloat() / total.toFloat()
-        }
-
-private val MutableState<WorkInfo>.finished: Boolean
-    get() = this.value.finished
-
-
-private val MutableState<WorkInfo>.failed: Boolean
-    get() = this.value.failed
-
-private val WorkInfo.total: Int
-    get() = this.progress.getInt("total", 0)
-
-private val WorkInfo.offset: Int
-    get() = this.progress.getInt("offset", 0)
-
-private val WorkInfo?.failed: Boolean
-    get() = this?.state == WorkInfo.State.FAILED
-
-private val WorkInfo?.finished: Boolean
-    get() = this?.outputData?.getBoolean("finished", false) ?: false
