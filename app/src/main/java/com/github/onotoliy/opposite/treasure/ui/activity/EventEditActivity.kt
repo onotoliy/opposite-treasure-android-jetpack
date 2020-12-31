@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -45,9 +44,9 @@ import com.github.onotoliy.opposite.treasure.utils.milliseconds
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
-import com.github.onotoliy.opposite.treasure.utils.randomUUID
 import com.github.onotoliy.opposite.treasure.utils.toISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
+import com.github.onotoliy.opposite.treasure.utils.uuid
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -69,7 +68,7 @@ class EventEditActivity : AppCompatActivity() {
             val context = mutableStateOf(defaultEvent) {
                 intent.pk?.let(dao::get) ?: MutableLiveData(
                     EventVO(
-                        uuid = randomUUID(),
+                        uuid = uuid(),
                         total = "0.0",
                         contribution = "0.0",
                         name = "",
@@ -166,8 +165,7 @@ fun EventEditScreen(
             modifier = Modifier.fillMaxWidth(0.8f),
             value = context.value.deadline.fromISO().toShortDate(),
             label = stringResource(id = R.string.event_edit_deadline),
-            onValueChange = { context.value = context.value.copy(deadline = it) },
-            divider = { Divider(color = Color.Gray) }
+            onValueChange = { context.value = context.value.copy(deadline = it) }
         )
     }
 }

@@ -9,6 +9,10 @@ import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import java.util.*
 
+const val WORKER = "worker"
+const val OFFSET = "offset"
+const val TOTAL = "total"
+
 val WorkInfo.event: EventVO
     get() = outputData.run {
         EventVO(
@@ -61,12 +65,6 @@ fun progress(worker: String, total: Int = 0, offset: Int = 0) = Builder()
 
 fun Builder.setWorker(name: String): Builder =
     putString(WORKER, name)
-
-fun Builder.setLocalVersion(version: String): Builder =
-    putString("local-version", version)
-
-fun Builder.setRemoteVersion(version: String): Builder =
-    putString("remote-version", version)
 
 fun Builder.failure() =
     ListenableWorker.Result.failure(build())

@@ -12,9 +12,7 @@ import com.github.onotoliy.opposite.treasure.di.database.repositories.AbstractRe
 import com.github.onotoliy.opposite.treasure.di.restful.resource.Resource
 import com.github.onotoliy.opposite.treasure.utils.failure
 import com.github.onotoliy.opposite.treasure.utils.progress
-import com.github.onotoliy.opposite.treasure.utils.setLocalVersion
 import com.github.onotoliy.opposite.treasure.utils.setWorker
-import com.github.onotoliy.opposite.treasure.utils.setRemoteVersion
 import com.github.onotoliy.opposite.treasure.utils.success
 import retrofit2.Response
 import java.net.SocketTimeoutException
@@ -40,10 +38,6 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
 
         val localVersion = repository.getVersion()
         val remoteVersion = resource.getVersion()
-
-        builder
-            .setLocalVersion(localVersion)
-            .setRemoteVersion(remoteVersion)
 
         Log.i(this.javaClass.simpleName, "LocalVersion: $localVersion. RemoteVersion $remoteVersion")
 

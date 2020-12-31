@@ -10,7 +10,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -55,9 +54,9 @@ import com.github.onotoliy.opposite.treasure.utils.milliseconds
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
-import com.github.onotoliy.opposite.treasure.utils.randomUUID
 import com.github.onotoliy.opposite.treasure.utils.toISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
+import com.github.onotoliy.opposite.treasure.utils.uuid
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -88,7 +87,7 @@ class TransactionEditActivity : AppCompatActivity() {
             val context = mutableStateOf(defaultTransaction) {
                 intent.pk?.let(transactions::get) ?: MutableLiveData(
                     TransactionVO(
-                        uuid = randomUUID(),
+                        uuid = uuid(),
                         name = "",
                         creationDate = Date().toISO(),
                         deletionDate = null,
@@ -282,8 +281,7 @@ fun TransactionEditScreen(
             modifier = modifier,
             value = context.value.transactionDate.fromISO().toShortDate(),
             label = stringResource(id = R.string.transaction_edit_date),
-            onValueChange = { context.value = context.value.copy(transactionDate = it) },
-            divider = { Divider(color = Color.Gray) }
+            onValueChange = { context.value = context.value.copy(transactionDate = it) }
         )
     }
 }

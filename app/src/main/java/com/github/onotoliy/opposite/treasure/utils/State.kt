@@ -35,7 +35,7 @@ fun <T> loading(context: MutableState<List<T>>, loading: (Int, Int) -> LiveData<
     loading(context, { it }, loading)
 
 fun <T, C> loading(context: MutableState<List<T>>, convert: (C) -> T, loading: (Int, Int) -> LiveData<List<C>>) =
-    loading(context.value.size, 2).observeForever { list ->
+    loading(context.value.size, 20).observeForever { list ->
         context.value = mutableListOf<T>().apply {
             addAll(context.value)
             addAll(list.map { convert(it) })
