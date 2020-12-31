@@ -1,58 +1,81 @@
 package com.github.onotoliy.opposite.treasure.ui
 
-import androidx.compose.Composable
-import androidx.ui.core.Modifier
-import androidx.ui.foundation.Icon
-import androidx.ui.foundation.Text
-import androidx.ui.layout.Arrangement
-import androidx.ui.layout.Row
-import androidx.ui.layout.fillMaxWidth
-import androidx.ui.material.*
-import androidx.ui.material.icons.Icons
-import androidx.ui.material.icons.filled.Home
-import androidx.ui.material.icons.filled.List
-import androidx.ui.material.icons.filled.LocationOn
-import androidx.ui.material.icons.filled.Person
-import androidx.ui.res.stringResource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.emptyContent
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
+import com.github.onotoliy.opposite.treasure.Screen.DepositPageScreen
+import com.github.onotoliy.opposite.treasure.Screen.DepositScreen
+import com.github.onotoliy.opposite.treasure.Screen.EventPageScreen
+import com.github.onotoliy.opposite.treasure.Screen.TransactionPageScreen
 
 @Composable
 fun Menu(
-    bodyContent: @Composable() (Modifier) -> Unit,
+    screen: Screen,
+    actions: @Composable RowScope.() -> Unit = {},
+    bodyContent: @Composable (PaddingValues) -> Unit,
     navigateTo: (Screen) -> Unit = {},
-    scaffoldState: ScaffoldState = ScaffoldState()
+    floatingActionButton: @Composable () -> Unit = emptyContent(),
+    scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
-        topAppBar = {
+        topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) }
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                backgroundColor = MaterialTheme.colors.surface,
+                actions = actions
             )
         },
+        floatingActionButton = floatingActionButton,
         bodyContent = bodyContent,
-        bottomAppBar = {
-            BottomAppBar {
+        bottomBar = {
+            BottomAppBar(backgroundColor = MaterialTheme.colors.surface) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(
-                        onClick = { navigateTo(Screen.HomeScreen) },
-                        icon = { Icon(asset = Icons.Filled.Home) }
-                    )
+                        onClick = { navigateTo(DepositScreen()) },
+                    ) {
+                         IconHome(
+                             tint = if (screen is DepositScreen) MaterialTheme.colors.primary else Color.Black
+                         )
+                    }
                     IconButton(
-                        onClick = { navigateTo(Screen.DepositPageScreen()) },
-                        icon = { Icon(asset = Icons.Filled.Person) }
-                    )
+                        onClick = { navigateTo(DepositPageScreen) }) {
+                        IconDeposits(
+                            tint = if (screen is DepositPageScreen) MaterialTheme.colors.primary else Color.Black
+                        )
+                    }
                     IconButton(
-                        onClick = { navigateTo(Screen.TransactionPageScreen()) },
-                        icon = { Icon(asset = Icons.Filled.List) }
-                    )
+                        onClick = { navigateTo(TransactionPageScreen) }) {
+                        IconTransactions(
+                            tint = if (screen is TransactionPageScreen) MaterialTheme.colors.primary else Color.Black
+                        )
+                    }
                     IconButton(
-                        onClick = { navigateTo(Screen.EventPageScreen()) },
-                        icon = { Icon(asset = Icons.Filled.LocationOn) }
-                    )
+                        onClick = { navigateTo(EventPageScreen) }) {
+                        IconEvents(
+                            tint = if (screen is EventPageScreen) MaterialTheme.colors.primary else Color.Black
+                        )
+                    }
                 }
             }
         }

@@ -1,9 +1,42 @@
 <resources>
+    <string name="monday">Пн</string>
+    <string name="tuesday">Вт</string>
+    <string name="wednesday">Ср</string>
+    <string name="thursday">Чт</string>
+    <string name="friday">Пт</string>
+    <string name="saturday">Сб</string>
+    <string name="sunday">Вc</string>
+
+    <string name="january">Январь</string>
+    <string name="february">Февраль</string>
+    <string name="march">Март</string>
+    <string name="april">Апрель</string>
+    <string name="may">Май</string>
+    <string name="june">Июнь</string>
+    <string name="july">Июль</string>
+    <string name="august">Август</string>
+    <string name="september">Сентябрь</string>
+    <string name="october">Октябрь</string>
+    <string name="november">Ноябрь</string>
+    <string name="december">Декабрь</string>
+
+    <string name="choose">Выбрать</string>
+
+    <string name="deposit_tab_general">Общее</string>
+    <string name="deposit_tab_debt">Долги</string>
+    <string name="deposit_tab_transaction">Операции</string>
+
+    <string name="event_tab_general">Общее</string>
+    <string name="event_tab_debtor">Должники</string>
+    <string name="event_tab_transaction">Операции</string>
+
     <string name="app_name">Оппозит МК</string>
 
     <string name="auth_login">Логин</string>
     <string name="auth_password">Пароль</string>
+    <string name="auth_telephone">Телефон</string>
     <string name="auth_enter">Войти</string>
+    <string name="auth_get_password">Получить пароль</string>
 
     <string name="deposit_person">Пользователь</string>
     <string name="deposit_contribution">Депозит</string>
@@ -16,20 +49,47 @@
     <string name="event_deadline">Сдать до</string>
     <string name="event_creation_date">Дата создания</string>
     <string name="event_author">Автор</string>
+    <string name="event_exceptions">Ошибка</string>
 
-    <string name="event_page_creation_date">Дата создания: </string>
-    <string name="event_page_deadline">Сдать до: </string>
+    <string name="event_edit_name">Название</string>
+    <string name="event_edit_contribution">Взнос с одного человека</string>
+    <string name="event_edit_total">Всего</string>
+    <string name="event_edit_deadline">Сдать до</string>
+
+    <string name="event_page_creation_date">Создано</string>
+    <string name="event_page_deadline">Сдать до</string>
 
     <string name="transaction_name">Название</string>
     <string name="transaction_type">Тип</string>
     <string name="transaction_cash">Сумма</string>
     <string name="transaction_event">Событие</string>
     <string name="transaction_person">Пользователь</string>
+    <string name="transaction_creation_date">Дата создания</string>
+    <string name="transaction_author">Автор</string>
+
+    <string name="transaction_edit_name">Название</string>
+    <string name="transaction_edit_type">Тип</string>
+    <string name="transaction_edit_cash">Сумма</string>
+    <string name="transaction_edit_event">Событие</string>
+    <string name="transaction_edit_person">Пользователь</string>
+    <string name="transaction_edit_date">Дата создания</string>
 
     <string name="transaction_page_creation_date">Дата создания: </string>
     <string name="transaction_page_person">Пользователь: </string>
 
-    <string name="progress_description"> Пожалуйста подождите.</string>
+    <string name="loading_finished">Загрузка завершена успешно!</string>
+    <string name="loading_loading">Выполняется загрузка данных…</string>
+    <string name="loading_please_wait">Пожалуйста, подождите.</string>
+    <string name="loading_debts">Долги</string>
+    <string name="loading_cashbox">Касса</string>
+    <string name="loading_events">События</string>
+    <string name="loading_deposits">Депозиты</string>
+    <string name="loading_transactions">Операции</string>
+
+    <string name="progress_description">Пожалуйста подождите.</string>
 
     <string name="treasure_scroller_next_page">Следующая страница</string>
+
+    <string name="default_notification_channel_id">Nilesh_channel</string>
+    <string name="default_notification_channel_name">Notification</string>
 </resources>

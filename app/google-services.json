@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "827738396697",
+    "firebase_url": "https://opposite-mk.firebaseio.com",
+    "project_id": "opposite-mk",
+    "storage_bucket": "opposite-mk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827738396697:android:26a1e92ecf73a2df46b288",
+        "android_client_info": {
+          "package_name": "com.github.onotoliy.opposite.treasure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827738396697-v63c665tcbrjpk09r2emktcvvlmirbrk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbREu0KOE5-Tf783Ai1ElU7AVakq2Y5rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827738396697-v63c665tcbrjpk09r2emktcvvlmirbrk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,30 @@
 package com.github.onotoliy.opposite.treasure.ui
 
-import androidx.ui.material.Typography
-import androidx.ui.text.TextStyle
-import androidx.ui.text.font.FontFamily
-import androidx.ui.text.font.FontWeight
-import androidx.ui.unit.sp
+import androidx.compose.material.Typography
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
+val H6 = TextStyle(
+    fontWeight = FontWeight.Normal,
+    fontSize = 16.sp,
+    letterSpacing = 0.15.sp
+)
+
+val H6_BOLD = TextStyle(
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    letterSpacing = 0.15.sp
+)
+
+val BODY_GREY = TextStyle(
+    fontWeight = FontWeight.Medium,
+    color = Color.Gray,
+    fontSize = 14.sp,
+    letterSpacing = 0.15.sp
+)
 
 val typography = Typography(
     h1 = TextStyle(
