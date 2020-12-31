@@ -14,7 +14,6 @@ import com.github.onotoliy.opposite.treasure.di.restful.resource.EventResource
 import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.progress
 import com.github.onotoliy.opposite.treasure.utils.setEvent
-import com.github.onotoliy.opposite.treasure.utils.setFinished
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -38,10 +37,7 @@ class EventWorker @Inject constructor(
 
             if (response.isSuccessful) {
                 if (response.body()?.status != 200) {
-                    builder.putString("uuid", vo.uuid)
-                        .putString("message", response.body()?.exception ?: "")
-                        .setEvent(vo)
-                        .setFinished(false)
+                    builder.setEvent(vo)
 
                     vo.exceptions = response.body()?.exception ?: ""
 
@@ -50,10 +46,11 @@ class EventWorker @Inject constructor(
                     return false
                 }
             } else {
-                 builder.putString("uuid", vo.uuid)
-                     .putString("message", "При выполнении синхронизации произошла ошибка")
-                     .setEvent(vo)
-                     .setFinished(false)
+                 builder.setEvent(vo)
+
+                vo.exceptions = "При выполнении синхронизации произошла ошибка"
+
+                repository.replace(vo)
 
                 return false
             }

@@ -4,11 +4,9 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -44,7 +42,22 @@ import com.github.onotoliy.opposite.treasure.ui.components.MoneyVisualTransforma
 import com.github.onotoliy.opposite.treasure.ui.components.SelectionField
 import com.github.onotoliy.opposite.treasure.ui.components.TextField
 import com.github.onotoliy.opposite.treasure.ui.components.calendar.CalendarField
-import com.github.onotoliy.opposite.treasure.utils.*
+import com.github.onotoliy.opposite.treasure.utils.GLOBAL
+import com.github.onotoliy.opposite.treasure.utils.INSERT
+import com.github.onotoliy.opposite.treasure.utils.UPDATE
+import com.github.onotoliy.opposite.treasure.utils.defaultOptions
+import com.github.onotoliy.opposite.treasure.utils.defaultTransaction
+import com.github.onotoliy.opposite.treasure.utils.fromISO
+import com.github.onotoliy.opposite.treasure.utils.getName
+import com.github.onotoliy.opposite.treasure.utils.getUUID
+import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.milliseconds
+import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
+import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.pk
+import com.github.onotoliy.opposite.treasure.utils.randomUUID
+import com.github.onotoliy.opposite.treasure.utils.toISO
+import com.github.onotoliy.opposite.treasure.utils.toShortDate
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -70,8 +83,6 @@ class TransactionEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         inject()
-
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         setContent {
             val context = mutableStateOf(defaultTransaction) {
@@ -178,12 +189,12 @@ class TransactionEditActivity : AppCompatActivity() {
                 } else {
                     if (q.isNullOrEmpty()) {
                         debts.getByPersonAll(person).observeForever { list ->
-                            events.value = (list.map { OptionVO(it.event.uuid, it.event.name) })
+                            events.value = list.map { OptionVO(it.event.uuid, it.event.name) }
                         }
                     } else {
                         debts.getByPersonAll(person, "%" + q.toLowerCase(Locale.getDefault()) + "%")
                             .observeForever { list ->
-                                events.value = (list.map { OptionVO(it.event.uuid, it.event.name) })
+                                events.value = list.map { OptionVO(it.event.uuid, it.event.name) }
                             }
                     }
                 }
@@ -194,11 +205,11 @@ class TransactionEditActivity : AppCompatActivity() {
     private fun loadingOnlyEvents(q: String?, events: MutableState<List<OptionVO>>) {
         if (q.isNullOrEmpty()) {
             this.events.getAll().observeForever { list ->
-                events.value = (list.map { OptionVO(it.uuid, it.name) })
+                events.value = list.map { OptionVO(it.uuid, it.name) }
             }
         } else {
             this.events.getAll("%" + q.toLowerCase(Locale.getDefault()) + "%").observeForever { list ->
-                events.value = (list.map { OptionVO(it.uuid, it.name) })
+                events.value = list.map { OptionVO(it.uuid, it.name) }
             }
         }
     }

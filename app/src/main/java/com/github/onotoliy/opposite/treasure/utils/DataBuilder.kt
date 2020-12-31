@@ -10,7 +10,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import java.util.*
 
 val WorkInfo.event: EventVO
-    get() = this.outputData.run {
+    get() = outputData.run {
         EventVO(
             uuid = getString("e_uuid") ?: "",
             name = getString("e_name") ?: "",
@@ -21,7 +21,7 @@ val WorkInfo.event: EventVO
     }
 
 val WorkInfo.transaction: TransactionVO
-    get() = this.outputData.run {
+    get() = outputData.run {
         TransactionVO(
             uuid = getString("t_uuid") ?: "",
             name = getString("t_name") ?: "",
@@ -32,46 +32,35 @@ val WorkInfo.transaction: TransactionVO
         )
     }
 
-val WorkInfo.total: Int
-    get() = this.progress.getInt("total", 0)
-
 val WorkInfo.worker: String
-    get() = this.progress.getString("worker") ?: ""
+    get() = progress.getString(WORKER) ?: ""
 
-val WorkInfo.offset: Int
-    get() = this.progress.getInt("offset", 0)
-
-val WorkInfo?.failed: Boolean
-    get() = this?.state == WorkInfo.State.FAILED
-
-val WorkInfo?.uuid: String
-    get() = this?.outputData?.getString("uuid") ?: ""
-
-val WorkInfo?.finished: Boolean
-    get() = this?.outputData?.getBoolean("finished", false) ?: false
+val WorkInfo.complete: Boolean
+    get() = state == WorkInfo.State.FAILED || state == WorkInfo.State.SUCCEEDED
 
 val WorkInfo.indicator: Float
     get() =
-        if (finished) {
+        if (complete) {
             1f
         } else {
-            if (offset == 0 || total == 0) {
-                0f
-            } else {
-                val indicator = offset.toFloat() / total.toFloat()
-                if (indicator > 1.0f) 1.0f else indicator
+            val offset = this.progress.getInt(OFFSET, 0)
+            val total = this.progress.getInt(TOTAL, 0)
+
+            when {
+                offset == 0 || total == 0 -> 0f
+                offset > total -> 1f
+                else -> offset.toFloat() / total.toFloat()
             }
         }
 
-
 fun progress(worker: String, total: Int = 0, offset: Int = 0) = Builder()
-    .putString("worker", worker)
-    .putInt("total", total)
-    .putInt("offset", offset)
+    .putString(WORKER, worker)
+    .putInt(TOTAL, total)
+    .putInt(OFFSET, offset)
     .build()
 
 fun Builder.setWorker(name: String): Builder =
-    putString("worker", name)
+    putString(WORKER, name)
 
 fun Builder.setLocalVersion(version: String): Builder =
     putString("local-version", version)
@@ -79,14 +68,11 @@ fun Builder.setLocalVersion(version: String): Builder =
 fun Builder.setRemoteVersion(version: String): Builder =
     putString("remote-version", version)
 
-fun Builder.setFinished(success: Boolean): Builder =
-    putBoolean("finished", true).putBoolean("success", success)
-
 fun Builder.failure() =
-    ListenableWorker.Result.failure(setFinished(false).build())
+    ListenableWorker.Result.failure(build())
 
 fun Builder.success() =
-    ListenableWorker.Result.success(setFinished(true).build())
+    ListenableWorker.Result.success(build())
 
 fun Builder.setTransaction(dto: TransactionVO) = this
     .putString("t_uuid", dto.uuid)

@@ -40,16 +40,15 @@ import com.github.onotoliy.opposite.treasure.ui.IconCheck
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.EventItemView
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionItemView
+import com.github.onotoliy.opposite.treasure.utils.complete
 import com.github.onotoliy.opposite.treasure.utils.defaultWorkInfo
 import com.github.onotoliy.opposite.treasure.utils.event
-import com.github.onotoliy.opposite.treasure.utils.failed
-import com.github.onotoliy.opposite.treasure.utils.finished
 import com.github.onotoliy.opposite.treasure.utils.indicator
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
-import com.github.onotoliy.opposite.treasure.utils.worker
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.transaction
+import com.github.onotoliy.opposite.treasure.utils.worker
 import javax.inject.Inject
 
 class LoadingActivity : AppCompatActivity() {
@@ -176,7 +175,7 @@ fun LinearProgressIndicators(works: List<WorkInfo>) {
         )
 
         LinearProgressIndicator(
-            progress = (works.count { it.finished || it.failed } * 0.2).toFloat()
+            progress = (works.count(WorkInfo::complete) * 0.2).toFloat()
         )
 
         Spacer(Modifier.padding(5.dp))

@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
-import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.ui.IconEdit
 import com.github.onotoliy.opposite.treasure.ui.IconRemove

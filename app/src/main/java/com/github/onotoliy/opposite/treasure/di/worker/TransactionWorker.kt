@@ -1,7 +1,6 @@
 package com.github.onotoliy.opposite.treasure.di.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -20,7 +19,6 @@ import com.github.onotoliy.opposite.treasure.di.database.repositories.Transactio
 import com.github.onotoliy.opposite.treasure.di.restful.resource.TransactionResource
 import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.progress
-import com.github.onotoliy.opposite.treasure.utils.setFinished
 import com.github.onotoliy.opposite.treasure.utils.setTransaction
 import javax.inject.Inject
 import javax.inject.Provider
@@ -58,10 +56,7 @@ class TransactionWorker @Inject constructor(
 
                 if (response.isSuccessful) {
                     if (response.body()?.status != 200) {
-                        builder.putString("uuid", vo.uuid)
-                            .putString("message", response.body()?.exception ?: "")
-                            .setTransaction(vo)
-                            .setFinished(false)
+                        builder.setTransaction(vo)
 
                         vo.exceptions = response.body()?.exception ?: ""
 
@@ -70,10 +65,11 @@ class TransactionWorker @Inject constructor(
                         return false
                     }
                 } else {
-                    builder.putString("uuid", vo.uuid)
-                        .putString("message", "При выполнении синхронизации произошла ошибка")
-                        .setTransaction(vo)
-                        .setFinished(false)
+                    builder.setTransaction(vo)
+
+                    vo.exceptions = "При выполнении синхронизации произошла ошибка"
+
+                    repository.replace(vo)
 
                     return false
                 }

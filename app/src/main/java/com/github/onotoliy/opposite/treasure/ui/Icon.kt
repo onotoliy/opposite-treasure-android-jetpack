@@ -1,7 +1,6 @@
 package com.github.onotoliy.opposite.treasure.ui
 
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color

@@ -55,8 +55,7 @@ fun CalendarField(
     valueFontSize: Int = 5,
     background: Color = Color.White,
     textAlign: TextAlign = TextAlign.Left,
-    leadingIcon: @Composable() (() -> Unit)? = null,
-    divider: @Composable() (() -> Unit)? = null
+    leadingIcon: @Composable() (() -> Unit)? = null
 ) {
     val model = remember { mutableStateOf(CalendarModel(value), neverEqualPolicy()) }
     val selected = remember { mutableStateOf(value) }

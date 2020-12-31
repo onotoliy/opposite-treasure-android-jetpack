@@ -15,6 +15,10 @@ const val INSERT = 1
 const val UPDATE = 2
 const val DELETE = 3
 
+const val WORKER = "worker"
+const val OFFSET = "offset"
+const val TOTAL = "total"
+
 fun randomUUID(): String = UUID.randomUUID().toString()
 
 val defaultCashbox = CashboxVO(
