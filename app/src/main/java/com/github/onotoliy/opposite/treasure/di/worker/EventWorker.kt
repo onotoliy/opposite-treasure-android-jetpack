@@ -11,6 +11,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.toDTO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.EventResource
+import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.progress
 import com.github.onotoliy.opposite.treasure.utils.setEvent
 import com.github.onotoliy.opposite.treasure.utils.setFinished
@@ -56,6 +57,10 @@ class EventWorker @Inject constructor(
 
                 return false
             }
+
+            vo.local = GLOBAL
+
+            repository.replace(vo)
         }
 
         return true

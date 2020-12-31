@@ -21,10 +21,6 @@ open class AbstractRepository<T: HasUUID, DAO: WriteDAO<T>>(
         dao.clean()
     }
 
-    fun clean(local: Int) {
-        clear(local)
-    }
-
     fun replace(vo: T) = dao.replace(vo)
 
     fun getAllLocal(): List<T> = dao.getAllLocal()

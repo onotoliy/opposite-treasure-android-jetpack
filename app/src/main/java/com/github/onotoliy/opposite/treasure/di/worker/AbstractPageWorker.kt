@@ -1,6 +1,7 @@
 package com.github.onotoliy.opposite.treasure.di.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
@@ -30,23 +31,28 @@ abstract class AbstractPageWorker<D, E: HasUUID, DAO: WriteDAO<E>> constructor(
     protected open fun sendAllLocal(builder: Data.Builder): Boolean = true
 
     override suspend fun doWork(): Result {
-        val localVersion = repository.getVersion()
-        val remoteVersion = resource.getVersion()
-
         val builder: Data.Builder = Data.Builder()
             .setWorker(this.javaClass.simpleName)
-            .setLocalVersion(localVersion)
-            .setRemoteVersion(remoteVersion)
 
         if (!sendAllLocal(builder)) {
             return builder.failure()
         }
 
+        val localVersion = repository.getVersion()
+        val remoteVersion = resource.getVersion()
+
+        builder
+            .setLocalVersion(localVersion)
+            .setRemoteVersion(remoteVersion)
+
+        Log.i(this.javaClass.simpleName, "LocalVersion: $localVersion. RemoteVersion $remoteVersion")
+
         return if (localVersion == remoteVersion) {
             builder.success()
         } else {
+            repository.clean()
 
-            if (sync(builder, localVersion.toLong(), 0, 20)) {
+            if (sync(builder, 0L, 0, 20)) {
                 repository.setVersion(remoteVersion)
 
                 builder.success()

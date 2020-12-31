@@ -4,7 +4,9 @@ import android.accounts.AccountManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,6 +70,8 @@ class TransactionEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         inject()
+
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         setContent {
             val context = mutableStateOf(defaultTransaction) {
@@ -211,7 +215,7 @@ fun TransactionEditScreen(
 ) {
     val modifier = Modifier.fillMaxWidth(0.8f).padding(vertical = 5.dp)
 
-    Column(
+    ScrollableColumn(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

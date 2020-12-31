@@ -3,7 +3,6 @@ package com.github.onotoliy.opposite.treasure.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.ui.Modifier
@@ -49,14 +48,12 @@ class TransactionPageActivity : AppCompatActivity() {
                         )
                     },
                     bodyContent = {
-                        Column {
-                            TransactionPageView(
-                                list = context.value,
-                                total = total.value,
-                                navigateTo = ::navigateTo,
-                                navigateToNextPageScreen = { loading(context) { o, n -> dao.getAll(o, n)} }
-                            )
-                        }
+                        TransactionPageView(
+                            list = context.value,
+                            total = total.value,
+                            navigateTo = ::navigateTo,
+                            navigateToNextPageScreen = { loading(context) { o, n -> dao.getAll(o, n) } }
+                        )
                     },
                     navigateTo = ::navigateTo
                 )

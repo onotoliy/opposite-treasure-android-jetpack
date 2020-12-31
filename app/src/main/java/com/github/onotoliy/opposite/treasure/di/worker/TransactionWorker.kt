@@ -18,6 +18,7 @@ import com.github.onotoliy.opposite.treasure.di.database.data.toDTO
 import com.github.onotoliy.opposite.treasure.di.database.data.toVO
 import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.di.restful.resource.TransactionResource
+import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.progress
 import com.github.onotoliy.opposite.treasure.utils.setFinished
 import com.github.onotoliy.opposite.treasure.utils.setTransaction
@@ -76,6 +77,10 @@ class TransactionWorker @Inject constructor(
 
                     return false
                 }
+
+                vo.local = GLOBAL
+
+                repository.replace(vo)
             }
 
         return true

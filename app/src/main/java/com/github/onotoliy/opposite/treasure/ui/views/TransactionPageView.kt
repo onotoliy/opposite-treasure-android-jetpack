@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.Screen
@@ -19,6 +20,7 @@ import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 import com.github.onotoliy.opposite.treasure.ui.IconDown
 import com.github.onotoliy.opposite.treasure.ui.IconUp
 import com.github.onotoliy.opposite.treasure.ui.Scroller
+import com.github.onotoliy.opposite.treasure.utils.GLOBAL
 import com.github.onotoliy.opposite.treasure.utils.fromISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 
@@ -47,9 +49,12 @@ fun TransactionItemView(dto: TransactionVO, navigateTo: (Screen) -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         when (dto.type) {
-            TransactionType.NONE, TransactionType.WRITE_OFF -> IconDown()
-            TransactionType.COST, TransactionType.PAID -> IconDown()
-            TransactionType.CONTRIBUTION, TransactionType.EARNED -> IconUp()
+            TransactionType.NONE, TransactionType.WRITE_OFF ->
+                IconDown(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
+            TransactionType.COST, TransactionType.PAID ->
+                IconDown(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
+            TransactionType.CONTRIBUTION, TransactionType.EARNED ->
+                IconUp(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
         }
 
         Column(modifier = Modifier.fillMaxWidth()) {

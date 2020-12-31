@@ -17,7 +17,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.emptyContent
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +44,6 @@ import com.github.onotoliy.opposite.treasure.utils.defaultWorkInfo
 import com.github.onotoliy.opposite.treasure.utils.event
 import com.github.onotoliy.opposite.treasure.utils.failed
 import com.github.onotoliy.opposite.treasure.utils.finished
-import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.indicator
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
@@ -58,6 +56,7 @@ class LoadingActivity : AppCompatActivity() {
 
     @Inject
     lateinit var worker: WorkManager
+
     @Inject
     lateinit var account: AccountManager
 
@@ -73,10 +72,10 @@ class LoadingActivity : AppCompatActivity() {
         val transaction: OneTimeWorkRequest = OneTimeWorkRequestBuilder<TransactionWorker>().build()
 
         worker
-            .beginWith(cashbox)
-            .then(event)
-            .then(deposit)
+            .beginWith(event)
             .then(transaction)
+            .then(cashbox)
+            .then(deposit)
             .then(debt)
             .enqueue()
 
@@ -156,32 +155,34 @@ fun LoadingScreen(
 
 @Composable
 fun LinearProgressIndicators(works: List<WorkInfo>) {
-    works.findLast { it.state == WorkInfo.State.RUNNING }?.let { info ->
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(
-                    when (info.worker) {
-                        "DebtWorker" -> R.string.loading_debts
-                        "CashboxWorker" -> R.string.loading_cashbox
-                        "EventWorker" -> R.string.loading_events
-                        "DepositWorker" -> R.string.loading_deposits
-                        "TransactionWorker" -> R.string.loading_transactions
-                        else -> R.string.loading_loading
-                    }
-                )
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val info = works.findLast { it.state == WorkInfo.State.RUNNING }
+
+        Text(
+            text = stringResource(
+                when (info?.worker) {
+                    "DebtWorker" -> R.string.loading_debts
+                    "CashboxWorker" -> R.string.loading_cashbox
+                    "EventWorker" -> R.string.loading_events
+                    "DepositWorker" -> R.string.loading_deposits
+                    "TransactionWorker" -> R.string.loading_transactions
+                    else -> R.string.loading_loading
+                }
             )
+        )
 
-            LinearProgressIndicator(
-                progress = (works.count { it.finished || it.failed } * 0.2).toFloat()
-            )
+        LinearProgressIndicator(
+            progress = (works.count { it.finished || it.failed } * 0.2).toFloat()
+        )
 
-            Spacer(Modifier.padding(5.dp))
+        Spacer(Modifier.padding(5.dp))
 
-            LinearProgressIndicator(progress = info.indicator)
+        info?.let {
+            LinearProgressIndicator(progress = it.indicator)
         }
     }
 }
