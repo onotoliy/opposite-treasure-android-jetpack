@@ -1,5 +1,6 @@
 package com.github.onotoliy.opposite.treasure.ui.activity
 
+import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.border
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
+import androidx.room.InvalidationTracker
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
@@ -66,9 +68,7 @@ class TransactionActivity : AppCompatActivity() {
                         )
                     },
                     bodyContent = {
-                        Column {
-                            TransactionView(dto = context.value, navigateTo = ::navigateTo)
-                        }
+                        TransactionView(dto = context.value, navigateTo = ::navigateTo)
                     },
                     navigateTo = ::navigateTo
                 )

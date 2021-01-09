@@ -57,6 +57,12 @@ fun TransactionView(dto: TransactionVO, navigateTo: (Screen) -> Unit) {
 
         LabeledText(
             modifier = Modifier.fillMaxWidth(),
+            label = stringResource(id = R.string.transaction_transaction_date),
+            value = dto.transactionDate.fromISO().toShortDate()
+        )
+
+        LabeledText(
+            modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.transaction_creation_date),
             value = dto.creationDate.fromISO().toShortDate()
         )

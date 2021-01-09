@@ -181,8 +181,6 @@ class TransactionEditActivity : AppCompatActivity() {
     ) {
         Handler(Looper.getMainLooper()).post {
             if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)) {
-                loadingOnlyEvents(q, events)
-            } else {
                 if (person.isNullOrEmpty()) {
                     loadingOnlyEvents(q, events)
                 } else {
@@ -197,6 +195,8 @@ class TransactionEditActivity : AppCompatActivity() {
                             }
                     }
                 }
+            } else {
+                loadingOnlyEvents(q, events)
             }
         }
     }

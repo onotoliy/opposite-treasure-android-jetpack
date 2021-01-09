@@ -126,7 +126,9 @@ fun LoadingScreen(
 
             Spacer(Modifier.padding(10.dp))
 
-            LinearProgressIndicators(works)
+            if (!works.all { it.state == WorkInfo.State.SUCCEEDED }) {
+                LinearProgressIndicators(works)
+            }
 
             if (works.all { it.state == WorkInfo.State.SUCCEEDED }) {
                 IconButton(

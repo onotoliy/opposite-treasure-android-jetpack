@@ -18,6 +18,7 @@ import com.github.onotoliy.opposite.treasure.ui.BODY_GREY
 import com.github.onotoliy.opposite.treasure.ui.H6
 import com.github.onotoliy.opposite.treasure.ui.H6_BOLD
 import com.github.onotoliy.opposite.treasure.ui.IconDown
+import com.github.onotoliy.opposite.treasure.ui.IconFlat
 import com.github.onotoliy.opposite.treasure.ui.IconUp
 import com.github.onotoliy.opposite.treasure.ui.Scroller
 import com.github.onotoliy.opposite.treasure.utils.GLOBAL
@@ -50,7 +51,7 @@ fun TransactionItemView(dto: TransactionVO, navigateTo: (Screen) -> Unit) {
     ) {
         when (dto.type) {
             TransactionType.NONE, TransactionType.WRITE_OFF ->
-                IconDown(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
+                IconFlat(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
             TransactionType.COST, TransactionType.PAID ->
                 IconDown(tint = if (dto.local == GLOBAL) Color.Black else Color.Blue)
             TransactionType.CONTRIBUTION, TransactionType.EARNED ->

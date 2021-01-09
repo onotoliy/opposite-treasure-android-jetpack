@@ -65,6 +65,7 @@
     <string name="transaction_event">Событие</string>
     <string name="transaction_person">Пользователь</string>
     <string name="transaction_creation_date">Дата создания</string>
+    <string name="transaction_transaction_date">Дата транзации</string>
     <string name="transaction_author">Автор</string>
 
     <string name="transaction_edit_name">Название</string>
