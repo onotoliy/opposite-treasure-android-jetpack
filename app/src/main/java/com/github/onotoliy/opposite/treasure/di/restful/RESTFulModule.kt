@@ -5,6 +5,7 @@ import com.github.onotoliy.opposite.treasure.di.restful.retrofit.DebtRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.DepositRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.EventRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.TransactionRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.UserRetrofit
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,10 @@ import java.util.concurrent.TimeUnit
 
 @Module
 class RESTFulModule {
+
+    @Provides
+    fun provideUserResource(retrofit: Retrofit): UserRetrofit =
+        retrofit.create(UserRetrofit::class.java)
 
     @Provides
     fun provideTransactionResource(retrofit: Retrofit): TransactionRetrofit =

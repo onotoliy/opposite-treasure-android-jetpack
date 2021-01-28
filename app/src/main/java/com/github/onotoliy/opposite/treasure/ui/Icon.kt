@@ -90,3 +90,7 @@ fun IconDown(modifier: Modifier = Modifier, tint: Color = Color.Black) =
 @Composable
 fun IconFlat(modifier: Modifier = Modifier, tint: Color = Color.Black) =
     Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_trending_flat_24), tint = tint, modifier = modifier)
+
+@Composable
+fun IconChat(modifier: Modifier = Modifier, tint: Color = Color.Black) =
+    Icon(imageVector = vectorResource(id = R.drawable.ic_baseline_chat_24), tint = tint, modifier = modifier)

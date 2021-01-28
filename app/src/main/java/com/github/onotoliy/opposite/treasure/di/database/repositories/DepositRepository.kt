@@ -11,6 +11,7 @@ class DepositRepository @Inject constructor(
     version: VersionDAO,
     dao: DepositDAO
 ) : AbstractRepository<DepositVO, DepositDAO>("deposit", version, dao) {
+
     fun getAll(name: String?): LiveData<List<DepositVO>>  {
         return if (name == null) {
             dao.getAll()

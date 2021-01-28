@@ -8,8 +8,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.setContent
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositPageView
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class DepositPageActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var dao: DepositDAO
+    lateinit var dao: DepositRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

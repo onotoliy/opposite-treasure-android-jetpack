@@ -17,6 +17,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +39,7 @@ import com.github.onotoliy.opposite.treasure.di.worker.DepositWorker
 import com.github.onotoliy.opposite.treasure.di.worker.EventWorker
 import com.github.onotoliy.opposite.treasure.di.worker.TransactionWorker
 import com.github.onotoliy.opposite.treasure.ui.IconCheck
+import com.github.onotoliy.opposite.treasure.ui.IconClose
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.EventItemView
 import com.github.onotoliy.opposite.treasure.ui.views.TransactionItemView
@@ -119,6 +122,8 @@ fun LoadingScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val cancel = remember(true) { mutableStateOf(true) }
+
             Image(
                 bitmap = imageResource(id = R.mipmap.ic_launcher),
                 contentScale = ContentScale.None
@@ -126,7 +131,7 @@ fun LoadingScreen(
 
             Spacer(Modifier.padding(10.dp))
 
-            if (!works.all { it.state == WorkInfo.State.SUCCEEDED }) {
+            if (!works.all { it.complete }) {
                 LinearProgressIndicators(works)
             }
 
@@ -139,17 +144,27 @@ fun LoadingScreen(
                 }
             }
 
-            works
-                .filter { it.state == WorkInfo.State.FAILED }
-                .firstOrNull { it.event.uuid.isNotEmpty() || it.transaction.uuid.isNotEmpty() }
-                ?.let {
-                    if (it.event.uuid.isNotEmpty()) {
-                        EventItemView(it.event, navigateTo)
+            for (work in works) {
+                if (work.state == WorkInfo.State.FAILED) {
+                    if (work.event.uuid.isNotEmpty()) {
+                        EventItemView(work.event, navigateTo)
+                        cancel.value = false
                     }
-                    if (it.transaction.uuid.isNotEmpty()) {
-                        TransactionItemView(it.transaction, navigateTo)
+                    if (work.transaction.uuid.isNotEmpty()) {
+                        TransactionItemView(work.transaction, navigateTo)
+                        cancel.value = false
                     }
                 }
+            }
+
+            if (works.any { it.state == WorkInfo.State.FAILED } && cancel.value) {
+                IconButton(
+                    modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
+                    onClick = { navigateTo(Screen.DepositScreen()) }
+                ) {
+                    IconClose(tint = Color.Red)
+                }
+            }
         }
     }
 }

@@ -68,9 +68,7 @@ class LoginActivity : AppCompatActivity() {
 
         Thread {
             try {
-                val newToken = FirebaseInstanceId.getInstance().getToken("827738396697", "FCM")
-
-                println("Token --> $newToken")
+                FirebaseInstanceId.getInstance().getToken("827738396697", "FCM")
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -101,9 +99,9 @@ class LoginActivity : AppCompatActivity() {
 fun LoginScreen(
     addAccount: (username: String, password: String, token: String) -> Unit
 ) {
-    val login = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-
+    val login = remember("") { mutableStateOf("") }
+    val password = remember("") { mutableStateOf("") }
+    val exceptions = remember(false) { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -123,8 +121,15 @@ fun LoginScreen(
             value = password.value,
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(0.8f),
-            onValueChange = { password.value = it }
+            onValueChange = { password.value = it },
+            textAlign = TextAlign.Center
         )
+
+        if (exceptions.value) {
+            Spacer(Modifier.padding(10.dp))
+
+            Text(text = stringResource(R.string.loading_exceptions))
+        }
 
         Spacer(Modifier.padding(10.dp))
 
@@ -135,11 +140,15 @@ fun LoginScreen(
                     username = login.value,
                     password = password.value,
                     onResponse = {
-                        it?.accessToken?.let { token ->
-                            addAccount(login.value, password.value, token)
+                        if (it?.accessToken == null) {
+                            exceptions.value = true
+                        } else {
+                            addAccount(login.value, password.value, it.accessToken)
                         }
                     },
-                    onFailure = { }
+                    onFailure = {
+                        exceptions.value = true
+                    }
                 )
             }
         ) {

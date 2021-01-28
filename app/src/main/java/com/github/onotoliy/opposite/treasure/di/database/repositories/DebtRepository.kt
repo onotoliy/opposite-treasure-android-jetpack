@@ -12,6 +12,18 @@ class DebtRepository @Inject constructor(
     dao: DebtDAO
 ) : AbstractRepository<DebtVO, DebtDAO>("debt", version, dao) {
 
+    fun countByEvent(person: String): LiveData<Long> =
+        dao.countByEvent(person)
+
+    fun getByEventAll(person: String, offset: Int, numberOfRows: Int): LiveData<List<DebtVO>> =
+        dao.getByEventAll(person, offset, numberOfRows)
+
+    fun countByPerson(person: String): LiveData<Long> =
+        dao.countByPerson(person)
+
+    fun getByPersonAll(person: String, offset: Int, numberOfRows: Int): LiveData<List<DebtVO>> =
+        dao.getByPersonAll(person, offset, numberOfRows)
+
     fun getByPersonAll(person: String, name: String?): LiveData<List<DebtVO>> {
         return if (name.isNullOrEmpty()) {
             dao.getByPersonAll(person)

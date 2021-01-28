@@ -17,16 +17,18 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.database.dao.CashboxDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.CashboxVO
 import com.github.onotoliy.opposite.treasure.di.database.data.DebtVO
 import com.github.onotoliy.opposite.treasure.di.database.data.DepositVO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.CashboxRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
+import com.github.onotoliy.opposite.treasure.di.restful.resource.NotificationResource
 import com.github.onotoliy.opposite.treasure.ui.IconCached
+import com.github.onotoliy.opposite.treasure.ui.IconChat
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
 import com.github.onotoliy.opposite.treasure.ui.views.DepositView
@@ -38,6 +40,7 @@ import com.github.onotoliy.opposite.treasure.utils.defaultEvents
 import com.github.onotoliy.opposite.treasure.utils.defaultTransactions
 import com.github.onotoliy.opposite.treasure.utils.getUUID
 import com.github.onotoliy.opposite.treasure.utils.inject
+import com.github.onotoliy.opposite.treasure.utils.isAdministrator
 import com.github.onotoliy.opposite.treasure.utils.loading
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
@@ -47,16 +50,19 @@ import javax.inject.Inject
 class DepositActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var deposit: DepositDAO
+    lateinit var notification: NotificationResource
 
     @Inject
-    lateinit var cashbox: CashboxDAO
+    lateinit var transactions: TransactionRepository
 
     @Inject
-    lateinit var debts: DebtDAO
+    lateinit var deposit: DepositRepository
 
     @Inject
-    lateinit var transactions: TransactionDAO
+    lateinit var cashbox: CashboxRepository
+
+    @Inject
+    lateinit var debts: DebtRepository
 
     @Inject
     lateinit var account: AccountManager
@@ -84,8 +90,13 @@ class DepositActivity : AppCompatActivity() {
                 Menu(
                     screen = Screen.DepositScreen(pk),
                     actions = {
-                        IconButton(onClick = { navigateTo(Screen.LoadingScreen) } ) {
+                        IconButton(onClick = { navigateTo(Screen.LoadingScreen) }) {
                             IconCached()
+                        }
+                        if (account.isAdministrator()) {
+                            IconButton(onClick = { notification.notification() }) {
+                                IconChat()
+                            }
                         }
                     },
                     bodyContent = {

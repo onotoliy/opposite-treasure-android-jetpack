@@ -19,7 +19,10 @@ fun AccountManager.getUUID(): String =
     getUserData(getAccount(), "uuid")
 
 fun AccountManager.getName(): String =
-    getUserData(getAccount(), "preferredName")
+    getUserData(getAccount(), "name")
+
+fun AccountManager.isAdministrator(): Boolean =
+    getUserData(getAccount(), "isAdministrator").toBoolean()
 
 private fun String.userdata(): Bundle {
     val parts = split(".")
@@ -29,13 +32,17 @@ private fun String.userdata(): Bundle {
 
     val payload = String(Base64.decode(parts[1], Base64.URL_SAFE), StandardCharsets.ISO_8859_1)
     val node = JSONObject(payload)
+    val roles = node.getJSONObject("realm_access").getJSONArray("roles")
+    val isAdministrator = (0 until roles.length())
+        .map(roles::getString)
+        .any { it in listOf("president", "vice-president", "treasurer") }
 
     return Bundle().apply {
-        putString("token", this@userdata)
-        putString("exp", node.getLong("exp").toString())
         putString("uuid", node.getString("sub"))
         putString("lastName", node.getString("family_name"))
         putString("firstName", node.getString("given_name"))
-        putString("preferredName", node.getString("preferred_username"))
+        putString("name", node.getString("name"))
+        putString("isAdministrator", isAdministrator.toString())
+
     }
 }

@@ -57,6 +57,6 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
             .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
             .setAutoCancel(true)
 
-        nm.notify(1000, builder.build())
+        nm.notify(message.notification?.body?.hashCode() ?: 1000, builder.build())
     }
 }

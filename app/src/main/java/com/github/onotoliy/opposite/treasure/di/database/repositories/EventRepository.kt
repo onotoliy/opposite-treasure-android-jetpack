@@ -11,6 +11,7 @@ class EventRepository @Inject constructor(
     version: VersionDAO,
     dao: EventDAO
 ) : AbstractRepository<EventVO, EventDAO>("event", version, dao, dao::clean) {
+
     fun getAll(name: String?): LiveData<List<EventVO>> {
         return if (name == null) {
             dao.getAll()

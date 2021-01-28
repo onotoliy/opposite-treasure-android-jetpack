@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.EventVO
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
+import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
 import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -57,7 +57,7 @@ class EventEditActivity : AppCompatActivity() {
     lateinit var manager: AccountManager
 
     @Inject
-    lateinit var dao: EventDAO
+    lateinit var dao: EventRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,10 +90,7 @@ class EventEditActivity : AppCompatActivity() {
                             modifier = Modifier.border(1.dp, Color.LightGray, CircleShape),
                             backgroundColor = Color.White,
                             content = { IconSave() },
-                            onClick = {
-                                replace(context.value)
-                                navigateTo(Screen.EventPageScreen)
-                            }
+                            onClick = { replace(context.value) }
                         )
                     },
                     bodyContent = { EventEditScreen(context.value.local == INSERT, context) },
@@ -110,6 +107,8 @@ class EventEditActivity : AppCompatActivity() {
             }
 
             dao.replace(context)
+
+            navigateTo(Screen.EventPageScreen)
         }
     }
 }

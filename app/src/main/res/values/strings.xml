@@ -32,7 +32,7 @@
 
     <string name="app_name">Оппозит МК</string>
 
-    <string name="auth_login">Логин</string>
+    <string name="auth_login">Номер телефона</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_telephone">Телефон</string>
     <string name="auth_enter">Войти</string>
@@ -86,6 +86,7 @@
     <string name="loading_events">События</string>
     <string name="loading_deposits">Депозиты</string>
     <string name="loading_transactions">Операции</string>
+    <string name="loading_exceptions">Неверный номер телефона или пароль, проверьте введенные данные и попробуйте еще раз.</string>
 
     <string name="progress_description">Пожалуйста подождите.</string>
 

@@ -25,14 +25,14 @@ import androidx.lifecycle.MutableLiveData
 import com.github.onotoliy.opposite.data.TransactionType
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
-import com.github.onotoliy.opposite.treasure.di.database.dao.DebtDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.DepositDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.EventDAO
-import com.github.onotoliy.opposite.treasure.di.database.dao.TransactionDAO
 import com.github.onotoliy.opposite.treasure.di.database.data.OptionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.TransactionVO
 import com.github.onotoliy.opposite.treasure.di.database.data.fromTransactionType
 import com.github.onotoliy.opposite.treasure.di.database.data.toTransactionType
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DebtRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.DepositRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.EventRepository
+import com.github.onotoliy.opposite.treasure.di.database.repositories.TransactionRepository
 import com.github.onotoliy.opposite.treasure.ui.IconSave
 import com.github.onotoliy.opposite.treasure.ui.Menu
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -67,16 +67,16 @@ class TransactionEditActivity : AppCompatActivity() {
     lateinit var manager: AccountManager
 
     @Inject
-    lateinit var debts: DebtDAO
+    lateinit var debts: DebtRepository
 
     @Inject
-    lateinit var events: EventDAO
+    lateinit var events: EventRepository
 
     @Inject
-    lateinit var deposits: DepositDAO
+    lateinit var deposits: DepositRepository
 
     @Inject
-    lateinit var transactions: TransactionDAO
+    lateinit var transactions: TransactionRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,10 +103,10 @@ class TransactionEditActivity : AppCompatActivity() {
                 )
             }
             val events = mutableStateOf(defaultOptions, { OptionVO(it.uuid, it.name) }) { _, _ ->
-                events.getAll()
+                events.getAll(null)
             }
             val persons = mutableStateOf(defaultOptions, { OptionVO(it.uuid, it.name) }) { _, _ ->
-                deposits.getAll()
+                deposits.getAll(null)
             }
 
             TreasureTheme {
@@ -119,7 +119,6 @@ class TransactionEditActivity : AppCompatActivity() {
                             content = { IconSave() },
                             onClick = {
                                 replace(context.value)
-                                navigateTo(Screen.TransactionPageScreen)
                             }
                         )
                     },
@@ -153,6 +152,8 @@ class TransactionEditActivity : AppCompatActivity() {
             }
 
             transactions.replace(context)
+
+            navigateTo(Screen.TransactionPageScreen)
         }
     }
 
@@ -161,14 +162,8 @@ class TransactionEditActivity : AppCompatActivity() {
         persons: MutableState<List<OptionVO>>
     ) {
         Handler(Looper.getMainLooper()).post {
-            if (q == null) {
-                deposits.getAll().observeForever { list ->
-                    persons.value = list.map { OptionVO(it.uuid, it.name) }
-                }
-            } else {
-                deposits.getAll("%" + q.toLowerCase(Locale.getDefault()) + "%").observeForever { list ->
-                    persons.value = list.map { OptionVO(it.uuid, it.name) }
-                }
+            deposits.getAll(q).observeForever { list ->
+                persons.value = list.map { OptionVO(it.uuid, it.name) }
             }
         }
     }
@@ -180,46 +175,26 @@ class TransactionEditActivity : AppCompatActivity() {
         events: MutableState<List<OptionVO>>
     ) {
         Handler(Looper.getMainLooper()).post {
-            if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF)) {
-                if (person.isNullOrEmpty()) {
-                    loadingOnlyEvents(q, events)
-                } else {
-                    if (q.isNullOrEmpty()) {
-                        debts.getByPersonAll(person).observeForever { list ->
-                            events.value = list.map { OptionVO(it.event.uuid, it.event.name) }
-                        }
-                    } else {
-                        debts.getByPersonAll(person, "%" + q.toLowerCase(Locale.getDefault()) + "%")
-                            .observeForever { list ->
-                                events.value = list.map { OptionVO(it.event.uuid, it.event.name) }
-                            }
-                    }
+            if (type in listOf(TransactionType.CONTRIBUTION, TransactionType.WRITE_OFF) && !person.isNullOrEmpty()) {
+                this.debts.getByPersonAll(person, q).observeForever { list ->
+                    events.value = list.map { OptionVO(it.event.uuid, it.event.name) }
                 }
             } else {
-                loadingOnlyEvents(q, events)
+                this.events.getAll(q).observeForever { list ->
+                    events.value = list.map { OptionVO(it.uuid, it.name) }
+                }
             }
         }
     }
 
-    private fun loadingOnlyEvents(q: String?, events: MutableState<List<OptionVO>>) {
-        if (q.isNullOrEmpty()) {
-            this.events.getAll().observeForever { list ->
-                events.value = list.map { OptionVO(it.uuid, it.name) }
-            }
-        } else {
-            this.events.getAll("%" + q.toLowerCase(Locale.getDefault()) + "%").observeForever { list ->
-                events.value = list.map { OptionVO(it.uuid, it.name) }
-            }
-        }
-    }
 }
 
 @Composable
 fun TransactionEditScreen(
     editable: Boolean,
     context: MutableState<TransactionVO> = mutableStateOf(defaultTransaction),
-    events:  MutableState<List<OptionVO>> = mutableStateOf(defaultOptions),
-    persons:  MutableState<List<OptionVO>> = mutableStateOf(defaultOptions),
+    events: MutableState<List<OptionVO>> = mutableStateOf(defaultOptions),
+    persons: MutableState<List<OptionVO>> = mutableStateOf(defaultOptions),
     qEvents: (String?) -> Unit,
     qPersons: (String?) -> Unit
 ) {
