@@ -17,11 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -102,6 +104,7 @@ fun LoginScreen(
     val login = remember("") { mutableStateOf("") }
     val password = remember("") { mutableStateOf("") }
     val exceptions = remember(false) { mutableStateOf(false) }
+    val message = remember("false") { mutableStateOf("false") }
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -128,6 +131,7 @@ fun LoginScreen(
         if (exceptions.value) {
             Spacer(Modifier.padding(10.dp))
 
+            Text(text = message.value, modifier = Modifier.padding(10.dp), color = Color.Red)
             Text(text = stringResource(R.string.loading_exceptions))
         }
 
@@ -142,12 +146,18 @@ fun LoginScreen(
                     onResponse = {
                         if (it?.accessToken == null) {
                             exceptions.value = true
+                            message.value = "Access token is null"
                         } else {
-                            addAccount(login.value, password.value, it.accessToken)
+                            try {
+                                addAccount(login.value, password.value, it.accessToken)
+                            } catch (it: Exception) {
+                                message.value = it.message ?: it.localizedMessage ?: it.stackTraceToString()
+                            }
                         }
                     },
                     onFailure = {
                         exceptions.value = true
+                        message.value = it.message ?: it.localizedMessage ?: it.stackTraceToString()
                     }
                 )
             }
