@@ -9,6 +9,9 @@ import java.nio.charset.StandardCharsets
 
 const val ACCOUNT_TYPE = "com.github.onotoliy.opposite.treasure"
 
+fun AccountManager.hasAccount(): Boolean =
+    getAccountsByType(ACCOUNT_TYPE).isNotEmpty()
+
 fun AccountManager.addAccount(username: String, password: String, token: String) =
     addAccountExplicitly(Account(username, ACCOUNT_TYPE), password, token.userdata())
 

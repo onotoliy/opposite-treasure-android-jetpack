@@ -27,20 +27,23 @@ import com.github.onotoliy.opposite.treasure.utils.isAdministrator
 import com.github.onotoliy.opposite.treasure.utils.loading
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import javax.inject.Inject
 
 class EventPageActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var dao: EventRepository
+    lateinit var account: AccountManager
 
     @Inject
-    lateinit var account: AccountManager
+    lateinit var dao: EventRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         setContent {
             val total = mutableStateOf(0L, dao::count)

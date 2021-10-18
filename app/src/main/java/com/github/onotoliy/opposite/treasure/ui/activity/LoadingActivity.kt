@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
@@ -25,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -52,6 +50,7 @@ import com.github.onotoliy.opposite.treasure.utils.indicator
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import com.github.onotoliy.opposite.treasure.utils.transaction
 import com.github.onotoliy.opposite.treasure.utils.worker
 import javax.inject.Inject
@@ -68,6 +67,8 @@ class LoadingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         val debt: OneTimeWorkRequest = OneTimeWorkRequestBuilder<DebtWorker>().build()
         val event: OneTimeWorkRequest = OneTimeWorkRequestBuilder<EventWorker>().build()

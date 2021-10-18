@@ -4,6 +4,7 @@ import com.github.onotoliy.opposite.treasure.di.restful.retrofit.CashboxRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.DebtRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.DepositRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.EventRetrofit
+import com.github.onotoliy.opposite.treasure.di.restful.retrofit.ExceptionDeviceRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.TransactionRetrofit
 import com.github.onotoliy.opposite.treasure.di.restful.retrofit.UserRetrofit
 import com.google.gson.GsonBuilder
@@ -40,6 +41,10 @@ class RESTFulModule {
     @Provides
     fun provideDebtResource(retrofit: Retrofit): DebtRetrofit =
         retrofit.create(DebtRetrofit::class.java)
+
+    @Provides
+    fun provideExceptionResource(retrofit: Retrofit): ExceptionDeviceRetrofit =
+        retrofit.create(ExceptionDeviceRetrofit::class.java)
 
     @Provides
     fun provideRetrofit(): Retrofit = Retrofit

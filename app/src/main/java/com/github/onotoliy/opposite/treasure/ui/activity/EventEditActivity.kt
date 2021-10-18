@@ -44,6 +44,7 @@ import com.github.onotoliy.opposite.treasure.utils.milliseconds
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import com.github.onotoliy.opposite.treasure.utils.toISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 import com.github.onotoliy.opposite.treasure.utils.uuid
@@ -54,7 +55,7 @@ import javax.inject.Inject
 class EventEditActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var manager: AccountManager
+    lateinit var account: AccountManager
 
     @Inject
     lateinit var dao: EventRepository
@@ -63,6 +64,8 @@ class EventEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         setContent {
             val context = mutableStateOf(defaultEvent) {
@@ -75,7 +78,7 @@ class EventEditActivity : AppCompatActivity() {
                         deadline = Date().toISO(),
                         creationDate = Date().toISO(),
                         deletionDate = null,
-                        author = OptionVO(manager.getUUID(), manager.getName()),
+                        author = OptionVO(account.getUUID(), account.getName()),
                         local = INSERT,
                         milliseconds = milliseconds()
                     )

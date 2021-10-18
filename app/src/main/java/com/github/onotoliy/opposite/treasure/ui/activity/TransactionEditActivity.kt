@@ -54,6 +54,7 @@ import com.github.onotoliy.opposite.treasure.utils.milliseconds
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import com.github.onotoliy.opposite.treasure.utils.toISO
 import com.github.onotoliy.opposite.treasure.utils.toShortDate
 import com.github.onotoliy.opposite.treasure.utils.uuid
@@ -64,7 +65,7 @@ import javax.inject.Inject
 class TransactionEditActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var manager: AccountManager
+    lateinit var account: AccountManager
 
     @Inject
     lateinit var debts: DebtRepository
@@ -83,6 +84,8 @@ class TransactionEditActivity : AppCompatActivity() {
 
         inject()
 
+        setDefaultUncaughtExceptionHandler()
+
         setContent {
             val context = mutableStateOf(defaultTransaction) {
                 intent.pk?.let(transactions::get) ?: MutableLiveData(
@@ -91,7 +94,7 @@ class TransactionEditActivity : AppCompatActivity() {
                         name = "",
                         creationDate = Date().toISO(),
                         deletionDate = null,
-                        author = OptionVO(manager.getUUID(), manager.getName()),
+                        author = OptionVO(account.getUUID(), account.getName()),
                         local = INSERT,
                         milliseconds = milliseconds(),
                         cash = "0.0",

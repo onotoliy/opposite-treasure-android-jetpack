@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import com.github.onotoliy.opposite.treasure.R
 import com.github.onotoliy.opposite.treasure.Screen
 import com.github.onotoliy.opposite.treasure.ui.TreasureTheme
@@ -33,6 +32,7 @@ import com.github.onotoliy.opposite.treasure.utils.addAccount
 import com.github.onotoliy.opposite.treasure.utils.getAuthToken
 import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import java.io.IOException
@@ -41,21 +41,23 @@ import javax.inject.Inject
 class LoginActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var manager: AccountManager
+    lateinit var account: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         inject()
 
-        if (!manager.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
+        setDefaultUncaughtExceptionHandler()
+
+        if (!account.getAccountsByType(ACCOUNT_TYPE).isNullOrEmpty()) {
             navigateTo(Screen.LoadingScreen)
         }
 
         setContent {
             TreasureTheme {
                 LoginScreen { account, password, token ->
-                    manager.addAccount(account, password, token)
+                    this.account.addAccount(account, password, token)
 
                     navigateTo(Screen.LoadingScreen)
                 }

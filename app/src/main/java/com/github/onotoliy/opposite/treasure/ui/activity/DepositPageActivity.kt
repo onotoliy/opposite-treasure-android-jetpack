@@ -18,6 +18,7 @@ import com.github.onotoliy.opposite.treasure.utils.inject
 import com.github.onotoliy.opposite.treasure.utils.loading
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import javax.inject.Inject
 
 class DepositPageActivity : AppCompatActivity() {
@@ -29,6 +30,8 @@ class DepositPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         setContent {
             val total = mutableStateOf(0L, dao::count)

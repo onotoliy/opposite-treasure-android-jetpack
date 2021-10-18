@@ -48,10 +48,14 @@ import com.github.onotoliy.opposite.treasure.utils.loading
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class EventActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var account: AccountManager
 
     @Inject
     lateinit var event: EventRepository
@@ -62,15 +66,14 @@ class EventActivity : AppCompatActivity() {
     @Inject
     lateinit var transactions: TransactionRepository
 
-    @Inject
-    lateinit var account: AccountManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val pk = intent.pk ?: throw IllegalArgumentException("Primary key can not be null")
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         setContent {
             val event = mutableStateOf(defaultEvent) { event.get(pk) }

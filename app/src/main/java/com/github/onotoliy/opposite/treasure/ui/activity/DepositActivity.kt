@@ -45,9 +45,13 @@ import com.github.onotoliy.opposite.treasure.utils.loading
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import javax.inject.Inject
 
 class DepositActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var account: AccountManager
 
     @Inject
     lateinit var notification: NotificationResource
@@ -64,13 +68,12 @@ class DepositActivity : AppCompatActivity() {
     @Inject
     lateinit var debts: DebtRepository
 
-    @Inject
-    lateinit var account: AccountManager
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         val pk = intent.pk ?: account.getUUID()
 

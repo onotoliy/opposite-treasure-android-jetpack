@@ -27,6 +27,7 @@ import com.github.onotoliy.opposite.treasure.utils.isAdministrator
 import com.github.onotoliy.opposite.treasure.utils.mutableStateOf
 import com.github.onotoliy.opposite.treasure.utils.navigateTo
 import com.github.onotoliy.opposite.treasure.utils.pk
+import com.github.onotoliy.opposite.treasure.utils.setDefaultUncaughtExceptionHandler
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -44,6 +45,8 @@ class TransactionActivity : AppCompatActivity() {
         val pk = intent.pk ?: throw IllegalArgumentException("Primary key can not be null")
 
         inject()
+
+        setDefaultUncaughtExceptionHandler()
 
         setContent {
             val context = mutableStateOf(defaultTransaction) { dao.get(pk) }

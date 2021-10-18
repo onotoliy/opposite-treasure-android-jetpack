@@ -59,6 +59,10 @@
     <string name="event_page_creation_date">Создано</string>
     <string name="event_page_deadline">Сдать до</string>
 
+    <string name="exception_screen">Экран</string>
+    <string name="exception_message">Ошибка</string>
+    <string name="exception_localized_message">Localized message</string>
+
     <string name="transaction_name">Название</string>
     <string name="transaction_type">Тип</string>
     <string name="transaction_cash">Сумма</string>
